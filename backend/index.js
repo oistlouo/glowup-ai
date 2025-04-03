@@ -82,6 +82,16 @@ Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return 
 ⚠️ Always include a Score (1~5), and clearly explain why the recommended ingredient helps that condition.
 ⚠️ For each ingredient, specify: the name, why it is effective, how it helps the skin, and what product type it belongs to (e.g., toner, cream, cleanser).
 
+📏 Scoring Guidelines (1 to 5):
+- 5: Excellent condition (no visible issues)
+- 4: Good condition (minor issues)
+- 3: Moderate condition (noticeable issues)
+- 2: Poor condition (clear skin problems)
+- 1: Very poor condition (severe skin problems)
+
+⚠️ Example: If there is no acne at all, assign a score of 5. If severe acne is present, assign a score of 1.
+⚠️ Please follow this scoring standard strictly for all 9 skin categories.
+
 <h1>🌿 Comprehensive Skin Report</h1>
 
 <h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
@@ -158,7 +168,6 @@ app.post('/generate-pdf', async (req, res) => {
       .replace('{{birthdate}}', birthdate || '')
       .replace('{{date}}', date || '');
 
-    // ✅ 수정된 Puppeteer 실행 코드
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
