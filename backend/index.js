@@ -127,7 +127,6 @@ Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return 
       .replace(/```$/gm, '')
       .trim();
 
-    // ⭐️ 별점 및 루틴 박스화 후처리 적용
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
 
@@ -159,7 +158,12 @@ app.post('/generate-pdf', async (req, res) => {
       .replace('{{birthdate}}', birthdate || '')
       .replace('{{date}}', date || '');
 
-    const browser = await puppeteer.launch({ headless: 'new' });
+    // ✅ 수정된 Puppeteer 실행 코드
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
     const page = await browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
 
@@ -181,7 +185,6 @@ app.post('/generate-pdf', async (req, res) => {
   }
 });
 
-// 여기서 환경변수로 동적 포트를 처리하도록 수정
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
