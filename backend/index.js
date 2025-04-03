@@ -181,6 +181,7 @@ app.post('/generate-pdf', async (req, res) => {
   }
 });
 
+// 여기서 환경변수로 동적 포트를 처리하도록 수정
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`✅ Backend running on http://localhost:${PORT}`);
