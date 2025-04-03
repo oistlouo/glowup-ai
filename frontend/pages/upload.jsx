@@ -54,70 +54,6 @@ export default function UploadPage() {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    if (!resultText || !imageUrl) return;
-
-    const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
-    const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
-    const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
-    const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
-
-    const topConcernsHTML = concernsArray.length > 0 ? `
-      <div style="margin-top: 40px;">
-        <h2 style="text-align: center; font-size: 20px; font-weight: bold; color: #333; margin-bottom: 20px;">
-          🌟 Top 3 Skin Concerns
-        </h2>
-        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-          ${concernsArray.map(concern => `
-            <div style="
-              background: linear-gradient(135deg, #ffe0e0, #e0f7ff);
-              padding: 18px;
-              border-radius: 14px;
-              border: 1px solid #ffc0cb;
-              min-width: 160px;
-              text-align: center;
-              font-weight: 700;
-              color: #cc0044;
-              font-size: 16px;
-              box-shadow: 0 3px 6px rgba(0,0,0,0.08);
-            ">
-              ${concern.replace(/<.*?>/g, '')}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-    ` : '';
-
-    try {
-      const response = await fetch('http://localhost:5001/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageUrl,
-          analysis: `<div>${resultText}</div>`,
-          topConcerns: topConcernsHTML,
-          name,
-          birthdate,
-          date
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to generate PDF');
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'glowup_report.pdf';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } catch (err) {
-      console.error('PDF download failed:', err);
-      alert('Failed to generate PDF.');
-    }
-  };
-
   const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
   const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
   const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
@@ -125,7 +61,6 @@ export default function UploadPage() {
 
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      {/* ✅ 다크모드 대응 스타일 추가 */}
       <style>{`
         @media (prefers-color-scheme: dark) {
           body {
@@ -152,7 +87,6 @@ export default function UploadPage() {
         Powered by Korean dermatology and AI-driven beauty insight
       </p>
 
-      {/* 🔥 사용자 정보 입력 필드 */}
       <div style={{ marginBottom: '24px' }}>
         <input
           type="text"
@@ -240,12 +174,6 @@ export default function UploadPage() {
               </div>
             </div>
           )}
-
-          <div style={{ textAlign: 'center' }}>
-            <button onClick={handleDownloadPDF} style={{ marginTop: '30px', padding: '12px 24px', fontSize: '16px', backgroundColor: '#009688', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-              📄 Download PDF Report
-            </button>
-          </div>
         </>
       )}
     </div>
