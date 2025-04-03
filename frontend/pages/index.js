@@ -28,7 +28,8 @@ export default function UploadPage() {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://localhost:5001/analyze', {
+      // 변경된 부분: Render로 배포된 백엔드 URL로 수정
+      const response = await fetch('https://glowup-ai.onrender.com/analyze', {
         method: 'POST',
         body: formData,
       });
@@ -58,7 +59,8 @@ export default function UploadPage() {
     if (!resultText || !imageUrl) return;
 
     try {
-      const response = await fetch('http://localhost:5001/generate-pdf', {
+      // 변경된 부분: Render로 배포된 백엔드 URL로 수정
+      const response = await fetch('https://glowup-ai.onrender.com/generate-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
