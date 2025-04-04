@@ -10,6 +10,7 @@ export default function UploadPage() {
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [isPaid, setIsPaid] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -196,11 +197,24 @@ export default function UploadPage() {
         <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />
       )}
 
-      <div style={{ textAlign: 'center' }}>
-        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? 'Analyzing...' : '✨ Start Analysis'}
-        </button>
-      </div>
+      {!isPaid && (
+        <div style={{ textAlign: 'center' }}>
+          <button
+            onClick={() => setIsPaid(true)}
+            style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+          >
+            👉 테스트용 결제 버튼 (누르면 분석 가능)
+          </button>
+        </div>
+      )}
+
+      {isPaid && !resultText && (
+        <div style={{ textAlign: 'center' }}>
+          <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+            {loading ? 'Analyzing...' : '✨ Start Analysis'}
+          </button>
+        </div>
+      )}
 
       {resultText && (
         <>
