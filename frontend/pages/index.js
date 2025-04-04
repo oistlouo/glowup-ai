@@ -93,7 +93,6 @@ export default function UploadPage() {
           color: #000 !important;
         }
 
-        /* ✅ AM/PM 루틴 줄바꿈 및 리스트처럼 보기 좋게 */
         .result-card .routine-box {
           padding-left: 18px;
           line-height: 1.6;
@@ -103,7 +102,6 @@ export default function UploadPage() {
           margin-bottom: 6px;
         }
 
-        /* ✅ 성분별 강조 라벨 */
         .ingredient-label {
           font-weight: bold;
           display: inline-block;
@@ -139,9 +137,14 @@ export default function UploadPage() {
             color: '#222'
           }}
         />
+
+        {/* ✅ 생년월일 필드에 라벨 추가 */}
+        <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
+          Birthdate
+        </label>
         <input
+          id="birthdate"
           type="date"
-          placeholder="Birthdate"
           value={birthdate}
           onChange={(e) => setBirthdate(e.target.value)}
           style={{
@@ -153,6 +156,7 @@ export default function UploadPage() {
             color: '#222'
           }}
         />
+        
         <input
           type="date"
           placeholder="Analysis Date"

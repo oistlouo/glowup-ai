@@ -31,15 +31,21 @@ const applyScoreStars = (html) => {
   });
 };
 
-// ⭐️ AM/PM 루틴 박스화 함수 개선 (줄바꿈/공백 대응)
+// ⭐️ AM/PM 루틴 박스 전체 <ul> 감싸도록 개선
 const applyRoutineBox = (html) => {
   return html
-    .replace(/<li>\s*<strong>AM Routine:<\/strong>\s*([\s\S]*?)<\/li>/, (_, content) => {
-      return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;">${content.trim()}</div></li>`;
-    })
-    .replace(/<li>\s*<strong>PM Routine:<\/strong>\s*([\s\S]*?)<\/li>/, (_, content) => {
-      return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;">${content.trim()}</div></li>`;
-    });
+    .replace(
+      /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
+      (_, content) => {
+        return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+      }
+    )
+    .replace(
+      /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
+      (_, content) => {
+        return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+      }
+    );
 };
 
 app.post('/analyze', upload.single('image'), async (req, res) => {
@@ -77,8 +83,8 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 For each of the following 9 skin categories, always include:
 <li><strong>Score:</strong> x/5</li>
-<li><strong>Recommended Ingredient:</strong> <strong>Name</strong> - <strong>Why it's effective</strong> - <strong>How it helps skin</strong> - <strong>Product type</strong></li>
-<li><strong>Analysis:</strong> ...</li>
+<li><strong>Analysis:</strong> Write a detailed professional analysis first.</li>
+<li><strong>Recommended Product:</strong> Product name or type first, then explain the ingredient it must contain, then explain why it's good and how it works on the skin.</li>
 
 Always return ALL of the following 9 skin categories in this exact order:
 
