@@ -5,7 +5,6 @@ const OpenAI = require('openai');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
-const puppeteer = require('puppeteer');
 require('dotenv').config();
 
 const app = express();
@@ -81,6 +80,7 @@ Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return 
 ⚠️ Always return all 9 fixed categories in the exact order below, even if the data is minimal.
 ⚠️ Always include a Score (1~5), and clearly explain why the recommended ingredient helps that condition.
 ⚠️ For each ingredient, specify: the name, why it is effective, how it helps the skin, and what product type it belongs to (e.g., toner, cream, cleanser).
+⚠️ At the end, summarize "Top 3 Concerns" clearly in a <div class="top-concerns"> as a visually highlighted section.
 
 📏 Scoring Guidelines (1 to 5):
 - 5: Excellent condition (no visible issues)
@@ -95,15 +95,14 @@ Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return 
 <h1>🌿 Comprehensive Skin Report</h1>
 
 <h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
-<ul>
-  <li><strong>Score:</strong> .../5</li>
-  <li><strong>Condition:</strong> ...</li>
-  <li><strong>Medical Meaning:</strong> ...</li>
-  <li><strong>Improvement Strategy:</strong> ...</li>
-  <li><strong>Recommended Ingredient:</strong> Niacinamide – Reduces sebum production and improves skin clarity – Lightweight serum</li>
-</ul>
-
-(repeat similar structure for all 9 categories)
+<h2>🔹 2. Hydration Level</h2>
+<h2>🔹 3. Texture</h2>
+<h2>🔹 4. Pigmentation</h2>
+<h2>🔹 5. Pore Visibility</h2>
+<h2>🔹 6. Sensitivity</h2>
+<h2>🔹 7. Wrinkles</h2>
+<h2>🔹 8. Skin Tone</h2>
+<h2>🔹 9. Acne</h2>
 
 <h2>✨ Final Summary</h2>
 <ul>
@@ -150,47 +149,6 @@ Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return 
       console.error('🔍 OpenAI API Error Response:', text);
     }
     res.status(500).json({ error: 'Internal server error.' });
-  }
-});
-
-app.post('/generate-pdf', async (req, res) => {
-  try {
-    const { imageUrl, analysis, topConcerns, name, birthdate, date } = req.body;
-
-    const templatePath = path.join(__dirname, 'templates', 'report.html');
-    let html = fs.readFileSync(templatePath, 'utf-8');
-
-    html = html
-      .replace('{{imageUrl}}', imageUrl)
-      .replace('{{analysis}}', analysis)
-      .replace('{{topConcerns}}', topConcerns || '')
-      .replace('{{name}}', name || '')
-      .replace('{{birthdate}}', birthdate || '')
-      .replace('{{date}}', date || '');
-
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-    });
-
-    await browser.close();
-
-    res.set({
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': 'attachment; filename="glowup_report.pdf"',
-    });
-    res.send(pdfBuffer);
-  } catch (err) {
-    console.error('❌ PDF 생성 에러:', err);
-    res.status(500).json({ error: 'Failed to generate PDF' });
   }
 });
 
