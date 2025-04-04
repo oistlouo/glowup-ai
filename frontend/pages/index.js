@@ -246,6 +246,10 @@ export default function UploadPage() {
       <p className="footer-email">
         Need help? Contact us at <a href="mailto:admate@atladmate.com" style={{ color: '#0066cc' }}>admate@atladmate.com</a>
       </p>
+      <p className="footer-email">
+  <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
+</p>
+
     </div>
   );
 }
