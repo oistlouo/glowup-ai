@@ -35,10 +35,10 @@ const applyScoreStars = (html) => {
 const applyRoutineBox = (html) => {
   return html
     .replace(/<li>\s*<strong>AM Routine:<\/strong>\s*([\s\S]*?)<\/li>/, (_, content) => {
-      return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px;">${content.trim()}</div></li>`;
+      return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;">${content.trim()}</div></li>`;
     })
     .replace(/<li>\s*<strong>PM Routine:<\/strong>\s*([\s\S]*?)<\/li>/, (_, content) => {
-      return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px;">${content.trim()}</div></li>`;
+      return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;">${content.trim()}</div></li>`;
     });
 };
 

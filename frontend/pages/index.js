@@ -78,6 +78,19 @@ export default function UploadPage() {
             background-color: #1e1e1e !important;
             color: #fff !important;
           }
+          .result-card div[style*="background:#e3f2fd"] {
+            background-color: #2a4f73 !important;
+            color: #fff !important;
+          }
+          .result-card div[style*="background:#fce4ec"] {
+            background-color: #743a54 !important;
+            color: #fff !important;
+          }
+        }
+        /* ✅ 이 한 줄만 추가됨 */
+        .result-card div[style*="background:#e3f2fd"],
+        .result-card div[style*="background:#fce4ec"] {
+          color: #000 !important;
         }
       `}</style>
 
