@@ -123,6 +123,23 @@ export default function UploadPage() {
         Powered by Korean dermatology and AI-driven beauty insight
       </p>
 
+      {/* ✅ Minimal Upload Guide 추가 */}
+      <p style={{ fontSize: '14px', color: '#777', textAlign: 'center', lineHeight: '1.6', marginTop: '10px', marginBottom: '30px' }}>
+        For the most accurate results, please upload a selfie that meets the following:
+        <br />
+        1. Well-lit with light facing your face
+        <br />
+        2. Forehead fully visible (no bangs or hats)
+        <br />
+        3. Original photo (no filters or edits)
+        <br />
+        4. Full face clearly centered in frame
+      </p>
+
+      {/* 나머지 코드 동일 */}
+    
+
+
       <div style={{ marginBottom: '24px' }}>
         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Name</label>
         <input
