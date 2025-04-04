@@ -72,25 +72,15 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const prompt = `
 You are a professional Korean dermatologist and K-beauty skincare AI.
 
-Please analyze the uploaded selfie and write a complete skin analysis report in valid HTML only.
-Use semantic HTML elements such as <h2>, <ul>, <li>, <strong>, etc.
+You MUST return a full HTML report. Do NOT return plain text or skip any section.
+Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
-Do NOT include any markdown, code blocks, or \`\`\`html formatting. Only return raw HTML.
+For each of the following 9 skin categories, always include:
+<li><strong>Score:</strong> x/5</li>
+<li><strong>Recommended Ingredient:</strong> Name - Why it's effective - How it helps skin - Product type</li>
+<li><strong>Analysis:</strong> ...</li>
 
-⚠️ Always return all 9 fixed categories in the exact order below, even if the data is minimal.
-⚠️ Always include a Score (1~5), and clearly explain why the recommended ingredient helps that condition.
-⚠️ For each ingredient, specify: the name, why it is effective, how it helps the skin, and what product type it belongs to (e.g., toner, cream, cleanser).
-⚠️ At the end, summarize "Top 3 Concerns" clearly in a <div class="top-concerns"> as a visually highlighted section.
-
-📏 Scoring Guidelines (1 to 5):
-- 5: Excellent condition (no visible issues)
-- 4: Good condition (minor issues)
-- 3: Moderate condition (noticeable issues)
-- 2: Poor condition (clear skin problems)
-- 1: Very poor condition (severe skin problems)
-
-⚠️ Example: If there is no acne at all, assign a score of 5. If severe acne is present, assign a score of 1.
-⚠️ Please follow this scoring standard strictly for all 9 skin categories.
+Always return ALL of the following 9 skin categories in this exact order:
 
 <h1>🌿 Comprehensive Skin Report</h1>
 
