@@ -74,6 +74,10 @@ export default function UploadPage() {
           h1, p, label {
             color: #fff !important;
           }
+          .result-card {
+            background-color: #1e1e1e !important;
+            color: #fff !important;
+          }
         }
       `}</style>
 
@@ -158,7 +162,17 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+          <div
+            className="result-card"
+            style={{
+              marginTop: '40px',
+              backgroundColor: '#fff',
+              padding: '20px',
+              borderRadius: '8px',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+            }}
+            dangerouslySetInnerHTML={{ __html: resultText }}
+          />
 
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
@@ -179,4 +193,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
