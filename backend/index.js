@@ -77,7 +77,7 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 For each of the following 9 skin categories, always include:
 <li><strong>Score:</strong> x/5</li>
-<li><strong>Recommended Ingredient:</strong> Name - Why it's effective - How it helps skin - Product type</li>
+<li><strong>Recommended Ingredient:</strong> <strong>Name</strong> - <strong>Why it's effective</strong> - <strong>How it helps skin</strong> - <strong>Product type</strong></li>
 <li><strong>Analysis:</strong> ...</li>
 
 Always return ALL of the following 9 skin categories in this exact order:
@@ -99,8 +99,20 @@ Always return ALL of the following 9 skin categories in this exact order:
   <li><strong>Total Score:</strong> .../45</li>
   <li><strong>Skin Type Summary:</strong> ...</li>
   <li><strong>Top 3 Concerns:</strong> ...</li>
-  <li><strong>AM Routine:</strong> ...</li>
-  <li><strong>PM Routine:</strong> ...</li>
+  <li><strong>AM Routine:</strong>
+    <ul>
+      <li>Step 1</li>
+      <li>Step 2</li>
+      <li>Step 3</li>
+    </ul>
+  </li>
+  <li><strong>PM Routine:</strong>
+    <ul>
+      <li>Step 1</li>
+      <li>Step 2</li>
+      <li>Step 3</li>
+    </ul>
+  </li>
   <li><strong>Improvement Timeline:</strong> ...</li>
   <li><strong>Closing Message:</strong> Write in a warm Korean tone. Include words like ‘피부’, ‘화이팅’</li>
 </ul>

@@ -87,10 +87,30 @@ export default function UploadPage() {
             color: #fff !important;
           }
         }
-        /* ✅ 이 한 줄만 추가됨 */
+
         .result-card div[style*="background:#e3f2fd"],
         .result-card div[style*="background:#fce4ec"] {
           color: #000 !important;
+        }
+
+        /* ✅ AM/PM 루틴 줄바꿈 및 리스트처럼 보기 좋게 */
+        .result-card .routine-box {
+          padding-left: 18px;
+          line-height: 1.6;
+        }
+
+        .result-card .routine-box li {
+          margin-bottom: 6px;
+        }
+
+        /* ✅ 성분별 강조 라벨 */
+        .ingredient-label {
+          font-weight: bold;
+          display: inline-block;
+          padding: 2px 6px;
+          background: #e0f7fa;
+          border-radius: 6px;
+          margin: 4px 0;
         }
       `}</style>
 
