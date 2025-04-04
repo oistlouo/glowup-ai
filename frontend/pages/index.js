@@ -103,6 +103,24 @@ export default function UploadPage() {
             background-color: #743a54 !important;
             color: #fff !important;
           }
+          .paypal-info {
+            color: #fff !important;
+          }
+          .footer-email {
+            color: #aaa !important;
+          }
+        }
+        .paypal-info {
+          color: #000;
+          font-size: 14px;
+          text-align: center;
+          margin-bottom: 12px;
+        }
+        .footer-email {
+          font-size: 13px;
+          text-align: center;
+          margin-top: 40px;
+          color: #666;
         }
         .result-card div[style*="background:#e3f2fd"],
         .result-card div[style*="background:#fce4ec"] {
@@ -135,7 +153,6 @@ export default function UploadPage() {
         Powered by Korean dermatology and AI-driven beauty insight
       </p>
 
-      {/* ✅ Minimal Upload Guide 추가 */}
       <p style={{ fontSize: '14px', color: '#777', textAlign: 'center', lineHeight: '1.6', marginTop: '10px', marginBottom: '30px' }}>
         For the most accurate results, please upload a selfie that meets the following:
         <br />
@@ -150,33 +167,19 @@ export default function UploadPage() {
 
       <div style={{ marginBottom: '24px' }}>
         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Name</label>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}
           style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
         <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
           Birthdate
         </label>
-        <input
-          id="birthdate"
-          type="date"
-          value={birthdate}
-          onChange={(e) => setBirthdate(e.target.value)}
-          required
+        <input id="birthdate" type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} required
           style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
         <label htmlFor="date" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
           Analysis Date
         </label>
-        <input
-          id="date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
+        <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required
           style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
       </div>
@@ -202,6 +205,11 @@ export default function UploadPage() {
 
       {!isPaid && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div className="paypal-info">
+            After payment, you'll be able to start your analysis
+            <br />
+            <strong>$3.99 USD</strong>
+          </div>
           <div id="paypal-container-XW5X3YNYP26TN" />
         </div>
       )}
@@ -218,7 +226,6 @@ export default function UploadPage() {
         <>
           <div className="result-card" style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
             dangerouslySetInnerHTML={{ __html: resultText }} />
-
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
               <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>
@@ -235,6 +242,10 @@ export default function UploadPage() {
           )}
         </>
       )}
+
+      <p className="footer-email">
+        Need help? Contact us at <a href="mailto:admate@atladmate.com" style={{ color: '#0066cc' }}>admate@atladmate.com</a>
+      </p>
     </div>
   );
 }
