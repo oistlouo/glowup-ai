@@ -28,8 +28,7 @@ export default function UploadPage() {
     formData.append('image', image);
 
     try {
-      // 변경된 부분: Render로 배포된 백엔드 URL로 수정
-      const response = await fetch('https://glowup-ai.onrender.com/analyze', {
+      const response = await fetch('http://localhost:5001/analyze', {
         method: 'POST',
         body: formData,
       });
@@ -55,39 +54,13 @@ export default function UploadPage() {
     }
   };
 
-  const handleDownloadPDF = async () => {
-    if (!resultText || !imageUrl) return;
-
-    try {
-      // 변경된 부분: Render로 배포된 백엔드 URL로 수정
-      const response = await fetch('https://glowup-ai.onrender.com/generate-pdf', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          imageUrl,
-          analysis: `<div>${resultText}</div>`
-        }),
-      });
-
-      if (!response.ok) throw new Error('Failed to generate PDF');
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'glowup_report.pdf';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } catch (err) {
-      console.error('PDF download failed:', err);
-      alert('Failed to generate PDF.');
-    }
-  };
+  const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
+  const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
+  const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
+  const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
 
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      {/* ✅ 다크모드 대응 스타일 추가 */}
       <style>{`
         @media (prefers-color-scheme: dark) {
           body {
@@ -114,7 +87,6 @@ export default function UploadPage() {
         Powered by Korean dermatology and AI-driven beauty insight
       </p>
 
-      {/* 🔥 사용자 정보 입력 필드 */}
       <div style={{ marginBottom: '24px' }}>
         <input
           type="text"
@@ -188,11 +160,20 @@ export default function UploadPage() {
         <>
           <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
 
-          <div style={{ textAlign: 'center' }}>
-            <button onClick={handleDownloadPDF} style={{ marginTop: '30px', padding: '12px 24px', fontSize: '16px', backgroundColor: '#009688', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-              📄 Download PDF Report
-            </button>
-          </div>
+          {concernsArray.length > 0 && (
+            <div style={{ marginTop: '40px' }}>
+              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>
+                🌟 Top 3 Skin Concerns
+              </h2>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                {concernsArray.map((concern, index) => (
+                  <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
+                    {concern.replace(/<.*?>/g, '')}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>
