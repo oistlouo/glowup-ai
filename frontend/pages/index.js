@@ -123,6 +123,7 @@ export default function UploadPage() {
       </p>
 
       <div style={{ marginBottom: '24px' }}>
+        <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Name</label>
         <input
           type="text"
           placeholder="Name"
@@ -138,7 +139,6 @@ export default function UploadPage() {
           }}
         />
 
-        {/* ✅ 생년월일 필드에 라벨 추가 */}
         <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
           Birthdate
         </label>
@@ -147,6 +147,7 @@ export default function UploadPage() {
           type="date"
           value={birthdate}
           onChange={(e) => setBirthdate(e.target.value)}
+          required
           style={{
             width: '100%',
             padding: '10px',
@@ -156,12 +157,16 @@ export default function UploadPage() {
             color: '#222'
           }}
         />
-        
+
+        <label htmlFor="date" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
+          Analysis Date
+        </label>
         <input
+          id="date"
           type="date"
-          placeholder="Analysis Date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          required
           style={{
             width: '100%',
             padding: '10px',
