@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function UploadPage() {
   const [image, setImage] = useState(null);
@@ -60,6 +60,22 @@ export default function UploadPage() {
   const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
   const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.paypal.com/sdk/js?client-id=BAAwOk4pNQMtsvhlLL_t1mVXYJ8IVvo7hi01PUDAy1bAkBXud17i_QzZVXdmjSrBZntcYrxV2icLmu2Ndo&components=hosted-buttons&disable-funding=venmo&currency=USD";
+    script.addEventListener("load", () => {
+      if (window.paypal) {
+        window.paypal.HostedButtons({
+          hostedButtonId: "XW5X3YNYP26TN",
+          onApprove: () => {
+            setIsPaid(true);
+          },
+        }).render("#paypal-container-XW5X3YNYP26TN");
+      }
+    });
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
@@ -88,21 +104,17 @@ export default function UploadPage() {
             color: #fff !important;
           }
         }
-
         .result-card div[style*="background:#e3f2fd"],
         .result-card div[style*="background:#fce4ec"] {
           color: #000 !important;
         }
-
         .result-card .routine-box {
           padding-left: 18px;
           line-height: 1.6;
         }
-
         .result-card .routine-box li {
           margin-bottom: 6px;
         }
-
         .ingredient-label {
           font-weight: bold;
           display: inline-block;
@@ -136,10 +148,6 @@ export default function UploadPage() {
         4. Full face clearly centered in frame
       </p>
 
-      {/* 나머지 코드 동일 */}
-    
-
-
       <div style={{ marginBottom: '24px' }}>
         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Name</label>
         <input
@@ -147,16 +155,8 @@ export default function UploadPage() {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '12px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
+          style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
-
         <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
           Birthdate
         </label>
@@ -166,16 +166,8 @@ export default function UploadPage() {
           value={birthdate}
           onChange={(e) => setBirthdate(e.target.value)}
           required
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '12px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
+          style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
-
         <label htmlFor="date" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
           Analysis Date
         </label>
@@ -185,13 +177,7 @@ export default function UploadPage() {
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
-          style={{
-            width: '100%',
-            padding: '10px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
+          style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
         />
       </div>
 
@@ -215,13 +201,8 @@ export default function UploadPage() {
       )}
 
       {!isPaid && (
-        <div style={{ textAlign: 'center' }}>
-          <button
-            onClick={() => setIsPaid(true)}
-            style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-          >
-            👉 테스트용 결제 버튼 (누르면 분석 가능)
-          </button>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div id="paypal-container-XW5X3YNYP26TN" />
         </div>
       )}
 
@@ -235,17 +216,8 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div
-            className="result-card"
-            style={{
-              marginTop: '40px',
-              backgroundColor: '#fff',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-            }}
-            dangerouslySetInnerHTML={{ __html: resultText }}
-          />
+          <div className="result-card" style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
+            dangerouslySetInnerHTML={{ __html: resultText }} />
 
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
