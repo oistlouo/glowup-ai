@@ -145,11 +145,15 @@ export default function UploadPage() {
       {/* Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
-        <p style={{ fontSize: '20px', marginBottom: '20px' }}>AI가 당신의 피부 상태를 진단합니다</p>
-        <img src="https://via.placeholder.com/600x300?text=Before+%2F+After+Example" alt="Before/After" style={{ width: '100%', borderRadius: '12px', marginBottom: '20px' }} />
-        <p style={{ fontSize: '16px', fontStyle: 'italic' }}>
-          "처음 진단 받고 3개월 루틴을 지켰더니 피부결이 눈에 띄게 좋아졌어요!" – Jane (NY)
-        </p>
+        <p style={{ fontSize: '20px', marginBottom: '20px' }}>AI-powered selfie skin analysis, inspired by Korea’s professional dermatology tech.</p>
+        <div style={{ marginBottom: '20px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>How to Use</h2>
+          <p style={{ fontSize: '16px', lineHeight: '1.6' }}>
+            1. Upload a selfie<br />
+            2. Tap “Analyze”<br />
+            3. Instantly receive expert skin insights and a personalized routine to reveal your glow
+          </p>
+        </div>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '20px' }}>
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Medical_symbol.png" alt="Medical Trust" width="40" />
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Logo.svg" alt="AI Powered" width="60" />

@@ -1,0 +1,54 @@
+.
+├── README.md
+├── backend
+│   ├── index.js
+│   ├── package-lock.json
+│   └── package.json
+├── eslint.config.mjs
+├── filetree.txt
+├── frontend
+│   ├── README.md
+│   ├── eslint.config.mjs
+│   ├── jsconfig.json
+│   ├── next.config.js
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── pages
+│   │   ├── _app.js
+│   │   ├── _document.js
+│   │   ├── api
+│   │   ├── index.js
+│   │   └── upload.jsx
+│   ├── postcss.config.mjs
+│   ├── public
+│   │   ├── favicon.ico
+│   │   ├── file.svg
+│   │   ├── globe.svg
+│   │   ├── next.svg
+│   │   ├── vercel.svg
+│   │   └── window.svg
+│   └── styles
+│       └── globals.css
+├── jsconfig.json
+├── next.config.js
+├── package-lock.json
+├── package.json
+├── pages
+│   ├── _app.js
+│   ├── _document.js
+│   ├── api
+│   │   └── hello.js
+│   ├── index.js
+│   └── upload.jsx
+├── postcss.config.mjs
+├── public
+│   ├── favicon.ico
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+└── styles
+    └── globals.css
+
+11 directories, 41 files
