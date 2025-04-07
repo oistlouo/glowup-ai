@@ -98,15 +98,22 @@ export default function UploadPage() {
             background-color: #121212;
             color: #fff;
           }
+
           input, h1, h2, p, label, div {
             color: #fff !important;
           }
+
           input {
-            color: #fff !important;
             background-color: #1e1e1e !important;
             border: 1px solid #444 !important;
+            color: #fff !important;
           }
-          input::placeholder {
+
+          input::placeholder,
+          input::-webkit-input-placeholder,
+          input::-moz-placeholder,
+          input:-ms-input-placeholder,
+          input:-moz-placeholder {
             color: #ccc !important;
             opacity: 1 !important;
           }

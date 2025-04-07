@@ -88,25 +88,33 @@ export default function UploadPage() {
   return (
     <div style={{ padding: '40px 20px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
-        @media (prefers-color-scheme: dark) {
-          body {
-            background-color: #121212;
-            color: #fff;
-          }
-          input, h1, h2, p, label, div {
-            color: #fff !important;
-          }
-          input {
-            background-color: #1e1e1e !important;
-            border: 1px solid #444 !important;
-            color: #fff !important;
-          }
-          input::placeholder {
-            color: #ccc !important;
-            opacity: 1 !important;
-          }
-        }
-      `}</style>
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #121212;
+      color: #fff;
+    }
+
+    input, h1, h2, p, label, div {
+      color: #fff !important;
+    }
+
+    input {
+      background-color: #1e1e1e !important;
+      border: 1px solid #444 !important;
+      color: #fff !important;
+    }
+
+    input::placeholder,
+    input::-webkit-input-placeholder,
+    input::-moz-placeholder,
+    input:-ms-input-placeholder,
+    input:-moz-placeholder {
+      color: #ccc !important;
+      opacity: 1 !important;
+    }
+  }
+`}</style>
+
 
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
