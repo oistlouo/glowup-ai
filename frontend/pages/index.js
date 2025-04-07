@@ -131,16 +131,65 @@ export default function UploadPage() {
       <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
         <label>Name</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
+        
         <label>Birthdate</label>
-        <input
-          type="text"
-          placeholder="YYYY-MM-DD"
-          value={birthdate}
-          onChange={(e) => setBirthdate(e.target.value)}
-          pattern="\d{4}-\d{2}-\d{2}"
-          inputMode="numeric"
-          style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }}
-        />
+        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+          <input
+            type="text"
+            placeholder="YYYY"
+            value={birthdate.slice(0, 4)}
+            onChange={(e) => {
+              const y = e.target.value.replace(/\D/g, '').slice(0, 4);
+              setBirthdate((prev) => y + prev.slice(4));
+            }}
+            inputMode="numeric"
+            maxLength={4}
+            style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: '#fafafa',
+              border: '1px solid #ccc',
+              borderRadius: '6px'
+            }}
+          />
+          <input
+            type="text"
+            placeholder="MM"
+            value={birthdate.slice(4, 6)}
+            onChange={(e) => {
+              const m = e.target.value.replace(/\D/g, '').slice(0, 2);
+              setBirthdate((prev) => prev.slice(0, 4) + m + prev.slice(6));
+            }}
+            inputMode="numeric"
+            maxLength={2}
+            style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: '#fafafa',
+              border: '1px solid #ccc',
+              borderRadius: '6px'
+            }}
+          />
+          <input
+            type="text"
+            placeholder="DD"
+            value={birthdate.slice(6, 8)}
+            onChange={(e) => {
+              const d = e.target.value.replace(/\D/g, '').slice(0, 2);
+              setBirthdate((prev) => prev.slice(0, 6) + d);
+            }}
+            inputMode="numeric"
+            maxLength={2}
+            style={{
+              flex: 1,
+              padding: '10px',
+              backgroundColor: '#fafafa',
+              border: '1px solid #ccc',
+              borderRadius: '6px'
+            }}
+          />
+        </div>
+
         <label>Analysis Date</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', background: '#fafafa' }} />
       </div>
@@ -163,7 +212,7 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* ✅ Top 3 Skin Concerns First */}
+      {/* Top 3 Concerns */}
       {previewHtml && (
         <div style={{ marginTop: '30px' }}>
           <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
@@ -172,12 +221,10 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* ✅ Report */}
       {displayedHtml && (
         <div className="result-card" style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
       )}
 
-      {/* ✅ PayPal 안내 */}
       {!isPaid && previewHtml && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
