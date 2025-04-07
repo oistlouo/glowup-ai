@@ -120,17 +120,6 @@ export default function UploadPage() {
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
-      {(!isPaid && previewHtml) && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <div className="paypal-info">
-            To unlock your full personalized routine:
-            <br />
-            <strong>$3.99 USD</strong>
-          </div>
-          <div id="paypal-container-XW5X3YNYP26TN" />
-        </div>
-      )}
-
       {(!isPaid && !previewHtml) && (
         <div style={{ textAlign: 'center' }}>
           <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
@@ -139,8 +128,38 @@ export default function UploadPage() {
         </div>
       )}
 
+      {/* ✅ Preview Title */}
+      {previewHtml && (
+        <div style={{ marginTop: '30px' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+            🌟 AI가 분석한 당신의 핵심 피부 문제 3가지
+          </h2>
+        </div>
+      )}
+
+      {/* ✅ PayPal Button after preview only */}
+      {!isPaid && previewHtml && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
+            🔓 전체 피부 분석을 확인하려면 결제가 필요합니다.
+            <br />
+            9가지 항목별 전문가 분석과 AM/PM 루틴을 포함한
+            <br />
+            <strong>맞춤형 스킨케어 리포트</strong>를 확인해보세요 – <strong>$3.99 USD</strong>
+          </div>
+          <div id="paypal-container-XW5X3YNYP26TN" />
+        </div>
+      )}
+
+      {/* ✅ Full Report Title */}
+      {isPaid && fullHtml && (
+        <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginTop: '30px', marginBottom: '12px' }}>
+          🔓 전체 리포트 – 전문가 피부 분석 + 홈케어 솔루션
+        </h2>
+      )}
+
       {displayedHtml && (
-        <div className="result-card" style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+        <div className="result-card" style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
       )}
 
       <p className="footer-email">
