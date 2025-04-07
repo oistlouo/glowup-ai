@@ -21,9 +21,6 @@ export default function UploadPage() {
     const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
     return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
   };
-  
-
-
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -45,11 +42,6 @@ export default function UploadPage() {
     setLoading(true);
     setPreviewHtml('');
     setFullHtml('');
-    setImageUrl(data.imageUrl);
-
-    setAmPreview(extractAmRoutine(data.previewHtml));
-    setPreviewInsights(data.previewInsights || []);
-
 
     const formData = new FormData();
     formData.append('image', image);
@@ -72,18 +64,11 @@ export default function UploadPage() {
       }
 
       setPreviewHtml(data.previewHtml);
-      const extractAmRoutine = (html) => {
-        const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
-        if (!match) return [];
-        const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
-        return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
-      };
-      
-      const amSteps = extractAmRoutine(data.previewHtml);
-      setAmPreview(amSteps);
-      
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
+      setAmPreview(extractAmRoutine(data.previewHtml));
+      setPreviewInsights(data.previewInsights || []);
+
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');
@@ -143,39 +128,36 @@ export default function UploadPage() {
         </button>
       </div>
 
-
       {resultText && (
         <>
           {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
-<div style={{ marginTop: '40px' }}>
-  <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
-    🌟 Top 3 Skin Insights (Free Preview)
-  </h2>
-
-  {previewInsights.length > 0 ? (
-    previewInsights.map((item, idx) => (
-      <div key={idx} style={{
-        marginBottom: '16px',
-        padding: '12px',
-        borderRadius: '8px',
-        backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-        color: isDarkMode ? '#fff' : '#222',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-      }}>
-        <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
-        <p><strong>Status:</strong> {item.status}</p>
-        <p><strong>Solution:</strong> {item.solution}</p>
-      </div>
-    ))
-  ) : (
-    <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-      <li>✅ Sebum: Balanced</li>
-      <li>🟡 Hydration: Low</li>
-      <li>❌ Texture: Uneven</li>
-    </ul>
-  )}
-</div>
-
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+              🌟 Top 3 Skin Insights (Free Preview)
+            </h2>
+            {previewInsights.length > 0 ? (
+              previewInsights.map((item, idx) => (
+                <div key={idx} style={{
+                  marginBottom: '16px',
+                  padding: '12px',
+                  borderRadius: '8px',
+                  backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+                  color: isDarkMode ? '#fff' : '#222',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+                }}>
+                  <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
+                  <p><strong>Status:</strong> {item.status}</p>
+                  <p><strong>Solution:</strong> {item.solution}</p>
+                </div>
+              ))
+            ) : (
+              <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
+                <li>✅ Sebum: Balanced</li>
+                <li>🟡 Hydration: Low</li>
+                <li>❌ Texture: Uneven</li>
+              </ul>
+            )}
+          </div>
 
           {/* 🔒 Locked Items */}
           <div style={{ marginTop: '40px' }}>
@@ -197,18 +179,19 @@ export default function UploadPage() {
 
           {/* 🧴 AM Routine 일부 미리보기 */}
           <div
-  style={{
-    marginTop: '30px',
-    padding: '20px',
-    backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-    borderRadius: '12px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-    color: isDarkMode ? '#fff' : '#222',
-  }}
->
+            style={{
+              marginTop: '30px',
+              padding: '20px',
+              backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+              borderRadius: '12px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+              color: isDarkMode ? '#fff' : '#222',
+            }}
+          >
             <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
-            <p style={{ margin: '4px 0' }}>Cleanser: Gentle Foaming Wash</p>
-            <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
+            {amPreview.map((step, idx) => (
+              <p key={idx} style={{ margin: '4px 0' }}>{step}</p>
+            ))}
             <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
           </div>
 
@@ -226,7 +209,6 @@ export default function UploadPage() {
       {isPaid && (
         <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
       )}
-
 
       <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
         Need help? Contact us at <strong>admate@atladmate.com</strong><br />
