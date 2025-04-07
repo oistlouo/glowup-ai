@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 export default function UploadPage() {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [resultText, setResultText] = useState('');
+  const [previewHtml, setPreviewHtml] = useState('');
+  const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
+  const [isPaid, setIsPaid] = useState(false);
 
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
@@ -22,7 +24,8 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!image) return;
     setLoading(true);
-    setResultText('');
+    setPreviewHtml('');
+    setFullHtml('');
 
     const formData = new FormData();
     formData.append('image', image);
@@ -40,11 +43,12 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      if (!data.result || data.result.trim() === '') {
-        throw new Error('No result returned from server');
+      if (!data.previewHtml || !data.fullHtml) {
+        throw new Error('Incomplete result from server');
       }
 
-      setResultText(data.result);
+      setPreviewHtml(data.previewHtml);
+      setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
     } catch (error) {
       console.error('Upload failed:', error);
@@ -53,6 +57,8 @@ export default function UploadPage() {
       setLoading(false);
     }
   };
+
+  const resultText = isPaid ? fullHtml : previewHtml;
 
   const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
   const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
@@ -105,59 +111,14 @@ export default function UploadPage() {
 
       {/* ✅ Upload Form */}
       <div style={{ marginBottom: '24px' }}>
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '12px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
-        />
-        <input
-          type="date"
-          placeholder="Birthdate"
-          value={birthdate}
-          onChange={(e) => setBirthdate(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            marginBottom: '12px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
-        />
-        <input
-          type="date"
-          placeholder="Analysis Date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          style={{
-            width: '100%',
-            padding: '10px',
-            borderRadius: '6px',
-            border: '1px solid #ccc',
-            color: '#222'
-          }}
-        />
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
+        <input type="date" placeholder="Birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
+        <input type="date" placeholder="Analysis Date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
       </div>
 
+      {/* ✅ File Upload */}
       <div style={{ textAlign: 'center' }}>
-        <label htmlFor="file-upload" style={{
-          display: 'inline-block',
-          padding: '12px 24px',
-          backgroundColor: '#0066cc',
-          color: '#fff',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          marginBottom: '20px',
-        }}>
+        <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer', marginBottom: '20px' }}>
           📷 Select Your Selfie
         </label>
         <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
@@ -168,20 +129,24 @@ export default function UploadPage() {
       )}
 
       <div style={{ textAlign: 'center' }}>
-        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? 'Analyzing...' : '✨ Start Analysis'}
+        <button onClick={() => {
+          if (!isPaid) {
+            const unlock = window.confirm('You are viewing a free preview.\nTo unlock your full personalized routine, click OK.');
+            if (unlock) setIsPaid(true);
+          } else {
+            handleUpload();
+          }
+        }} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+          {loading ? 'Analyzing...' : (isPaid ? '🔓 Start Analysis' : '✨ Start Free Preview')}
         </button>
       </div>
 
       {resultText && (
         <>
           <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
-
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
-              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>
-                🌟 Top 3 Skin Concerns
-              </h2>
+              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>🌟 Top 3 Skin Concerns</h2>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 {concernsArray.map((concern, index) => (
                   <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
@@ -196,5 +161,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-
