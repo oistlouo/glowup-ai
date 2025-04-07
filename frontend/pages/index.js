@@ -112,8 +112,14 @@ export default function UploadPage() {
       color: #ccc !important;
       opacity: 1 !important;
     }
+
+    /* ✅ 카드 배경도 어둡게 통일 */
+    .card, .result-card {
+      background-color: #1e1e1e !important;
+    }
   }
 `}</style>
+
 
 
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>

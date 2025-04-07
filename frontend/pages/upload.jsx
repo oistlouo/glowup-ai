@@ -93,32 +93,38 @@ export default function UploadPage() {
   return (
     <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
-        @media (prefers-color-scheme: dark) {
-          body {
-            background-color: #121212;
-            color: #fff;
-          }
+  @media (prefers-color-scheme: dark) {
+    body {
+      background-color: #121212;
+      color: #fff;
+    }
 
-          input, h1, h2, p, label, div {
-            color: #fff !important;
-          }
+    input, h1, h2, p, label, div {
+      color: #fff !important;
+    }
 
-          input {
-            background-color: #1e1e1e !important;
-            border: 1px solid #444 !important;
-            color: #fff !important;
-          }
+    input {
+      background-color: #1e1e1e !important;
+      border: 1px solid #444 !important;
+      color: #fff !important;
+    }
 
-          input::placeholder,
-          input::-webkit-input-placeholder,
-          input::-moz-placeholder,
-          input:-ms-input-placeholder,
-          input:-moz-placeholder {
-            color: #ccc !important;
-            opacity: 1 !important;
-          }
-        }
-      `}</style>
+    input::placeholder,
+    input::-webkit-input-placeholder,
+    input::-moz-placeholder,
+    input:-ms-input-placeholder,
+    input:-moz-placeholder {
+      color: #ccc !important;
+      opacity: 1 !important;
+    }
+
+    /* ✅ 카드 배경도 어둡게 통일 */
+    .card, .result-card {
+      background-color: #1e1e1e !important;
+    }
+  }
+`}</style>
+
 
       <div style={{ background: '#fff', padding: '24px', borderRadius: '12px', boxShadow: '0 1px 4px rgba(0,0,0,0.08)', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '20px', fontWeight: '700', textAlign: 'center', marginBottom: '12px' }}>How to Use</h2>
