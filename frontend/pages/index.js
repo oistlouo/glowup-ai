@@ -148,10 +148,6 @@ export default function UploadPage() {
             <strong>Only $3.99 USD</strong>
           </div>
           <div id="paypal-container-XW5X3YNYP26TN" />
-          {/* UX용 데모 버튼 */}
-          <button onClick={() => setIsPaid(true)} style={{ marginTop: '10px', background: '#eee', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer' }}>
-            👉 View Full Report
-          </button>
         </div>
       )}
 
