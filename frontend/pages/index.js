@@ -6,7 +6,6 @@ export default function UploadPage() {
   const [resultText, setResultText] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
-
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
@@ -143,59 +142,41 @@ export default function UploadPage() {
         }
       `}</style>
 
-      <h1 style={{ fontSize: '36px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px' }}>
-        GlowUp.AI
-      </h1>
-      <p style={{ textAlign: 'center', fontSize: '16px', color: '#000', marginBottom: '12px' }}>
-        Discover your skin's hidden story with GlowUp.AI ✨
-      </p>
-      <p style={{ textAlign: 'center', fontSize: '14px', color: '#000', marginBottom: '30px' }}>
-        Powered by Korean dermatology and AI-driven beauty insight
-      </p>
+      {/* Hero Section */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
+        <p style={{ fontSize: '20px', marginBottom: '20px' }}>AI가 당신의 피부 상태를 진단합니다</p>
+        <img src="https://via.placeholder.com/600x300?text=Before+%2F+After+Example" alt="Before/After" style={{ width: '100%', borderRadius: '12px', marginBottom: '20px' }} />
+        <p style={{ fontSize: '16px', fontStyle: 'italic' }}>
+          "처음 진단 받고 3개월 루틴을 지켰더니 피부결이 눈에 띄게 좋아졌어요!" – Jane (NY)
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '20px' }}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Medical_symbol.png" alt="Medical Trust" width="40" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Logo.svg" alt="AI Powered" width="60" />
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/OpenAI_Logo.svg" alt="OpenAI GPT" width="50" />
+        </div>
+      </div>
 
+      {/* Upload Section */}
       <p style={{ fontSize: '14px', color: '#777', textAlign: 'center', lineHeight: '1.6', marginTop: '10px', marginBottom: '30px' }}>
         For the most accurate results, please upload a selfie that meets the following:
-        <br />
-        1. Well-lit with light facing your face
-        <br />
-        2. Forehead fully visible (no bangs or hats)
-        <br />
-        3. Original photo (no filters or edits)
-        <br />
-        4. Full face clearly centered in frame
+        <br />1. Well-lit with light facing your face
+        <br />2. Forehead fully visible (no bangs or hats)
+        <br />3. Original photo (no filters or edits)
+        <br />4. Full face clearly centered in frame
       </p>
 
       <div style={{ marginBottom: '24px' }}>
         <label style={{ fontWeight: 'bold', marginBottom: '4px', display: 'block' }}>Name</label>
-        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)}
-          style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
-        />
-        <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
-          Birthdate
-        </label>
-        <input id="birthdate" type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} required
-          style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
-        />
-        <label htmlFor="date" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>
-          Analysis Date
-        </label>
-        <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required
-          style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }}
-        />
+        <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
+        <label htmlFor="birthdate" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>Birthdate</label>
+        <input id="birthdate" type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} required style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
+        <label htmlFor="date" style={{ fontWeight: 'bold', display: 'block', marginBottom: '4px' }}>Analysis Date</label>
+        <input id="date" type="date" value={date} onChange={(e) => setDate(e.target.value)} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #ccc', color: '#222' }} />
       </div>
 
       <div style={{ textAlign: 'center' }}>
-        <label htmlFor="file-upload" style={{
-          display: 'inline-block',
-          padding: '12px 24px',
-          backgroundColor: '#0066cc',
-          color: '#fff',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          marginBottom: '20px',
-        }}>
-          📷 Select Your Selfie
-        </label>
+        <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer', marginBottom: '20px' }}>📷 Select Your Selfie</label>
         <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </div>
 
@@ -224,13 +205,10 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div className="result-card" style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
-            dangerouslySetInnerHTML={{ __html: resultText }} />
+          <div className="result-card" style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
-              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>
-                🌟 Top 3 Skin Concerns
-              </h2>
+              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>🌟 Top 3 Skin Concerns</h2>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 {concernsArray.map((concern, index) => (
                   <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
@@ -247,9 +225,8 @@ export default function UploadPage() {
         Need help? Contact us at <a href="mailto:admate@atladmate.com" style={{ color: '#0066cc' }}>admate@atladmate.com</a>
       </p>
       <p className="footer-email">
-  <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
-</p>
-
+        <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
+      </p>
     </div>
   );
 }
