@@ -23,9 +23,6 @@ export default function UploadPage() {
   };
   
 
-
-
-
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -249,31 +246,28 @@ export default function UploadPage() {
   </ul>
 )}
 
+{/* 🔒 Locked Items */}
+<div style={{ marginTop: '40px' }}>
+  <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
+    🔒 Locked Analysis Sections
+  </h3>
+  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
+    <li>🔒 Pores</li>
+    <li>🔒 Redness</li>
+    <li>🔒 Wrinkles</li>
+    <li>🔒 Pigmentation</li>
+    <li>🔒 Skin Tone</li>
+    <li>🔒 Sensitivity</li>
+    <li>🔒 Total Score</li>
+    <li>🔒 Skin Type Summary</li>
+    <li>🔒 Personalized AM/PM Routine</li>
+  </ul>
+</div>
 
-    </div>
-
-    {/* 🔒 Locked Items */}
-    <div style={{ marginTop: '40px' }}>
-      <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
-        🔒 Locked Analysis Sections
-      </h3>
-      <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
-        <li>🔒 Pores</li>
-        <li>🔒 Redness</li>
-        <li>🔒 Wrinkles</li>
-        <li>🔒 Pigmentation</li>
-        <li>🔒 Skin Tone</li>
-        <li>🔒 Sensitivity</li>
-        <li>🔒 Total Score</li>
-        <li>🔒 Skin Type Summary</li>
-        <li>🔒 Personalized AM/PM Routine</li>
-      </ul>
-    </div>
-
-    {/* 🧴 AM Routine 일부 미리보기 */}
-    <div style={{ marginTop: '30px', padding: '20px', backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', color: isDarkMode ? '#fff' : '#222' }}>
+{/* 🧴 AM Routine 일부 미리보기 */}
+<div style={{ marginTop: '30px', padding: '20px', backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', color: isDarkMode ? '#fff' : '#222' }}>
   <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
-  {amPreview.length > 0 ? (
+  {amPreview && amPreview.length > 0 ? (
     amPreview.map((step, idx) => <p key={idx} style={{ margin: '4px 0' }}>{step}</p>)
   ) : (
     <>
@@ -281,6 +275,9 @@ export default function UploadPage() {
       <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
     </>
   )}
+  <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
+</div>
+
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
 </div>
 
