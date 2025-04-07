@@ -11,16 +11,14 @@ export default function UploadPage() {
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isPaid, setIsPaid] = useState(false);
-
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-useEffect(() => {
-  if (typeof window !== 'undefined') {
-    const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDarkMode(match);
-  }
-}, []);
-
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(match);
+    }
+  }, []);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -98,36 +96,32 @@ useEffect(() => {
   return (
     <div style={{ padding: '40px 20px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #121212;
-      color: #fff;
-    }
-
-    input, h1, h2, p, label, div {
-      color: #fff !important;
-    }
-
-    input {
-      background-color: #1e1e1e !important;
-      border: 1px solid #444 !important;
-      color: #fff !important;
-    }
-
-    input::placeholder,
-    input::-webkit-input-placeholder,
-    input::-moz-placeholder,
-    input:-ms-input-placeholder,
-    input:-moz-placeholder {
-      color: #ccc !important;
-      opacity: 1 !important;
-    }
-
-    .card, .result-card {
-      background-color: #1e1e1e !important;
-    }
-  }
-`}</style>
+        @media (prefers-color-scheme: dark) {
+          body {
+            background-color: #121212;
+            color: #fff;
+          }
+          input, h1, h2, p, label, div {
+            color: #fff !important;
+          }
+          input {
+            background-color: #1e1e1e !important;
+            border: 1px solid #444 !important;
+            color: #fff !important;
+          }
+          input::placeholder,
+          input::-webkit-input-placeholder,
+          input::-moz-placeholder,
+          input:-ms-input-placeholder,
+          input:-moz-placeholder {
+            color: #ccc !important;
+            opacity: 1 !important;
+          }
+          .card, .result-card {
+            background-color: #1e1e1e !important;
+          }
+        }
+      `}</style>
 
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
@@ -172,7 +166,50 @@ useEffect(() => {
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', background: '#fafafa' }} />
       </div>
 
-      {/* 👇 나머지 카드들 및 로직은 이전 코드 그대로 두기 */}
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <label htmlFor="file-upload" style={{ backgroundColor: '#0066cc', color: '#fff', padding: '12px 24px', borderRadius: '6px', cursor: 'pointer' }}>📷 Select Your Selfie</label>
+        <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
+      </div>
+
+      {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
+
+      {(!isPaid && !previewHtml) && (
+        <div style={{ textAlign: 'center' }}>
+          <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
+            {loading ? 'Analyzing...' : '✨ Start Analyze'}
+          </button>
+        </div>
+      )}
+
+      {previewHtml && (
+        <div style={{ marginTop: '30px' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+            🌟 Top 3 Skin Concerns
+          </h2>
+        </div>
+      )}
+
+      {displayedHtml && (
+        <div className="result-card" style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+      )}
+
+      {!isPaid && previewHtml && (
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
+            🔓 To unlock your full skin report, complete the payment.<br />
+            Includes analysis of 9 key skin categories + AM/PM routines.<br />
+            <strong>Only $3.99 USD</strong>
+          </div>
+          <div id="paypal-container-XW5X3YNYP26TN" />
+        </div>
+      )}
+
+      <p className="footer-email">
+        Need help? Contact us at <a href="mailto:admate@atladmate.com">admate@atladmate.com</a>
+      </p>
+      <p className="footer-email">
+        <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
+      </p>
     </div>
   );
 }
