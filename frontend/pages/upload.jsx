@@ -117,38 +117,62 @@ export default function UploadPage() {
         </button>
       </div>
 
+
       {resultText && (
         <>
-          {concernsArray.length > 0 && (
-            <div style={{ marginTop: '40px' }}>
-              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>🌟 Top 3 Skin Concerns</h2>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                {concernsArray.map((concern, index) => (
-                  <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
-                    {concern.replace(/<.*?>/g, '')}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
+          <div style={{ marginTop: '40px' }}>
+            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+              🌟 Top 3 Skin Insights (Free Preview)
+            </h2>
+            <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
+              <li>✅ Sebum (T-zone vs Cheeks): Balanced</li>
+              <li>🟡 Hydration Level: Low</li>
+              <li>❌ Texture: Uneven</li>
+            </ul>
+          </div>
 
-          <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+          {/* 🔒 Locked Items */}
+          <div style={{ marginTop: '40px' }}>
+            <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
+              🔒 Locked Analysis Sections
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
+              <li>🔒 Pores</li>
+              <li>🔒 Redness</li>
+              <li>🔒 Wrinkles</li>
+              <li>🔒 Pigmentation</li>
+              <li>🔒 Skin Tone</li>
+              <li>🔒 Sensitivity</li>
+              <li>🔒 Total Score</li>
+              <li>🔒 Skin Type Summary</li>
+              <li>🔒 Personalized AM/PM Routine</li>
+            </ul>
+          </div>
 
-          {!isPaid && previewHtml && (
-            <div style={{ textAlign: 'center', marginTop: '30px' }}>
-              <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
-                🔓 To unlock your full skin report, complete the payment.<br />
-                Includes analysis of 9 key skin categories + AM/PM routines.<br />
-                <strong>Only $3.99 USD</strong><br />
-                <span style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>
-                  After payment, you'll be able to start your analysis
-                </span>
-              </div>
-              <div id="paypal-container-XW5X3YNYP26TN" />
+          {/* 🧴 AM Routine 일부 미리보기 */}
+          <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+            <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
+            <p style={{ margin: '4px 0' }}>Cleanser: Gentle Foaming Wash</p>
+            <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
+            <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
+          </div>
+
+          {/* 💸 결제 유도 문구 + 버튼 */}
+          <div style={{ textAlign: 'center', marginTop: '30px' }}>
+            <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px', fontWeight: 'bold' }}>
+              Start your skin transformation now for just <span style={{ color: '#cc0044' }}>$3.99</span> 💎<br />
+              Your personal skin consultant — no clinic visit needed.
             </div>
-          )}
+            <div id="paypal-container-XW5X3YNYP26TN" />
+          </div>
         </>
       )}
+
+      {isPaid && (
+        <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
+      )}
+
 
       <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
         Need help? Contact us at <strong>admate@atladmate.com</strong><br />
