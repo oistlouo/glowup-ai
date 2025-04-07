@@ -60,33 +60,50 @@ export default function UploadPage() {
   const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
 
   return (
-    <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
+    <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
         @media (prefers-color-scheme: dark) {
           body {
             background-color: #121212;
           }
-          input {
-            background-color: #1e1e1e;
-            color: #fff !important;
-            border: 1px solid #444;
-          }
-          h1, p, label {
+          input, h1, h2, p, label {
             color: #fff !important;
           }
         }
       `}</style>
 
-      <h1 style={{ fontSize: '36px', fontWeight: 'bold', textAlign: 'center', marginBottom: '8px' }}>
-        GlowUp.AI
-      </h1>
-      <p style={{ textAlign: 'center', fontSize: '16px', color: '#000', marginBottom: '12px' }}>
-        Discover your skin's hidden story with GlowUp.AI ✨
-      </p>
-      <p style={{ textAlign: 'center', fontSize: '14px', color: '#000', marginBottom: '30px' }}>
-        Powered by Korean dermatology and AI-driven beauty insight
-      </p>
+      {/* ✅ Hero Section */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h1 style={{ fontSize: '40px', fontWeight: '800', marginBottom: '10px' }}>GlowUp.AI</h1>
+        <p style={{ fontSize: '18px', fontWeight: '500' }}>AI가 당신의 피부 상태를 진단합니다</p>
+        <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>Developed with top Korean dermatologists & trusted by over 100,000 users</p>
+      </div>
 
+      {/* ✅ Before & After */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <img src="https://via.placeholder.com/120x120?text=Before" alt="Before" style={{ borderRadius: '12px' }} />
+          <p style={{ fontSize: '13px', marginTop: '6px' }}>Before</p>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <img src="https://via.placeholder.com/120x120?text=After" alt="After" style={{ borderRadius: '12px' }} />
+          <p style={{ fontSize: '13px', marginTop: '6px' }}>After 3 months</p>
+        </div>
+      </div>
+
+      {/* ✅ Testimonial */}
+      <div style={{ background: '#f8f8f8', padding: '20px', borderRadius: '10px', fontSize: '14px', marginBottom: '30px' }}>
+        "처음 진단 받고 3개월 루틴을 지켰더니 피부결이 눈에 띄게 좋아졌어요!" — <strong>Jane (NY)</strong>
+      </div>
+
+      {/* ✅ Trust Logos */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginBottom: '50px' }}>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/OpenAI_Logo.svg" alt="OpenAI" style={{ height: '30px' }} />
+        <img src="https://via.placeholder.com/100x30?text=K-Derm" alt="K-Derm" />
+        <img src="https://via.placeholder.com/100x30?text=100K+Trusted" alt="Trust" />
+      </div>
+
+      {/* ✅ Upload Form */}
       <div style={{ marginBottom: '24px' }}>
         <input
           type="text"
