@@ -44,7 +44,7 @@ export default function UploadPage() {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://localhost:5001/analyze', {
+      const response = await fetch('https://glowup-ai.onrender.com/analyze', {
         method: 'POST',
         body: formData,
       });
