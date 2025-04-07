@@ -77,8 +77,6 @@ export default function UploadPage() {
 
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      {/* 스타일 생략: 기존 동일 */}
-
       {/* Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
@@ -122,19 +120,21 @@ export default function UploadPage() {
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
-      {!isPaid && (
+      {(!isPaid && previewHtml) && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div className="paypal-info">
-            To unlock your full skincare routine, complete your analysis for <strong>$3.99 USD</strong>
+            To unlock your full personalized routine:
+            <br />
+            <strong>$3.99 USD</strong>
           </div>
           <div id="paypal-container-XW5X3YNYP26TN" />
         </div>
       )}
 
-      {isPaid && !fullHtml && (
+      {(!isPaid && !previewHtml) && (
         <div style={{ textAlign: 'center' }}>
           <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
-            {loading ? 'Analyzing...' : '✨ Start Analysis'}
+            {loading ? 'Analyzing...' : '✨ Start Free Preview'}
           </button>
         </div>
       )}
