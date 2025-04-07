@@ -100,6 +100,35 @@ Always return ALL of the following 9 skin categories in this exact order:
 <h2>🔹 8. Skin Tone</h2>
 <h2>🔹 9. Acne</h2>
 
+(!!!) After generating the full HTML report above, ALSO return a second output in JSON format that summarizes ONLY the following 3 categories:
+
+- Sebum
+- Hydration
+- Texture
+
+Return it like this:
+
+[
+  {
+    "category": "Sebum",
+    "status": "...",
+    "solution": "..."
+  },
+  {
+    "category": "Hydration",
+    "status": "...",
+    "solution": "..."
+  },
+  {
+    "category": "Texture",
+    "status": "...",
+    "solution": "..."
+  }
+]
+
+This will be used for a free preview UI. Write in a clear and expert tone, no translation needed.
+
+
 <h2>✨ Final Summary</h2>
 <ul>
   <li><strong>Total Score:</strong> .../45</li>
@@ -122,7 +151,8 @@ Always return ALL of the following 9 skin categories in this exact order:
   <li><strong>Improvement Timeline:</strong> ...</li>
   <li><strong>Closing Message:</strong> Write in a warm Korean tone. Include words like ‘피부’, ‘화이팅’</li>
 </ul>
-    `;
+`;
+
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
@@ -143,21 +173,19 @@ Always return ALL of the following 9 skin categories in this exact order:
       .replace(/^```html\n?/gm, '')
       .replace(/```$/gm, '')
       .trim();
-
+    
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
-
+    
     // ✅ 프리뷰: 1~3번 항목까지만 추출
-    const previewHtml = processedResult.split('<h2>🔹 4.')[0] + '</div>';
-
-    console.log("📦 Final GPT result generated.");
-
-    // ✅ previewHtml, fullHtml 모두 전달
+    const previewHtml = processedResult.split('<h2>🔹 4.')[0] + '</div';
+    
     res.json({
       previewHtml,
       fullHtml: processedResult,
       imageUrl,
     });
+    
   } catch (err) {
     console.error('❌ Server error:', err);
     if (err.response) {

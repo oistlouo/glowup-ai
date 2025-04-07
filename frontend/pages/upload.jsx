@@ -13,6 +13,7 @@ export default function UploadPage() {
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [previewInsights, setPreviewInsights] = useState([]);
   const [amPreview, setAmPreview] = useState([]);
 
 
@@ -36,6 +37,8 @@ export default function UploadPage() {
     setLoading(true);
     setPreviewHtml('');
     setFullHtml('');
+    setPreviewInsights(data.previewInsights || []);
+
 
     const formData = new FormData();
     formData.append('image', image);
@@ -133,16 +136,35 @@ export default function UploadPage() {
       {resultText && (
         <>
           {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
-          <div style={{ marginTop: '40px' }}>
-            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
-              🌟 Top 3 Skin Insights (Free Preview)
-            </h2>
-            <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-              <li>✅ Sebum (T-zone vs Cheeks): Balanced</li>
-              <li>🟡 Hydration Level: Low</li>
-              <li>❌ Texture: Uneven</li>
-            </ul>
-          </div>
+<div style={{ marginTop: '40px' }}>
+  <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+    🌟 Top 3 Skin Insights (Free Preview)
+  </h2>
+
+  {previewInsights.length > 0 ? (
+    previewInsights.map((item, idx) => (
+      <div key={idx} style={{
+        marginBottom: '16px',
+        padding: '12px',
+        borderRadius: '8px',
+        backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+        color: isDarkMode ? '#fff' : '#222',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
+      }}>
+        <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
+        <p><strong>Status:</strong> {item.status}</p>
+        <p><strong>Solution:</strong> {item.solution}</p>
+      </div>
+    ))
+  ) : (
+    <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
+      <li>✅ Sebum: Balanced</li>
+      <li>🟡 Hydration: Low</li>
+      <li>❌ Texture: Uneven</li>
+    </ul>
+  )}
+</div>
+
 
           {/* 🔒 Locked Items */}
           <div style={{ marginTop: '40px' }}>

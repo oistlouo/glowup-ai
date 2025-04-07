@@ -14,6 +14,8 @@ export default function UploadPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [amPreview, setAmPreview] = useState([]);
   const [top3Insights, setTop3Insights] = useState([]);
+  const [previewInsights, setPreviewInsights] = useState([]);
+
 
 
 
@@ -76,6 +78,7 @@ export default function UploadPage() {
         throw new Error('Incomplete result from server');
       }
 
+      setPreviewInsights(data.previewInsights || []);
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
@@ -216,17 +219,28 @@ export default function UploadPage() {
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
         🌟 Top 3 Skin Insights (Free Preview)
       </h2>
-      <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-  {top3Insights.length > 0 ? (
-    top3Insights.map((item, idx) => <li key={idx}>{item}</li>)
-  ) : (
-    <>
-      <li>✅ Sebum: Balanced</li>
-      <li>🟡 Hydration: Low</li>
-      <li>❌ Texture: Uneven</li>
-    </>
-  )}
-</ul>
+      {previewInsights.length > 0 ? (
+  previewInsights.map((item, idx) => (
+    <div key={idx} style={{
+      marginBottom: '16px',
+      padding: '12px',
+      borderRadius: '8px',
+      backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+      color: isDarkMode ? '#fff' : '#222',
+    }}>
+      <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
+      <p><strong>Status:</strong> {item.status}</p>
+      <p><strong>Solution:</strong> {item.solution}</p>
+    </div>
+  ))
+) : (
+  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
+    <li>✅ Sebum: Balanced</li>
+    <li>🟡 Hydration: Low</li>
+    <li>❌ Texture: Uneven</li>
+  </ul>
+)}
+
 
     </div>
 
