@@ -86,37 +86,40 @@ export default function UploadPage() {
   const displayedHtml = isPaid ? fullHtml : previewHtml;
 
   return (
-    <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
+    <div style={{ padding: '40px 20px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <style>{`
         @media (prefers-color-scheme: dark) {
           body {
             background-color: #121212;
+            color: #fff;
           }
-          label, input, h1, h2, p, div {
+          input, h1, h2, p, label, div {
             color: #fff !important;
           }
           input {
             background-color: #1e1e1e !important;
             border: 1px solid #444 !important;
+            color: #fff !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .birthdate-group input {
+            flex: 1 1 30%;
           }
         }
       `}</style>
 
-      {/* Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
         <p style={{ fontSize: '20px', marginBottom: '20px' }}>AI-powered selfie skin analysis, inspired by Korea’s professional dermatology tech.</p>
-        <div style={{ marginBottom: '20px' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>How to Use</h2>
-          <p style={{ fontSize: '16px', lineHeight: '1.6' }}>
-            1. Upload a selfie<br />
-            2. Tap “Analyze”<br />
-            3. Instantly receive expert skin insights and a personalized routine to reveal your glow
-          </p>
-        </div>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>How to Use</h2>
+        <p style={{ fontSize: '16px', lineHeight: '1.6' }}>
+          1. Upload a selfie<br />
+          2. Tap “Analyze”<br />
+          3. Instantly receive expert skin insights and a personalized routine to reveal your glow
+        </p>
       </div>
 
-      {/* Upload Instructions */}
       <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '30px' }}>
         <p style={{ fontSize: '14px', color: '#777', lineHeight: '1.6', textAlign: 'center' }}>
           For the most accurate results, please upload a selfie that meets the following:<br />
@@ -127,78 +130,30 @@ export default function UploadPage() {
         </p>
       </div>
 
-      {/* User Info */}
       <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
         <label>Name</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
-        
         <label>Birthdate</label>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
-          <input
-            type="text"
-            placeholder="YYYY"
-            value={birthdate.slice(0, 4)}
-            onChange={(e) => {
-              const y = e.target.value.replace(/\D/g, '').slice(0, 4);
-              setBirthdate((prev) => y + prev.slice(4));
-            }}
-            inputMode="numeric"
-            maxLength={4}
-            style={{
-              flex: 1,
-              padding: '10px',
-              backgroundColor: '#fafafa',
-              border: '1px solid #ccc',
-              borderRadius: '6px'
-            }}
-          />
-          <input
-            type="text"
-            placeholder="MM"
-            value={birthdate.slice(4, 6)}
-            onChange={(e) => {
-              const m = e.target.value.replace(/\D/g, '').slice(0, 2);
-              setBirthdate((prev) => prev.slice(0, 4) + m + prev.slice(6));
-            }}
-            inputMode="numeric"
-            maxLength={2}
-            style={{
-              flex: 1,
-              padding: '10px',
-              backgroundColor: '#fafafa',
-              border: '1px solid #ccc',
-              borderRadius: '6px'
-            }}
-          />
-          <input
-            type="text"
-            placeholder="DD"
-            value={birthdate.slice(6, 8)}
-            onChange={(e) => {
-              const d = e.target.value.replace(/\D/g, '').slice(0, 2);
-              setBirthdate((prev) => prev.slice(0, 6) + d);
-            }}
-            inputMode="numeric"
-            maxLength={2}
-            style={{
-              flex: 1,
-              padding: '10px',
-              backgroundColor: '#fafafa',
-              border: '1px solid #ccc',
-              borderRadius: '6px'
-            }}
-          />
+        <div className="birthdate-group" style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+          <input type="text" placeholder="YYYY" value={birthdate.slice(0, 4)} onChange={(e) => {
+            const y = e.target.value.replace(/\D/g, '').slice(0, 4);
+            setBirthdate((prev) => y + prev.slice(4));
+          }} inputMode="numeric" maxLength={4} style={{ flex: 1, minWidth: '80px', padding: '10px', backgroundColor: '#fafafa', border: '1px solid #ccc', borderRadius: '6px' }} />
+          <input type="text" placeholder="MM" value={birthdate.slice(4, 6)} onChange={(e) => {
+            const m = e.target.value.replace(/\D/g, '').slice(0, 2);
+            setBirthdate((prev) => prev.slice(0, 4) + m + prev.slice(6));
+          }} inputMode="numeric" maxLength={2} style={{ flex: 1, minWidth: '60px', padding: '10px', backgroundColor: '#fafafa', border: '1px solid #ccc', borderRadius: '6px' }} />
+          <input type="text" placeholder="DD" value={birthdate.slice(6, 8)} onChange={(e) => {
+            const d = e.target.value.replace(/\D/g, '').slice(0, 2);
+            setBirthdate((prev) => prev.slice(0, 6) + d);
+          }} inputMode="numeric" maxLength={2} style={{ flex: 1, minWidth: '60px', padding: '10px', backgroundColor: '#fafafa', border: '1px solid #ccc', borderRadius: '6px' }} />
         </div>
-
         <label>Analysis Date</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', background: '#fafafa' }} />
       </div>
 
-      {/* File Upload */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <label htmlFor="file-upload" style={{ backgroundColor: '#0066cc', color: '#fff', padding: '12px 24px', borderRadius: '6px', cursor: 'pointer' }}>
-          📷 Select Your Selfie
-        </label>
+        <label htmlFor="file-upload" style={{ backgroundColor: '#0066cc', color: '#fff', padding: '12px 24px', borderRadius: '6px', cursor: 'pointer' }}>📷 Select Your Selfie</label>
         <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </div>
 
@@ -212,7 +167,6 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* Top 3 Concerns */}
       {previewHtml && (
         <div style={{ marginTop: '30px' }}>
           <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>

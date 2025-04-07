@@ -102,6 +102,7 @@ export default function UploadPage() {
             color: #fff !important;
           }
           input {
+            color: #fff !important;
             background-color: #1e1e1e !important;
             border: 1px solid #444 !important;
           }
@@ -129,7 +130,7 @@ export default function UploadPage() {
         <input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', borderRadius: '6px', border: '1px solid #ccc', background: '#fafafa' }} />
         
         <label>Birthdate</label>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
           <input
             type="text"
             placeholder="YYYY"
@@ -141,7 +142,8 @@ export default function UploadPage() {
             inputMode="numeric"
             maxLength={4}
             style={{
-              flex: 1,
+              minWidth: '80px',
+              flex: '1 1 30%',
               padding: '10px',
               backgroundColor: '#fafafa',
               border: '1px solid #ccc',
@@ -159,7 +161,8 @@ export default function UploadPage() {
             inputMode="numeric"
             maxLength={2}
             style={{
-              flex: 1,
+              minWidth: '60px',
+              flex: '1 1 30%',
               padding: '10px',
               backgroundColor: '#fafafa',
               border: '1px solid #ccc',
@@ -177,7 +180,8 @@ export default function UploadPage() {
             inputMode="numeric"
             maxLength={2}
             style={{
-              flex: 1,
+              minWidth: '60px',
+              flex: '1 1 30%',
               padding: '10px',
               backgroundColor: '#fafafa',
               border: '1px solid #ccc',
