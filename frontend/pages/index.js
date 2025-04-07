@@ -132,29 +132,33 @@ export default function UploadPage() {
       {previewHtml && (
         <div style={{ marginTop: '30px' }}>
           <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
-            🌟 AI가 분석한 당신의 핵심 피부 문제 3가지
+            🌟 Top 3 Skin Concerns
           </h2>
         </div>
       )}
 
-      {/* ✅ PayPal Button after preview only */}
+      {/* ✅ PayPal Section */}
       {!isPaid && previewHtml && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
-            🔓 전체 피부 분석을 확인하려면 결제가 필요합니다.
+            🔓 To unlock your full skin report, complete the payment.
             <br />
-            9가지 항목별 전문가 분석과 AM/PM 루틴을 포함한
+            Includes analysis of 9 key skin categories + AM/PM routines.
             <br />
-            <strong>맞춤형 스킨케어 리포트</strong>를 확인해보세요 – <strong>$3.99 USD</strong>
+            <strong>Only $3.99 USD</strong>
           </div>
           <div id="paypal-container-XW5X3YNYP26TN" />
+          {/* UX용 데모 버튼 */}
+          <button onClick={() => setIsPaid(true)} style={{ marginTop: '10px', background: '#eee', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer' }}>
+            👉 View Full Report
+          </button>
         </div>
       )}
 
       {/* ✅ Full Report Title */}
       {isPaid && fullHtml && (
         <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginTop: '30px', marginBottom: '12px' }}>
-          🔓 전체 리포트 – 전문가 피부 분석 + 홈케어 솔루션
+          🔓 Full Report – Expert Skin Analysis + Homecare Solution
         </h2>
       )}
 

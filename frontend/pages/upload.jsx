@@ -81,8 +81,8 @@ export default function UploadPage() {
       {/* ✅ Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '40px', fontWeight: '800', marginBottom: '10px' }}>GlowUp.AI</h1>
-        <p style={{ fontSize: '18px', fontWeight: '500' }}>AI가 당신의 피부 상태를 진단합니다</p>
-        <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>Developed with top Korean dermatologists & trusted by over 100,000 users</p>
+        <p style={{ fontSize: '18px', fontWeight: '500' }}>AI-powered selfie skin analysis based on Korean dermatology.</p>
+        <p style={{ fontSize: '14px', color: '#666', marginTop: '10px' }}>Used by over 100,000+ people worldwide</p>
       </div>
 
       {/* ✅ Before & After */}
@@ -99,7 +99,7 @@ export default function UploadPage() {
 
       {/* ✅ Testimonial */}
       <div style={{ background: '#f8f8f8', padding: '20px', borderRadius: '10px', fontSize: '14px', marginBottom: '30px' }}>
-        "처음 진단 받고 3개월 루틴을 지켰더니 피부결이 눈에 띄게 좋아졌어요!" — <strong>Jane (NY)</strong>
+        "I followed the routine for 3 months after my first diagnosis and my skin texture visibly improved!" — <strong>Jane (NY)</strong>
       </div>
 
       {/* ✅ Trust Logos */}
@@ -143,10 +143,35 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+          {/* ✅ Preview Title */}
+          {!isPaid && (
+            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginTop: '40px', marginBottom: '12px' }}>
+              🌟 Top 3 Skin Concerns
+            </h2>
+          )}
+
+          {/* ✅ Result Preview */}
+          <div style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+
+          {/* ✅ Full Report Demo Button */}
+          {!isPaid && (
+            <div style={{ textAlign: 'center', marginTop: '20px' }}>
+              <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
+                🔓 To unlock your full skin report, complete the payment.
+                <br />
+                Includes analysis of 9 key skin categories + AM/PM routines.
+                <br />
+                <strong>Only $3.99 USD</strong>
+              </div>
+              <button onClick={() => setIsPaid(true)} style={{ marginTop: '10px', background: '#eee', border: 'none', padding: '10px 16px', borderRadius: '6px', cursor: 'pointer' }}>
+                👉 View Full Report
+              </button>
+            </div>
+          )}
+
+          {/* ✅ Top 3 concerns badge UI */}
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
-              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '20px' }}>🌟 Top 3 Skin Concerns</h2>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
                 {concernsArray.map((concern, index) => (
                   <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
