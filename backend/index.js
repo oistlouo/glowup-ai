@@ -147,13 +147,14 @@ Always return ALL of the following 9 skin categories in this exact order:
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
 
-    // 🔥 preview 영역만 잘라내기
-    const previewOnly = processedResult.split('<h2>✨ Final Summary</h2>')[0] + '<h2>✨ Final Summary</h2>';
+    // ✅ 프리뷰: 1~3번 항목까지만 추출
+    const previewHtml = processedResult.split('<h2>🔹 4.')[0] + '</div>';
 
     console.log("📦 Final GPT result generated.");
 
+    // ✅ previewHtml, fullHtml 모두 전달
     res.json({
-      previewHtml: previewOnly,
+      previewHtml,
       fullHtml: processedResult,
       imageUrl,
     });
