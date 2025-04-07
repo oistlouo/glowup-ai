@@ -57,7 +57,6 @@ export default function UploadPage() {
     }
   };
 
-  // ✅ PayPal SDK는 previewHtml이 생긴 후에만 로드되도록
   useEffect(() => {
     if (!previewHtml || isPaid) return;
 
@@ -88,6 +87,17 @@ export default function UploadPage() {
 
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
+      <style>{`
+        @media (prefers-color-scheme: dark) {
+          body {
+            background-color: #121212;
+          }
+          label, input, h1, h2, p, div {
+            color: #fff !important;
+          }
+        }
+      `}</style>
+
       {/* Hero Section */}
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
@@ -103,26 +113,28 @@ export default function UploadPage() {
       </div>
 
       {/* Upload Instructions */}
-      <p style={{ fontSize: '14px', color: '#777', textAlign: 'center', lineHeight: '1.6', marginTop: '10px', marginBottom: '30px' }}>
-        For the most accurate results, please upload a selfie that meets the following:
-        <br />1. Well-lit with light facing your face
-        <br />2. Forehead fully visible (no bangs or hats)
-        <br />3. Original photo (no filters or edits)
-        <br />4. Full face clearly centered in frame
-      </p>
+      <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '30px' }}>
+        <p style={{ fontSize: '14px', color: '#777', lineHeight: '1.6', textAlign: 'center' }}>
+          For the most accurate results, please upload a selfie that meets the following:<br />
+          1. Well-lit with light facing your face<br />
+          2. Forehead fully visible (no bangs or hats)<br />
+          3. Original photo (no filters or edits)<br />
+          4. Full face clearly centered in frame
+        </p>
+      </div>
 
       {/* User Info */}
-      <div style={{ marginBottom: '24px' }}>
+      <div style={{ background: '#fff', borderRadius: '12px', padding: '20px', boxShadow: '0 2px 6px rgba(0,0,0,0.1)', marginBottom: '24px' }}>
         <label>Name</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px' }} />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
         <label>Birthdate</label>
-        <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px' }} />
+        <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
         <label>Analysis Date</label>
-        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px' }} />
+        <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', background: '#fafafa' }} />
       </div>
 
       {/* File Upload */}
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <label htmlFor="file-upload" style={{ backgroundColor: '#0066cc', color: '#fff', padding: '12px 24px', borderRadius: '6px', cursor: 'pointer' }}>
           📷 Select Your Selfie
         </label>
@@ -139,7 +151,7 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* ✅ Preview Title */}
+      {/* ✅ Top 3 Skin Concerns First */}
       {previewHtml && (
         <div style={{ marginTop: '30px' }}>
           <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
@@ -148,29 +160,21 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* ✅ PayPal Section */}
+      {/* ✅ Report */}
+      {displayedHtml && (
+        <div className="result-card" style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
+      )}
+
+      {/* ✅ PayPal 안내 */}
       {!isPaid && previewHtml && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
-            🔓 To unlock your full skin report, complete the payment.
-            <br />
-            Includes analysis of 9 key skin categories + AM/PM routines.
-            <br />
+            🔓 To unlock your full skin report, complete the payment.<br />
+            Includes analysis of 9 key skin categories + AM/PM routines.<br />
             <strong>Only $3.99 USD</strong>
           </div>
           <div id="paypal-container-XW5X3YNYP26TN" />
         </div>
-      )}
-
-      {/* ✅ Full Report Title */}
-      {isPaid && fullHtml && (
-        <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginTop: '30px', marginBottom: '12px' }}>
-          🔓 Full Report – Expert Skin Analysis + Homecare Solution
-        </h2>
-      )}
-
-      {displayedHtml && (
-        <div className="result-card" style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px' }} dangerouslySetInnerHTML={{ __html: displayedHtml }} />
       )}
 
       <p className="footer-email">
