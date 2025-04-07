@@ -15,6 +15,13 @@ export default function UploadPage() {
   const [amPreview, setAmPreview] = useState([]);
   const [top3Insights, setTop3Insights] = useState([]);
   const [previewInsights, setPreviewInsights] = useState([]);
+  const extractAmRoutine = (html) => {
+    const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
+    if (!match) return [];
+    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
+    return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
+  };
+  
 
 
 
