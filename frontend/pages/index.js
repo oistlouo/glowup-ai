@@ -95,6 +95,10 @@ export default function UploadPage() {
           label, input, h1, h2, p, div {
             color: #fff !important;
           }
+          input {
+            background-color: #1e1e1e !important;
+            border: 1px solid #444 !important;
+          }
         }
       `}</style>
 
@@ -128,7 +132,15 @@ export default function UploadPage() {
         <label>Name</label>
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
         <label>Birthdate</label>
-        <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }} />
+        <input
+          type="text"
+          placeholder="YYYY-MM-DD"
+          value={birthdate}
+          onChange={(e) => setBirthdate(e.target.value)}
+          pattern="\d{4}-\d{2}-\d{2}"
+          inputMode="numeric"
+          style={{ width: '100%', padding: '10px', marginBottom: '12px', border: '1px solid #ccc', background: '#fafafa' }}
+        />
         <label>Analysis Date</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{ width: '100%', padding: '10px', border: '1px solid #ccc', background: '#fafafa' }} />
       </div>
