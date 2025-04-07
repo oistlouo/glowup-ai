@@ -106,6 +106,10 @@ export default function UploadPage() {
             background-color: #1e1e1e !important;
             border: 1px solid #444 !important;
           }
+          input::placeholder {
+            color: #ccc !important;
+            opacity: 1 !important;
+          }
         }
       `}</style>
 

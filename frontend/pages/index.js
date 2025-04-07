@@ -101,10 +101,9 @@ export default function UploadPage() {
             border: 1px solid #444 !important;
             color: #fff !important;
           }
-        }
-        @media (max-width: 480px) {
-          .birthdate-group input {
-            flex: 1 1 30%;
+          input::placeholder {
+            color: #ccc !important;
+            opacity: 1 !important;
           }
         }
       `}</style>
