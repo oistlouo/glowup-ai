@@ -58,7 +58,6 @@ export default function UploadPage() {
     }
   };
 
-  // ✅ 수정된 PayPal SDK useEffect
   useEffect(() => {
     if (!previewHtml || isPaid) return;
 
@@ -162,39 +161,43 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          {!isPaid && (
-            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginTop: '40px', marginBottom: '12px' }}>
-              🌟 Top 3 Skin Concerns
-            </h2>
-          )}
-          <div style={{ marginTop: '20px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
-        </>
-      )}
-
-      {!isPaid && previewHtml && (
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
-            🔓 To unlock your full skin report, complete the payment.
-            <br />
-            Includes analysis of 9 key skin categories + AM/PM routines.
-            <br />
-            <strong>Only $3.99 USD</strong>
-          </div>
-          <div id="paypal-container-XW5X3YNYP26TN" />
-        </div>
-      )}
-
-      {concernsArray.length > 0 && (
-        <div style={{ marginTop: '40px' }}>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            {concernsArray.map((concern, index) => (
-              <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
-                {concern.replace(/<.*?>/g, '')}
+          {/* ✅ 1. Top 3 Skin Concerns 뱃지 */}
+          {concernsArray.length > 0 && (
+            <div style={{ marginTop: '40px' }}>
+              <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
+                🌟 Top 3 Skin Concerns
+              </h2>
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                {concernsArray.map((concern, index) => (
+                  <div key={index} style={{ background: 'linear-gradient(135deg, #ffe0e0, #e0f7ff)', padding: '18px', borderRadius: '14px', border: '1px solid #ffc0cb', minWidth: '160px', textAlign: 'center', fontWeight: '700', color: '#cc0044', fontSize: '16px', boxShadow: '0 3px 6px rgba(0,0,0,0.08)' }}>
+                    {concern.replace(/<.*?>/g, '')}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+          )}
+
+          {/* ✅ 2. Skin Report HTML */}
+          <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+
+          {/* ✅ 3. 안내 문구 + PayPal */}
+          {!isPaid && previewHtml && (
+            <div style={{ textAlign: 'center', marginTop: '30px' }}>
+              <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
+                🔓 To unlock your full skin report, complete the payment.
+                <br />
+                Includes analysis of 9 key skin categories + AM/PM routines.
+                <br />
+                <strong>Only $3.99 USD</strong>
+                <br />
+                <span style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>After payment, you'll be able to start your analysis</span>
+              </div>
+              <div id="paypal-container-XW5X3YNYP26TN" />
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
+
