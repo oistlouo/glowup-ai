@@ -37,6 +37,7 @@ export default function UploadPage() {
     setLoading(true);
     setPreviewHtml('');
     setFullHtml('');
+    setImageUrl(data.imageUrl);
     setPreviewInsights(data.previewInsights || []);
 
 

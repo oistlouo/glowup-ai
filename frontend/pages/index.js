@@ -82,6 +82,8 @@ export default function UploadPage() {
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
+      setPreviewInsights(data.previewInsights);
+      
       const extractedInsights = extractTop3Insights(data.previewHtml);
       setTop3Insights(extractedInsights);
       
