@@ -58,11 +58,17 @@ export default function UploadPage() {
     }
   };
 
+  // ✅ 수정된 PayPal SDK useEffect
   useEffect(() => {
+    if (!previewHtml || isPaid) return;
+
+    let alreadyRendered = false;
+
     const script = document.createElement("script");
     script.src = "https://www.paypal.com/sdk/js?client-id=BAAwOk4pNQMtsvhlLL_t1mVXYJ8IVvo7hi01PUDAy1bAkBXud17i_QzZVXdmjSrBZntcYrxV2icLmu2Ndo&components=hosted-buttons&disable-funding=venmo&currency=USD";
     script.addEventListener("load", () => {
-      if (window.paypal) {
+      if (window.paypal && !alreadyRendered && document.getElementById("paypal-container-XW5X3YNYP26TN")) {
+        alreadyRendered = true;
         window.paypal.HostedButtons({
           hostedButtonId: "XW5X3YNYP26TN",
           onApprove: () => {
@@ -71,8 +77,12 @@ export default function UploadPage() {
         }).render("#paypal-container-XW5X3YNYP26TN");
       }
     });
+
     document.body.appendChild(script);
-  }, []);
+    return () => {
+      script.remove();
+    };
+  }, [previewHtml, isPaid]);
 
   const resultText = isPaid ? fullHtml : previewHtml;
 
@@ -161,7 +171,6 @@ export default function UploadPage() {
         </>
       )}
 
-      {/* PayPal 결제 안내 UI */}
       {!isPaid && previewHtml && (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
           <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px' }}>
@@ -175,7 +184,6 @@ export default function UploadPage() {
         </div>
       )}
 
-      {/* Top 3 concerns badge */}
       {concernsArray.length > 0 && (
         <div style={{ marginTop: '40px' }}>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>

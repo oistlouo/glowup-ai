@@ -57,13 +57,18 @@ export default function UploadPage() {
     }
   };
 
-  const displayedHtml = isPaid ? fullHtml : previewHtml;
-
+  // ✅ PayPal SDK는 previewHtml이 생긴 후에만 로드되도록
   useEffect(() => {
+    if (!previewHtml || isPaid) return;
+
+    let alreadyRendered = false;
+
     const script = document.createElement("script");
     script.src = "https://www.paypal.com/sdk/js?client-id=BAAwOk4pNQMtsvhlLL_t1mVXYJ8IVvo7hi01PUDAy1bAkBXud17i_QzZVXdmjSrBZntcYrxV2icLmu2Ndo&components=hosted-buttons&disable-funding=venmo&currency=USD";
+
     script.addEventListener("load", () => {
-      if (window.paypal) {
+      if (window.paypal && !alreadyRendered && document.getElementById("paypal-container-XW5X3YNYP26TN")) {
+        alreadyRendered = true;
         window.paypal.HostedButtons({
           hostedButtonId: "XW5X3YNYP26TN",
           onApprove: () => {
@@ -72,8 +77,14 @@ export default function UploadPage() {
         }).render("#paypal-container-XW5X3YNYP26TN");
       }
     });
+
     document.body.appendChild(script);
-  }, []);
+    return () => {
+      script.remove();
+    };
+  }, [previewHtml, isPaid]);
+
+  const displayedHtml = isPaid ? fullHtml : previewHtml;
 
   return (
     <div style={{ padding: '40px', maxWidth: '700px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
