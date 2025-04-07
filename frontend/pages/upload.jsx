@@ -14,6 +14,9 @@ export default function UploadPage() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  const [top3Insights, setTop3Insights] = useState([]);
+  const [amRoutinePreview, setAmRoutinePreview] = useState([]);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -27,6 +30,29 @@ export default function UploadPage() {
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
+  };
+
+  const extractInsights = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const listItems = Array.from(doc.querySelectorAll('li')).map(li => li.textContent.trim());
+    const insights = listItems.filter(item =>
+      item.toLowerCase().includes('sebum') ||
+      item.toLowerCase().includes('hydration') ||
+      item.toLowerCase().includes('texture')
+    ).slice(0, 3);
+    return insights;
+  };
+
+  const extractAmRoutine = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const amDiv = Array.from(doc.querySelectorAll('div')).find(div =>
+      div.textContent.toLowerCase().includes('am routine')
+    );
+    if (!amDiv) return [];
+    const lines = amDiv.textContent.split('\n').map(line => line.trim()).filter(Boolean);
+    return lines.slice(0, 2);
   };
 
   const handleUpload = async () => {
@@ -58,6 +84,8 @@ export default function UploadPage() {
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
+      setTop3Insights(extractInsights(data.previewHtml));
+      setAmRoutinePreview(extractAmRoutine(data.previewHtml));
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');
@@ -93,15 +121,8 @@ export default function UploadPage() {
 
   const resultText = isPaid ? fullHtml : previewHtml;
 
-  const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
-  const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
-  const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
-  const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
-
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      {/* 상단 입력 섹션은 이미 적용된 상태 */}
-
+    <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: isDarkMode ? '#fff' : '#222' }}>
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
           📷 Select Your Selfie
@@ -117,7 +138,6 @@ export default function UploadPage() {
         </button>
       </div>
 
-
       {resultText && (
         <>
           {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
@@ -126,9 +146,9 @@ export default function UploadPage() {
               🌟 Top 3 Skin Insights (Free Preview)
             </h2>
             <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-              <li>✅ Sebum (T-zone vs Cheeks): Balanced</li>
-              <li>🟡 Hydration Level: Low</li>
-              <li>❌ Texture: Uneven</li>
+              {top3Insights.map((insight, idx) => (
+                <li key={idx}>{insight}</li>
+              ))}
             </ul>
           </div>
 
@@ -151,11 +171,12 @@ export default function UploadPage() {
           </div>
 
           {/* 🧴 AM Routine 일부 미리보기 */}
-          <div style={{ marginTop: '30px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }}>
+          <div style={{ marginTop: '30px', padding: '20px', backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', color: isDarkMode ? '#fff' : '#222' }}>
             <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
-            <p style={{ margin: '4px 0' }}>Cleanser: Gentle Foaming Wash</p>
-            <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
-            <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
+            {amRoutinePreview.map((line, idx) => (
+              <p key={idx} style={{ margin: '4px 0' }}>{line}</p>
+            ))}
+            <p style={{ fontSize: '13px', color: isDarkMode ? '#ccc' : '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
           </div>
 
           {/* 💸 결제 유도 문구 + 버튼 */}
@@ -172,7 +193,6 @@ export default function UploadPage() {
       {isPaid && (
         <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
       )}
-
 
       <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
         Need help? Contact us at <strong>admate@atladmate.com</strong><br />
