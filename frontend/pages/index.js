@@ -154,11 +154,7 @@ export default function UploadPage() {
             3. Instantly receive expert skin insights and a personalized routine to reveal your glow
           </p>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '20px' }}>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/27/Medical_symbol.png" alt="Medical Trust" width="40" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_Logo.svg" alt="AI Powered" width="60" />
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6e/OpenAI_Logo.svg" alt="OpenAI GPT" width="50" />
-        </div>
+        
       </div>
 
       {/* Upload Section */}
