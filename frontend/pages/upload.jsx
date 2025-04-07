@@ -8,13 +8,21 @@ export default function UploadPage() {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
-
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [previewInsights, setPreviewInsights] = useState([]);
   const [amPreview, setAmPreview] = useState([]);
+  const [previewInsights, setPreviewInsights] = useState([]);
+
+  const extractAmRoutine = (html) => {
+    const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
+    if (!match) return [];
+    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
+    return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
+  };
+  
+
 
 
   useEffect(() => {
@@ -38,6 +46,8 @@ export default function UploadPage() {
     setPreviewHtml('');
     setFullHtml('');
     setImageUrl(data.imageUrl);
+
+    setAmPreview(extractAmRoutine(data.previewHtml));
     setPreviewInsights(data.previewInsights || []);
 
 
