@@ -12,7 +12,7 @@ export default function UploadPage() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isPaid, setIsPaid] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
+  const [amPreview, setAmPreview] = useState([]);
   const [top3Insights, setTop3Insights] = useState([]);
 
 
@@ -80,8 +80,11 @@ export default function UploadPage() {
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
       const extractedInsights = extractTop3Insights(data.previewHtml);
-setTop3Insights(extractedInsights);
-
+      setTop3Insights(extractedInsights);
+      
+      const amSteps = extractAmRoutine(data.previewHtml);
+      setAmPreview(amSteps);
+      
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');

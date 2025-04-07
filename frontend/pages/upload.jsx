@@ -13,6 +13,8 @@ export default function UploadPage() {
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [amPreview, setAmPreview] = useState([]);
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -56,6 +58,16 @@ export default function UploadPage() {
       }
 
       setPreviewHtml(data.previewHtml);
+      const extractAmRoutine = (html) => {
+        const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
+        if (!match) return [];
+        const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
+        return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
+      };
+      
+      const amSteps = extractAmRoutine(data.previewHtml);
+      setAmPreview(amSteps);
+      
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
     } catch (error) {
