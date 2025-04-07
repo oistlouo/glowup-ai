@@ -197,4 +197,4 @@ export default function UploadPage() {
   );
 }
 
-<p style={{ textAlign: 'center', color: 'red' }}>🚀 TEST - 변경 확인용 문구입니다</p>
+
