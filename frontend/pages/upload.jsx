@@ -13,7 +13,15 @@ export default function UploadPage() {
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
 
-  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDarkMode(match);
+  }
+}, []);
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
