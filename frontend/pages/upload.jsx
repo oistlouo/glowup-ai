@@ -212,9 +212,36 @@ export default function UploadPage() {
         </>
       )}
 
-      {isPaid && (
-        <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
-      )}
+{isPaid && (
+  <>
+    <div
+      style={{
+        backgroundColor: '#f5f5f5',
+        padding: '20px',
+        borderRadius: '12px',
+        textAlign: 'center',
+        fontSize: '18px',
+        fontWeight: '600',
+        marginBottom: '20px',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+      }}
+    >
+      Hey {name || 'there'}, here’s what your skin is telling us today — and how we’ll glow it up ✨
+    </div>
+
+    <div
+      style={{
+        marginTop: '30px',
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+      }}
+      dangerouslySetInnerHTML={{ __html: fullHtml }}
+    />
+  </>
+)}
+
 
       <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
         Need help? Contact us at <strong>admate@atladmate.com</strong><br />
