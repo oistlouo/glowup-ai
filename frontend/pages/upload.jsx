@@ -206,22 +206,7 @@ export default function UploadPage() {
             🔓 Unlock 9 expert-level insights to reveal your personalized skincare routine.<br />
             💎 Just $3.99 — Get your complete skin blueprint today.
             </div>
-            <div style={{ textAlign: 'center', marginBottom: '12px' }}>
-  <button
-    onClick={() => setIsPaid(true)}
-    style={{
-      backgroundColor: '#888',
-      color: '#fff',
-      padding: '10px 20px',
-      borderRadius: '6px',
-      border: 'none',
-      cursor: 'pointer'
-    }}
-  >
-    🔓 Unlock Full Report (Test)
-  </button>
-</div>
-
+            
             <div id="paypal-container-XW5X3YNYP26TN" />
           </div>
         </>
