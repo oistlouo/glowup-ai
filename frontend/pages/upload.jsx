@@ -13,6 +13,7 @@ export default function UploadPage() {
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [amPreview, setAmPreview] = useState([]);
+  const [pmPreview, setPmPreview] = useState([]);
   const [previewInsights, setPreviewInsights] = useState([]);
 
   const extractAmRoutine = (html) => {
@@ -20,6 +21,14 @@ export default function UploadPage() {
     if (!match) return [];
     const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
     return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
+  };
+
+  const extractRoutineSteps = (html, type) => {
+    const regex = new RegExp(`${type}\\s*Routine.*?<ul>([\\s\\S]*?)</ul>`, 'i');
+    const match = html.match(regex);
+    if (!match) return [];
+    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
+    return steps.map(step => step.replace(/<[^>]+>/g, '').trim());
   };
 
   useEffect(() => {
@@ -68,6 +77,12 @@ export default function UploadPage() {
       setImageUrl(data.imageUrl);
       setAmPreview(extractAmRoutine(data.previewHtml));
       setPreviewInsights(data.previewInsights || []);
+
+      const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
+const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
+
+setAmPreview(amSteps.slice(0, 2));
+setPmPreview(pmSteps.slice(0, 2));
 
     } catch (error) {
       console.error('Upload failed:', error);

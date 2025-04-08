@@ -13,6 +13,7 @@ export default function UploadPage() {
   const [isPaid, setIsPaid] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [amPreview, setAmPreview] = useState([]);
+  const [pmPreview, setPmPreview] = useState([]);
   const [top3Insights, setTop3Insights] = useState([]);
   const [previewInsights, setPreviewInsights] = useState([]);
   const extractAmRoutine = (html) => {
@@ -20,6 +21,13 @@ export default function UploadPage() {
     if (!match) return [];
     const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
     return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
+  };
+  const extractRoutineSteps = (html, type) => {
+    const regex = new RegExp(`${type}\\s*Routine.*?<ul>([\\s\\S]*?)</ul>`, 'i');
+    const match = html.match(regex);
+    if (!match) return [];
+    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
+    return steps.map(step => step.replace(/<[^>]+>/g, '').trim());
   };
   
 
@@ -61,6 +69,11 @@ export default function UploadPage() {
     setLoading(true);
     setPreviewHtml('');
     setFullHtml('');
+    const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
+const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
+setAmPreview(amSteps);
+setPmPreview(pmSteps);
+
 
     const formData = new FormData();
     formData.append('image', image);
@@ -303,6 +316,7 @@ export default function UploadPage() {
 
 {isPaid && (
   <>
+    {/* 💡 Personalized Message */}
     <div style={{
       backgroundColor: '#f5f5f5',
       padding: '20px',
@@ -315,7 +329,54 @@ export default function UploadPage() {
     }}>
       Hey {name || 'there'}, here’s what your skin is telling us today — and how we’ll glow it up ✨
     </div>
-    <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
+
+    {/* ✅ AM Routine Card */}
+    {amPreview.length > 0 && (
+      <div style={{
+        backgroundColor: '#e3f2fd',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px',
+        color: '#000'
+      }}>
+        <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>☀️ AM Routine</h4>
+        <ul style={{ paddingLeft: '20px' }}>
+          {amPreview.map((step, idx) => (
+            <li key={idx} style={{ marginBottom: '6px' }}>{step}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* ✅ PM Routine Card */}
+    {pmPreview.length > 0 && (
+      <div style={{
+        backgroundColor: '#fce4ec',
+        borderRadius: '12px',
+        padding: '16px',
+        marginBottom: '20px',
+        color: '#000'
+      }}>
+        <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>🌙 PM Routine</h4>
+        <ul style={{ paddingLeft: '20px' }}>
+          {pmPreview.map((step, idx) => (
+            <li key={idx} style={{ marginBottom: '6px' }}>{step}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* 🧾 Full HTML Report */}
+    <div
+      style={{
+        marginTop: '20px',
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+      }}
+      dangerouslySetInnerHTML={{ __html: fullHtml }}
+    />
   </>
 )}
 
