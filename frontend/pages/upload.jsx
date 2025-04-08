@@ -202,8 +202,9 @@ export default function UploadPage() {
           {/* 💸 결제 유도 문구 + 버튼 */}
           <div style={{ textAlign: 'center', marginTop: '30px' }}>
             <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px', fontWeight: 'bold' }}>
-              Start your skin transformation now for just <span style={{ color: '#cc0044' }}>$3.99</span> 💎<br />
-              Your personal skin consultant — no clinic visit needed.
+            🔍 Understand your skin better than ever before.<br />
+            🔓 Unlock 9 expert-level insights to reveal your personalized skincare routine.<br />
+            💎 Just $3.99 — Get your complete skin blueprint today.
             </div>
             <div id="paypal-container-XW5X3YNYP26TN" />
           </div>
