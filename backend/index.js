@@ -174,6 +174,17 @@ This will be used for a free preview UI. Write in a clear and expert tone, no tr
       .replace(/```$/gm, '')
       .trim();
     
+      // ⭐️ 추가: previewInsights 추출
+let previewInsights = [];
+const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
+if (previewInsightsMatch) {
+  try {
+    previewInsights = JSON.parse(previewInsightsMatch[0]);
+  } catch (e) {
+    console.warn("⚠️ previewInsights 파싱 실패:", e);
+  }
+}
+
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
     
