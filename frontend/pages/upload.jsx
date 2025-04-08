@@ -161,21 +161,25 @@ export default function UploadPage() {
 
           {/* 🔒 Locked Items */}
           <div style={{ marginTop: '40px' }}>
-            <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
-              🔒 Locked Analysis Sections
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
-              <li>🔒 Pores</li>
-              <li>🔒 Redness</li>
-              <li>🔒 Wrinkles</li>
-              <li>🔒 Pigmentation</li>
-              <li>🔒 Skin Tone</li>
-              <li>🔒 Sensitivity</li>
-              <li>🔒 Total Score</li>
-              <li>🔒 Skin Type Summary</li>
-              <li>🔒 Personalized AM/PM Routine</li>
-            </ul>
-          </div>
+  <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
+    🔒 Locked Analysis Sections
+  </h3>
+  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
+    <li>🔒 Pores - Analyze pore visibility, size & congestion level</li>
+    <li>🔒 Redness - Detect inflammation, sensitivity & irritation zones</li>
+    <li>🔒 Wrinkles - Detect fine lines & early aging signs</li>
+    <li>🔒 Pigmentation - Identify dark spots, freckles & sun damage</li>
+    <li>🔒 Skin Tone - AI color correction + hyperpigmentation mapping</li>
+    <li>🔒 Sensitivity - Assess reactivity to heat, touch, and skincare</li>
+    <li>🔒 Total Score - Overall skin health score (0–45)</li>
+    <li>🔒 Skin Type Summary - Identify your skin type & characteristics</li>
+    <li>🔒 Personalized AM/PM Routine - Product-specific, time-based regimen</li>
+  </ul>
+  <p style={{ fontSize: '13px', color: '#999', marginTop: '8px' }}>
+    → Unlock for a dermatologist-style full report
+  </p>
+</div>
+
 
           {/* 🧴 AM Routine 일부 미리보기 */}
           <div
