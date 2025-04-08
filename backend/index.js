@@ -188,8 +188,13 @@ if (previewInsightsMatch) {
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
     
-    // ✅ 프리뷰: 1~3번 항목까지만 추출
-    const previewHtml = processedResult.split('<h2>🔹 4.')[0] + '</div';
+    // 개선: Final Summary 포함되게 일부 더 살림
+    const previewSplit = processedResult.split('<h2>🔹 4.');
+    const summaryIndex = processedResult.indexOf('<h2>✨ Final Summary</h2>');
+    const previewHtml = summaryIndex !== -1
+      ? processedResult.slice(0, summaryIndex + 1000) // 충분히 길게 포함
+      : previewSplit[0];
+
     
     res.json({
       previewHtml,
