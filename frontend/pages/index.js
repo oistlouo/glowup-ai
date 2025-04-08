@@ -69,11 +69,6 @@ export default function UploadPage() {
     setLoading(true);
     setPreviewHtml('');
     setFullHtml('');
-    const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
-const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
-setAmPreview(amSteps);
-setPmPreview(pmSteps);
-
 
     const formData = new FormData();
     formData.append('image', image);
@@ -91,6 +86,7 @@ setPmPreview(pmSteps);
       }
 
       const data = await response.json();
+
       if (!data.previewHtml || !data.fullHtml) {
         throw new Error('Incomplete result from server');
       }
@@ -102,10 +98,11 @@ setPmPreview(pmSteps);
 
       const extractedInsights = extractTop3Insights(data.previewHtml);
       setTop3Insights(extractedInsights);
-      
-      const amSteps = extractAmRoutine(data.previewHtml);
-      setAmPreview(amSteps);
-      
+
+      const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
+      const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
+      setAmPreview(amSteps.slice(0, 2));
+      setPmPreview(pmSteps.slice(0, 2));
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');
@@ -114,6 +111,7 @@ setPmPreview(pmSteps);
     }
   };
 
+  
   useEffect(() => {
     if (!previewHtml || isPaid) return;
 
@@ -296,10 +294,6 @@ setPmPreview(pmSteps);
   )}
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
 </div>
-
-  <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
-</div>
-
 
     {/* 💸 결제 유도 */}
     <div style={{ textAlign: 'center', marginTop: '30px' }}>

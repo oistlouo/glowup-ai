@@ -75,14 +75,13 @@ export default function UploadPage() {
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
-      setAmPreview(extractAmRoutine(data.previewHtml));
+
       setPreviewInsights(data.previewInsights || []);
+      const amSteps = extractRoutineSteps(data.fullHtml, 'AM');    // ✅ 추가
+      const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');    // ✅ 추가
 
-      const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
-const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
-
-setAmPreview(amSteps.slice(0, 2));
-setPmPreview(pmSteps.slice(0, 2));
+      setAmPreview(amSteps.slice(0, 2));                           // ✅ 수정
+      setPmPreview(pmSteps.slice(0, 2));                           // ✅ 추가
 
     } catch (error) {
       console.error('Upload failed:', error);
