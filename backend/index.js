@@ -184,6 +184,7 @@ This will be used for a free preview UI. Write in a clear and expert tone, no tr
       previewHtml,
       fullHtml: processedResult,
       imageUrl,
+      previewInsights,
     });
     
   } catch (err) {
