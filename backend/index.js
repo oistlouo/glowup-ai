@@ -118,6 +118,7 @@ Always return ALL of the following 9 categories in this exact order:
 📌 After generating the full HTML above, return a second JSON block for preview UI:
 
 Each preview item must include:
+You MUST return exactly 3 preview items only — one for each of the following categories: Sebum, Hydration, and Texture.
 - "category": name of the skin category
 - "status": a short summary of the current skin condition
 - "solution": recommended product strategy (summarized)
@@ -208,6 +209,21 @@ if (previewInsightsMatch) {
     previewInsights = previewInsights.filter(item =>
       allowedCategories.includes(item.category)
     );
+
+    // 🚨 previewInsights가 부족할 경우, 빈 항목으로 채우기
+const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
+for (const category of requiredCategories) {
+  if (!previewInsights.find(item => item.category === category)) {
+    previewInsights.push({
+      category,
+      status: 'No data',
+      solution: 'Analysis not available',
+      emotionalHook: '📷 Try uploading a clearer image!',
+      product: '-',
+      reason: 'Insufficient data to generate result.',
+    });
+  }
+}
 
     
   } catch (e) {
