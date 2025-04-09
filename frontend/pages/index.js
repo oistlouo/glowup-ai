@@ -13,7 +13,6 @@ export default function UploadPage() {
   const [isPaid, setIsPaid] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [amPreview, setAmPreview] = useState([]);
-  const [pmPreview, setPmPreview] = useState([]);
   const [top3Insights, setTop3Insights] = useState([]);
   const [previewInsights, setPreviewInsights] = useState([]);
   const extractAmRoutine = (html) => {
@@ -21,13 +20,6 @@ export default function UploadPage() {
     if (!match) return [];
     const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
     return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
-  };
-  const extractRoutineSteps = (html, type) => {
-    const regex = new RegExp(`${type}\\s*Routine.*?<ul>([\\s\\S]*?)</ul>`, 'i');
-    const match = html.match(regex);
-    if (!match) return [];
-    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
-    return steps.map(step => step.replace(/<[^>]+>/g, '').trim());
   };
   
 
@@ -86,7 +78,6 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-
       if (!data.previewHtml || !data.fullHtml) {
         throw new Error('Incomplete result from server');
       }
@@ -98,11 +89,10 @@ export default function UploadPage() {
 
       const extractedInsights = extractTop3Insights(data.previewHtml);
       setTop3Insights(extractedInsights);
-
-      const amSteps = extractRoutineSteps(data.fullHtml, 'AM');
-      const pmSteps = extractRoutineSteps(data.fullHtml, 'PM');
-      setAmPreview(amSteps.slice(0, 2));
-      setPmPreview(pmSteps.slice(0, 2));
+      
+      const amSteps = extractAmRoutine(data.previewHtml);
+      setAmPreview(amSteps);
+      
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');
@@ -111,7 +101,6 @@ export default function UploadPage() {
     }
   };
 
-  
   useEffect(() => {
     if (!previewHtml || isPaid) return;
 
@@ -295,6 +284,10 @@ export default function UploadPage() {
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
 </div>
 
+  <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
+</div>
+
+
     {/* 💸 결제 유도 */}
     <div style={{ textAlign: 'center', marginTop: '30px' }}>
       <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px', fontWeight: 'bold' }}>
@@ -309,71 +302,8 @@ export default function UploadPage() {
 )}
 
 {isPaid && (
-  <>
-    {/* 💡 Personalized Message */}
-    <div style={{
-      backgroundColor: '#f5f5f5',
-      padding: '20px',
-      borderRadius: '12px',
-      textAlign: 'center',
-      fontSize: '18px',
-      fontWeight: '600',
-      marginBottom: '20px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
-    }}>
-      Hey {name || 'there'}, here’s what your skin is telling us today — and how we’ll glow it up ✨
-    </div>
-
-    {/* ✅ AM Routine Card */}
-    {amPreview.length > 0 && (
-      <div style={{
-        backgroundColor: '#e3f2fd',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px',
-        color: '#000'
-      }}>
-        <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>☀️ AM Routine</h4>
-        <ul style={{ paddingLeft: '20px' }}>
-          {amPreview.map((step, idx) => (
-            <li key={idx} style={{ marginBottom: '6px' }}>{step}</li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {/* ✅ PM Routine Card */}
-    {pmPreview.length > 0 && (
-      <div style={{
-        backgroundColor: '#fce4ec',
-        borderRadius: '12px',
-        padding: '16px',
-        marginBottom: '20px',
-        color: '#000'
-      }}>
-        <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>🌙 PM Routine</h4>
-        <ul style={{ paddingLeft: '20px' }}>
-          {pmPreview.map((step, idx) => (
-            <li key={idx} style={{ marginBottom: '6px' }}>{step}</li>
-          ))}
-        </ul>
-      </div>
-    )}
-
-    {/* 🧾 Full HTML Report */}
-    <div
-      style={{
-        marginTop: '20px',
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-      }}
-      dangerouslySetInnerHTML={{ __html: fullHtml }}
-    />
-  </>
+  <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
 )}
-
 
 
       <p className="footer-email">
@@ -385,5 +315,4 @@ export default function UploadPage() {
     </div>
   );
 }
-
 
