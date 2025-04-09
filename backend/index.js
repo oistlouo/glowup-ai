@@ -117,23 +117,26 @@ Always return ALL of the following 9 categories in this exact order:
 
 📌 After generating the full HTML above, return a second JSON block for preview UI:
 
+Each preview item must include:
+- "category": name of the skin category
+- "status": a short summary of the current skin condition
+- "solution": recommended product strategy (summarized)
+- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": explain why the product is a good fit (mention ingredients and effect)
+
 [
   {
     "category": "Sebum",
     "status": "...",
-    "solution": "..."
+    "solution": "...",
+    "emotionalHook": "...",
+    "product": "...",
+    "reason": "..."
   },
-  {
-    "category": "Hydration",
-    "status": "...",
-    "solution": "..."
-  },
-  {
-    "category": "Texture",
-    "status": "...",
-    "solution": "..."
-  }
+  ...
 ]
+
 
 <h2>✨ Final Summary</h2>
 <ul>
