@@ -249,23 +249,41 @@ export default function UploadPage() {
         🌟 Top 3 Skin Insights (Free Preview)
       </h2>
       {previewInsights.length > 0 ? (
-  previewInsights.map((item, idx) => (
-    <div key={idx} style={{
-      marginBottom: '16px',
-      padding: '12px',
-      borderRadius: '8px',
-      backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-      color: isDarkMode ? '#fff' : '#222',
-    }}>
-      <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category} – {item.emotionalHook}</h4>
-      <p><strong>Status:</strong> {item.status}</p>
-      <p><strong>Solution:</strong> {item.solution}</p>
-      <p><strong>Recommended:</strong> {item.product}</p>
-      <p><strong>Why it works:</strong> {item.reason}</p>
+  <>
+    <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
+    ✨ Your Free Glow Breakdown – Top 3 Skin Insights
+    </h2>
 
-    </div>
-  ))
+    {previewInsights.slice(0, 3).map((item, idx) => (
+      <div key={idx} style={{
+        marginBottom: '20px',
+        padding: '20px',
+        borderRadius: '14px',
+        backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
+        color: isDarkMode ? '#fff' : '#222',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
+      }}>
+        <h3 style={{ fontSize: '17px', marginBottom: '12px' }}>
+          {idx + 1}. <strong>{item.category}</strong> – {item.emotionalHook}
+        </h3>
+
+        <p style={{ margin: '6px 0' }}>
+          <strong>진단:</strong> {item.status}
+        </p>
+        <p style={{ margin: '6px 0' }}>
+          <strong>해결책:</strong> {item.solution}
+        </p>
+        <p style={{ margin: '6px 0' }}>
+          <strong>추천 제품:</strong> {item.product}
+        </p>
+        <p style={{ margin: '6px 0' }}>
+          <strong>이 제품이 좋은 이유:</strong> {item.reason}
+        </p>
+      </div>
+    ))}
+  </>
 ) : (
+
   <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
     <li>✅ Sebum: Balanced</li>
     <li>🟡 Hydration: Low</li>
