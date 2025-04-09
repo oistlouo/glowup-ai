@@ -248,10 +248,10 @@ export default function UploadPage() {
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
         🌟 Top 3 Skin Insights (Free Preview)
       </h2>
-      {previewInsights.length > 0 ? (
+      {previewInsights.length > 0 && (
   <>
     <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
-    ✨ Your Free Glow Breakdown – Top 3 Skin Insights
+      ✨ Your Free Glow Breakdown – Top 3 Skin Insights
     </h2>
 
     {previewInsights.slice(0, 3).map((item, idx) => (
@@ -266,30 +266,23 @@ export default function UploadPage() {
         <h3 style={{ fontSize: '17px', marginBottom: '12px' }}>
           {idx + 1}. <strong>{item.category}</strong> – {item.emotionalHook}
         </h3>
-
         <p style={{ margin: '6px 0' }}>
-          <strong>진단:</strong> {item.status}
+          <strong>Diagnosis:</strong> {item.status}
         </p>
         <p style={{ margin: '6px 0' }}>
-          <strong>해결책:</strong> {item.solution}
+          <strong>Solution:</strong> {item.solution}
         </p>
         <p style={{ margin: '6px 0' }}>
-          <strong>추천 제품:</strong> {item.product}
+          <strong>Recommended Product:</strong> {item.product}
         </p>
         <p style={{ margin: '6px 0' }}>
-          <strong>이 제품이 좋은 이유:</strong> {item.reason}
+          <strong>Why It Works:</strong> {item.reason}
         </p>
       </div>
     ))}
   </>
-) : (
-
-  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-    <li>✅ Sebum: Balanced</li>
-    <li>🟡 Hydration: Low</li>
-    <li>❌ Texture: Uneven</li>
-  </ul>
 )}
+
 
 {/* 🔒 Locked Items */}
 <div style={{ marginTop: '40px' }}>
@@ -315,22 +308,11 @@ export default function UploadPage() {
 
 </div>
 
-{/* 🧴 AM Routine 일부 미리보기 */}
-<div style={{ marginTop: '30px', padding: '20px', backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', color: isDarkMode ? '#fff' : '#222' }}>
-  <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
-  {amPreview && amPreview.length > 0 ? (
-    amPreview.map((step, idx) => <p key={idx} style={{ margin: '4px 0' }}>{step}</p>)
-  ) : (
-    <>
-      <p style={{ margin: '4px 0' }}>Cleanser: Gentle Foaming Wash</p>
-      <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
-    </>
-  )}
+
   
 </div>
 
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
-</div>
 
 
     {/* 💸 결제 유도 */}

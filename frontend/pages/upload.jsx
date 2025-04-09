@@ -146,34 +146,44 @@ export default function UploadPage() {
         <>
           {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
           <div style={{ marginTop: '40px' }}>
-            <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
-              🌟 Top 3 Skin Insights (Free Preview)
-            </h2>
-            {previewInsights.length > 0 ? (
-              previewInsights.map((item, idx) => (
-                <div key={idx} style={{
-                  marginBottom: '16px',
-                  padding: '12px',
-                  borderRadius: '8px',
-                  backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-                  color: isDarkMode ? '#fff' : '#222',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                }}>
-                  <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
-                  <p><strong>Status:</strong> {item.status}</p>
-                  <p><strong>Solution:</strong> {item.solution}</p>
-                  <p><strong>Recommended:</strong> {item.product}</p>
-                  <p><strong>Why it works:</strong> {item.reason}</p>
+          <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '24px' }}>
+  ✨ Your Free Glow Breakdown – 3 Personalized Skin Insights
+</h2>
 
-                </div>
-              ))
-            ) : (
-              <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '16px', lineHeight: '1.8' }}>
-                <li>✅ Sebum: Balanced</li>
-                <li>🟡 Hydration: Low</li>
-                <li>❌ Texture: Uneven</li>
-              </ul>
-            )}
+<div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+  {previewInsights.map((item, idx) => (
+    <div
+      key={idx}
+      style={{
+        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+        color: isDarkMode ? '#f5f5f5' : '#222',
+        borderRadius: '12px',
+        padding: '20px',
+        boxShadow: isDarkMode
+          ? '0 2px 6px rgba(255, 255, 255, 0.05)'
+          : '0 2px 8px rgba(0,0,0,0.08)',
+        transition: 'all 0.3s ease',
+      }}
+    >
+      <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>
+        🔹 {item.category} <span style={{ fontWeight: '400' }}>– {item.emotionalHook}</span>
+      </h3>
+      <p style={{ marginBottom: '8px' }}>
+        <strong>Diagnosis:</strong> {item.status}
+      </p>
+      <p style={{ marginBottom: '8px' }}>
+        <strong>Solution:</strong> {item.solution}
+      </p>
+      <p style={{ marginBottom: '8px' }}>
+        <strong>Recommended Product:</strong> {item.product}
+      </p>
+      <p style={{ marginBottom: '0px' }}>
+        <strong>Why It Works:</strong> {item.reason}
+      </p>
+    </div>
+  ))}
+</div>
+
           </div>
 
           {/* 🔒 Locked Items */}
@@ -197,24 +207,6 @@ export default function UploadPage() {
   </p>
 </div>
 
-
-          {/* 🧴 AM Routine 일부 미리보기 */}
-          <div
-            style={{
-              marginTop: '30px',
-              padding: '20px',
-              backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-              borderRadius: '12px',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-              color: isDarkMode ? '#fff' : '#222',
-            }}
-          >
-            <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '8px' }}>💧 AM Routine (Preview)</h4>
-            {amPreview.map((step, idx) => (
-              <p key={idx} style={{ margin: '4px 0' }}>{step}</p>
-            ))}
-            <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
-          </div>
 
           {/* 💸 결제 유도 문구 + 버튼 */}
           <div style={{ textAlign: 'center', marginTop: '30px' }}>
