@@ -226,12 +226,14 @@ export default function UploadPage() {
     <div style={{ marginTop: '40px' }}>
       
     <div style={{
-  backgroundColor: '#fff',
+  backgroundColor: isDarkMode ? '#1e1e1e' : '#fff',
+  color: isDarkMode ? '#fff' : '#222',
   padding: '16px',
   borderRadius: '12px',
   boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
   marginBottom: '30px'
 }}>
+
   <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>🧾 Quick Glow Summary</h3>
   <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
     {top3Insights.map((text, idx) => (

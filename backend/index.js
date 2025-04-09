@@ -195,6 +195,7 @@ const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
 if (previewInsightsMatch) {
   try {
     previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
+      
       category: item.category || '',
       status: item.status || '',
       solution: item.solution || '',
@@ -202,6 +203,12 @@ if (previewInsightsMatch) {
       product: item.product || '',
       reason: item.reason || '',
     }));
+
+    const allowedCategories = ['Sebum', 'Hydration', 'Texture'];
+    previewInsights = previewInsights.filter(item =>
+      allowedCategories.includes(item.category)
+    );
+
     
   } catch (e) {
     console.warn("⚠️ previewInsights 파싱 실패:", e);
