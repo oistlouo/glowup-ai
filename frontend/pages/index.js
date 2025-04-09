@@ -234,7 +234,7 @@ export default function UploadPage() {
   marginBottom: '30px'
 }}>
 
-  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>🧾 Quick Glow Summary</h3>
+  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>💡 Free Glow Check – Your Top 3 Skin Signals</h3>
   <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
     {top3Insights.map((text, idx) => (
       <li key={idx} style={{ marginBottom: '6px' }}>{text}</li>
@@ -248,39 +248,35 @@ export default function UploadPage() {
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
         🌟 Top 3 Skin Insights (Free Preview)
       </h2>
-      {previewInsights.length > 0 && (
+      {previewInsights.length > 0 ? (
   <>
     <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '20px' }}>
       ✨ Your Free Glow Breakdown – Top 3 Skin Insights
     </h2>
 
     {previewInsights.slice(0, 3).map((item, idx) => (
-      <div key={idx} style={{
-        marginBottom: '20px',
-        padding: '20px',
-        borderRadius: '14px',
-        backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
-        color: isDarkMode ? '#fff' : '#222',
-        boxShadow: '0 2px 6px rgba(0,0,0,0.05)'
-      }}>
+      <div key={idx} style={{ /* 카드 스타일 생략 */ }}>
         <h3 style={{ fontSize: '17px', marginBottom: '12px' }}>
           {idx + 1}. <strong>{item.category}</strong> – {item.emotionalHook}
         </h3>
-        <p style={{ margin: '6px 0' }}>
-          <strong>Diagnosis:</strong> {item.status}
-        </p>
-        <p style={{ margin: '6px 0' }}>
-          <strong>Solution:</strong> {item.solution}
-        </p>
-        <p style={{ margin: '6px 0' }}>
-          <strong>Recommended Product:</strong> {item.product}
-        </p>
-        <p style={{ margin: '6px 0' }}>
-          <strong>Why It Works:</strong> {item.reason}
-        </p>
+        <p><strong>Diagnosis:</strong> {item.status}</p>
+        <p><strong>Solution:</strong> {item.solution}</p>
+        <p><strong>Recommended Product:</strong> {item.product}</p>
+        <p><strong>Why It Works:</strong> {item.reason}</p>
       </div>
     ))}
+
+    {previewInsights.length < 3 && (
+      <p style={{ textAlign: 'center', fontSize: '14px', color: '#999', marginTop: '8px' }}>
+        Only {previewInsights.length} insight{previewInsights.length === 1 ? '' : 's'} available for this photo.<br />
+        For more detailed results, try uploading a clearer or brighter selfie.
+      </p>
+    )}
   </>
+) : (
+  <p style={{ textAlign: 'center', fontSize: '14px', color: '#999' }}>
+    No insights could be generated. Try uploading a higher-quality selfie.
+  </p>
 )}
 
 

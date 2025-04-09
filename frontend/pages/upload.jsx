@@ -151,37 +151,44 @@ export default function UploadPage() {
 </h2>
 
 <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-  {previewInsights.map((item, idx) => (
-    <div
-      key={idx}
-      style={{
-        backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-        color: isDarkMode ? '#f5f5f5' : '#222',
-        borderRadius: '12px',
-        padding: '20px',
-        boxShadow: isDarkMode
-          ? '0 2px 6px rgba(255, 255, 255, 0.05)'
-          : '0 2px 8px rgba(0,0,0,0.08)',
-        transition: 'all 0.3s ease',
-      }}
-    >
-      <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>
-        🔹 {item.category} <span style={{ fontWeight: '400' }}>– {item.emotionalHook}</span>
-      </h3>
-      <p style={{ marginBottom: '8px' }}>
-        <strong>Diagnosis:</strong> {item.status}
-      </p>
-      <p style={{ marginBottom: '8px' }}>
-        <strong>Solution:</strong> {item.solution}
-      </p>
-      <p style={{ marginBottom: '8px' }}>
-        <strong>Recommended Product:</strong> {item.product}
-      </p>
-      <p style={{ marginBottom: '0px' }}>
-        <strong>Why It Works:</strong> {item.reason}
-      </p>
-    </div>
-  ))}
+{previewInsights.length === 0 && (
+  <p style={{ textAlign: 'center', color: '#888' }}>
+    No skin insights available. Please try again with a clearer photo.
+  </p>
+)}
+
+{previewInsights.length > 0 && previewInsights.map((item, idx) => (
+  <div
+    key={idx}
+    style={{
+      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
+      color: isDarkMode ? '#f5f5f5' : '#222',
+      borderRadius: '12px',
+      padding: '20px',
+      boxShadow: isDarkMode
+        ? '0 2px 6px rgba(255, 255, 255, 0.05)'
+        : '0 2px 8px rgba(0,0,0,0.08)',
+      transition: 'all 0.3s ease',
+    }}
+  >
+    <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>
+      🔹 {item.category} <span style={{ fontWeight: '400' }}>– {item.emotionalHook}</span>
+    </h3>
+    <p style={{ marginBottom: '8px' }}>
+      <strong>Diagnosis:</strong> {item.status}
+    </p>
+    <p style={{ marginBottom: '8px' }}>
+      <strong>Solution:</strong> {item.solution}
+    </p>
+    <p style={{ marginBottom: '8px' }}>
+      <strong>Recommended Product:</strong> {item.product}
+    </p>
+    <p style={{ marginBottom: '0px' }}>
+      <strong>Why It Works:</strong> {item.reason}
+    </p>
+  </div>
+))}
+
 </div>
 
           </div>
