@@ -79,6 +79,12 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
 You are a professional Korean dermatologist and K-beauty skincare AI.
 
 You MUST return a full HTML report. Do NOT return plain text or skip any section.
+
+Each category must include:
+- "emotionalHook": a short emoji + fun summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product brand recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": why this product is a good fit, mentioning key ingredients and their effect
+
 Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 🔹 At the very top of the report, insert a warm personalized greeting:
@@ -185,7 +191,15 @@ let previewInsights = [];
 const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
 if (previewInsightsMatch) {
   try {
-    previewInsights = JSON.parse(previewInsightsMatch[0]);
+    previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
+      category: item.category || '',
+      status: item.status || '',
+      solution: item.solution || '',
+      emotionalHook: item.emotionalHook || '',
+      product: item.product || '',
+      reason: item.reason || '',
+    }));
+    
   } catch (e) {
     console.warn("⚠️ previewInsights 파싱 실패:", e);
   }
@@ -201,7 +215,9 @@ if (previewInsightsMatch) {
       ? processedResult.slice(0, summaryIndex + 1000) // 충분히 길게 포함
       : previewSplit[0];
 
-    
+      console.log('🎯 Preview Insights:', previewInsights);
+
+
     res.json({
       previewHtml,
       fullHtml: processedResult,

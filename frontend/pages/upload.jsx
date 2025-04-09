@@ -162,6 +162,9 @@ export default function UploadPage() {
                   <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
                   <p><strong>Status:</strong> {item.status}</p>
                   <p><strong>Solution:</strong> {item.solution}</p>
+                  <p><strong>Recommended:</strong> {item.product}</p>
+                  <p><strong>Why it works:</strong> {item.reason}</p>
+
                 </div>
               ))
             ) : (

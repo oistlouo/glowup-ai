@@ -83,6 +83,8 @@ export default function UploadPage() {
       }
 
       setPreviewInsights(data.previewInsights || []);
+      console.log("🧪 previewInsights data:", data.previewInsights);
+
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
@@ -256,6 +258,9 @@ export default function UploadPage() {
       <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category} – {item.emotionalHook}</h4>
       <p><strong>Status:</strong> {item.status}</p>
       <p><strong>Solution:</strong> {item.solution}</p>
+      <p><strong>Recommended:</strong> {item.product}</p>
+      <p><strong>Why it works:</strong> {item.reason}</p>
+
     </div>
   ))
 ) : (
@@ -301,10 +306,7 @@ export default function UploadPage() {
       <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
     </>
   )}
-  <p style={{ fontSize: '14px', marginTop: '10px' }}>
-  → Recommended: <strong>{item.recommendation.product}</strong><br />
-  {item.recommendation.description} Perfect match for you 💧
-</p>
+  
 </div>
 
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
