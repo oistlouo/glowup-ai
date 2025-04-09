@@ -161,7 +161,8 @@ export default function UploadPage() {
 
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
-        <p style={{ fontSize: '20px', marginBottom: '20px' }}>AI-powered selfie skin analysis, inspired by Korea’s professional dermatology tech.</p>
+        Let AI decode your skin — and unlock your glow. All for just $3.99.
+
         <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>How to Use</h2>
         <p style={{ fontSize: '16px', lineHeight: '1.6' }}>
           1. Upload a selfie<br />
@@ -221,6 +222,25 @@ export default function UploadPage() {
   <>
     {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
     <div style={{ marginTop: '40px' }}>
+      
+    <div style={{
+  backgroundColor: '#fff',
+  padding: '16px',
+  borderRadius: '12px',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+  marginBottom: '30px'
+}}>
+  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>🧾 Quick Glow Summary</h3>
+  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
+    {top3Insights.map((text, idx) => (
+      <li key={idx} style={{ marginBottom: '6px' }}>{text}</li>
+    ))}
+  </ul>
+  <p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
+    Curious about the full analysis? Unlock all 9 insights for just $3.99.
+  </p>
+</div>
+
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
         🌟 Top 3 Skin Insights (Free Preview)
       </h2>
@@ -233,7 +253,7 @@ export default function UploadPage() {
       backgroundColor: isDarkMode ? '#1e1e1e' : '#f9f9f9',
       color: isDarkMode ? '#fff' : '#222',
     }}>
-      <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category}</h4>
+      <h4 style={{ fontSize: '17px', marginBottom: '6px' }}>🔹 {item.category} – {item.emotionalHook}</h4>
       <p><strong>Status:</strong> {item.status}</p>
       <p><strong>Solution:</strong> {item.solution}</p>
     </div>
@@ -281,7 +301,10 @@ export default function UploadPage() {
       <p style={{ margin: '4px 0' }}>Serum: Vitamin C 15%</p>
     </>
   )}
-  <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
+  <p style={{ fontSize: '14px', marginTop: '10px' }}>
+  → Recommended: <strong>{item.recommendation.product}</strong><br />
+  {item.recommendation.description} Perfect match for you 💧
+</p>
 </div>
 
   <p style={{ fontSize: '13px', color: '#999', marginTop: '6px' }}>→ Unlock full 5-step routine with instructions</p>
@@ -302,8 +325,30 @@ export default function UploadPage() {
 )}
 
 {isPaid && (
-  <div style={{ marginTop: '30px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
+  <>
+    <div style={{
+      backgroundColor: '#f5f5f5',
+      padding: '20px',
+      borderRadius: '12px',
+      textAlign: 'center',
+      fontSize: '18px',
+      fontWeight: '600',
+      marginBottom: '20px',
+      boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+    }}>
+      Hey {name || 'there'}, here’s what your skin is telling us today – and how we’ll glow it up ✨
+    </div>
+
+    <div style={{
+      marginTop: '30px',
+      backgroundColor: '#fff',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+    }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
+  </>
 )}
+
 
 
       <p className="footer-email">
