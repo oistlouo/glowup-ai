@@ -266,15 +266,17 @@ export default function UploadPage() {
     </div>
 
     <div
-      style={{
-        marginTop: '30px',
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-      }}
-      dangerouslySetInnerHTML={{ __html: fullHtml }}
-    />
+  style={{
+    marginTop: '30px',
+    backgroundColor: isDarkMode ? '#000000' : '#ffffff',
+    color: isDarkMode ? '#ffffff' : '#222222',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+  }}
+  dangerouslySetInnerHTML={{ __html: fullHtml }}
+/>
+
   </>
 )}
 

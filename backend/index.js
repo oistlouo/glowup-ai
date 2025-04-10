@@ -86,7 +86,7 @@ The report MUST include all 9 skin categories, the Final Summary, and the full A
 Each category must include:
 - "emotionalHook": a short emoji + fun summary (e.g., “T-zone’s going wild 🛢️”)
 - "product": specific product brand recommendation (e.g., "The Ordinary Niacinamide 10%")
-- "reason": why this product is a good fit, mentioning key ingredients and their effect
+- "reason": Explain *why* this product is effective based on the user's specific skin issue. Include ingredients, mechanisms (e.g., exfoliates, hydrates, tightens pores), and what result it delivers (e.g., brighter skin, smoother texture).
 
 Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
@@ -150,42 +150,24 @@ You MUST return exactly 3 preview items only — one for each of the following c
 At the end, return:
 
 <h2>✨ Final Summary</h2>
-<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
-<p><strong>Total Score:</strong> 32/45</p>
-<p><strong>Skin Type Summary:</strong> Combination skin with mild sensitivity and early signs of aging.</p>
-<p><strong>Top 3 Concerns:</strong><br />
-1. Wrinkles – Use RoC Retinol Night Cream 2x/week + daily hydration<br />
-2. Pigmentation – Use Missha Essence daily AM/PM<br />
-3. Texture – Gently exfoliate with COSRX BHA 2~3x/week</p>
-</div>
+- Provide a total skin score out of 45
+- Give a personalized skin type summary based on the analysis (e.g., “Combination skin with mild sensitivity and early aging signs.”)
+- List the Top 3 Concerns in priority order with short solution strategy per item
+- Then add an emotional motivational message like a dermatologist would give
+- Also mention what visible improvement can be expected and how long it usually takes if the suggested routine is followed (e.g., “In 2–3 weeks, you may notice smoother texture and less redness.”)
 
-<h2>☀️ AM Routine</h2>
-<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
-<ul>
-<li>Cleanser: Low pH Gel Cleanser</li>
-<li>Toner: Klairs Supple Preparation Toner</li>
-<li>Serum: Vitamin C Serum by Klairs</li>
-<li>Moisturizer: Neutrogena Hydro Boost Gel</li>
-<li>Sunscreen: Beauty of Joseon Rice SPF</li>
-</ul>
-</div>
+<h2>☀️ AM Routine</h2> and <h2>🌙 PM Routine</h2>
+- Generate personalized 5-step AM/PM skincare routines based on the user’s skin issues
+- Include real product brand names per step (e.g., COSRX, La Roche-Posay, Klairs)
+- Include 1 friendly and professional <p><strong>Lifestyle Tip:</strong> ...</p> under each routine
+- Make sure everything is wrapped inside a styled <div class="card" style="..."> element for each block
 
-<h2>🌙 PM Routine</h2>
-<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
-<ul>
-<li>Cleanser: Oil-based cleanser for makeup</li>
-<li>Exfoliator: COSRX BHA (2~3x/week)</li>
-<li>Serum: Retinol (every 2 days)</li>
-<li>Moisturizer: Avene Skin Recovery Cream</li>
-<li>Spot Treatment: Paula's Choice CLEAR</li>
-</ul>
 
 For both AM and PM routine sections, also include a personalized "Lifestyle Tip" based on the user's skin condition, concerns, or habits.
 
 Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
 <p><strong>Lifestyle Tip:</strong> ...</p> format.
 
-</div>
 
 `;
 

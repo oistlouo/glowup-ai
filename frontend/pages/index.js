@@ -359,13 +359,18 @@ export default function UploadPage() {
       Hey {name || 'there'}, here’s what your skin is telling us today – and how we’ll glow it up ✨
     </div>
 
-    <div style={{
-      marginTop: '30px',
-      backgroundColor: '#fff',
-      padding: '20px',
-      borderRadius: '8px',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-    }} dangerouslySetInnerHTML={{ __html: fullHtml }} />
+    <div
+  style={{
+    marginTop: '30px',
+    backgroundColor: isDarkMode ? '#000000' : '#ffffff',
+    color: isDarkMode ? '#ffffff' : '#222222',
+    padding: '20px',
+    borderRadius: '8px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+  }}
+  dangerouslySetInnerHTML={{ __html: fullHtml }}
+/>
+
   </>
 )}
 
