@@ -93,7 +93,7 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 🔹 At the very top of the report, insert a warm personalized greeting:
 <div className="card" style={{
-  background: '#000',
+  background: '#1e1e1e',  // ✅ 진한 회색으로 변경
   color: '#fff',
   borderRadius: '12px',
   padding: '24px',
@@ -104,6 +104,7 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
     Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨
   </p>
 </div>
+
 
 
 You MUST include the following 6 clearly labeled elements using semantic HTML (no bullet points):
