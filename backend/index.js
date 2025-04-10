@@ -37,13 +37,13 @@ const applyRoutineBox = (html) => {
     .replace(
       /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
       (_, content) => {
-        return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+        return `<li><strong>AM Routine:</strong><div style="background:#3a3a3a; border-radius:8px; padding:12px; margin-top:6px; color:#fff;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
       }
     )
     .replace(
       /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
       (_, content) => {
-        return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+        return `<li><strong>PM Routine:</strong><div style="background:#3a3a3a; border-radius:8px; padding:12px; margin-top:6px; color:#fff;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
       }
     );
 };
@@ -176,7 +176,7 @@ const completion = await openai.chat.completions.create({
       ],
     },
   ],
-  max_tokens: 4096, // ✅ 또는 6000~7000 정도까지도 가능
+  max_tokens: 8000, // ✅ 또는 6000~7000 정도까지도 가능
   stream: false,
 });
 
@@ -194,7 +194,6 @@ if (previewInsightsMatch) {
   .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":')          // 키에 큰따옴표 추가
   .replace(/:\s*'(.*?)'/g, ': "$1"')                  // 값이 '텍스트' → "텍스트"
   .replace(/'/g, '"');                                // 그 외 모든 작은따옴표도 변환
-
 
     previewInsights = JSON.parse(validJson).map(item => ({
       category: item.category || '',
@@ -236,6 +235,7 @@ for (const category of requiredCategories) {
 // 🧠 Step 3: 이제 HTML만 추출
 const fullResult = rawResult
   .replace(/```(json|html)?[\s\S]*?```/g, '') // 마크다운 블록 제거
+  .replace(/^```html/, '')
   .replace(/JSON Output:/g, '')
   // ↓ JSON만 제거하되, 정확한 위치 기준으로 제거 (마지막 JSON만 제거)
   .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
@@ -260,7 +260,7 @@ console.log('🧾 fullResult (500자 미리보기):', fullResult.slice(0, 500));
     const previewSplit = processedResult.split('<h2>🔹 4.');
     const summaryIndex = processedResult.indexOf('<h2>✨ Final Summary</h2>');
     const previewHtml = summaryIndex !== -1
-      ? processedResult.slice(0, summaryIndex + 3000) // 충분히 길게 포함
+      ? processedResult.slice(0, summaryIndex + 8000) // 충분히 길게 포함
       : previewSplit[0];
 
       console.log('🎯 Preview Insights:', previewInsights);
