@@ -242,46 +242,16 @@ const fullResult = rawResult
   .trim();
 
 
+// ✅ 여기에 로그 추가!
+console.log('🧾 fullResult (500자 미리보기):', fullResult.slice(0, 500));
 
 
-      // ⭐️ 추가: previewInsights 추출
-if (previewInsightsMatch) {
-  try {
-    previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
-      
-      category: item.category || '',
-      status: item.status || '',
-      solution: item.solution || '',
-      emotionalHook: item.emotionalHook || '',
-      product: item.product || '',
-      reason: item.reason || '',
-    }));
-
-    const allowedCategories = ['Sebum', 'Hydration', 'Texture'];
-    previewInsights = previewInsights.filter(item =>
-      allowedCategories.includes(item.category)
-    );
-
-    // 🚨 previewInsights가 부족할 경우, 빈 항목으로 채우기
-const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
-for (const category of requiredCategories) {
-  if (!previewInsights.find(item => item.category === category)) {
-    previewInsights.push({
-      category,
-      status: 'No data',
-      solution: 'Analysis not available',
-      emotionalHook: '📷 Try uploading a clearer image!',
-      product: '-',
-      reason: 'Insufficient data to generate result.',
-    });
+  if (!fullResult || fullResult.length < 500) {
+    console.warn('⚠️ GPT 응답이 비정상적으로 짧음. fullResult 길이:', fullResult.length);
+    return res.status(400).json({ error: 'Incomplete result from GPT (missing HTML)' });
   }
-}
+  
 
-    
-  } catch (e) {
-    console.warn("⚠️ previewInsights 파싱 실패:", e);
-  }
-}
 
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
