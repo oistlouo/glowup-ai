@@ -97,8 +97,9 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 - Start with a friendly one-liner summary using emoji (e.g., “Sebum is feeling a bit wild today 🛢️”)
 - Then give:
   <li><strong>Score:</strong> x/5</li>
-  <li><strong>Analysis:</strong> ...</li>
+  <li><strong>Analysis:</strong> Brief summary of current condition</li>
   <li><strong>Recommended Product:</strong> Include real product brand examples (e.g., The Ordinary, La Roche-Posay, Cosrx)</li>
+  <li><strong>Why It Works:</strong> Explain *why* this product is a good match, including key ingredients and how they help this skin issue</li>
 
 🔹 Group the results:
 - Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
