@@ -254,15 +254,7 @@ export default function UploadPage() {
   marginBottom: '30px'
 }}>
 
-  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>💡 Free Glow Check – Your Top 3 Skin Signals</h3>
-  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
-    {top3Insights.map((text, idx) => (
-      <li key={idx} style={{ marginBottom: '6px' }}>{text}</li>
-    ))}
-  </ul>
-  <p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
-    Curious about the full analysis? Unlock all 9 insights for just $3.99.
-  </p>
+
 </div>
 
       <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '12px' }}>
