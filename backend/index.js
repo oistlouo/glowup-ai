@@ -176,7 +176,7 @@ const completion = await openai.chat.completions.create({
       ],
     },
   ],
-  max_tokens: 4000, // ✅ 또는 6000~7000 정도까지도 가능
+  max_tokens: 4096, // ✅ 또는 6000~7000 정도까지도 가능
   stream: false,
 });
 
