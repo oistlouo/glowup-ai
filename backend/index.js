@@ -75,8 +75,7 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const imageUrl = uploaded.secure_url;
     console.log("✅ Uploaded Image URL:", imageUrl);
 
-    const prompt = `
-You are a professional Korean dermatologist and K-beauty skincare AI.
+    const prompt = `You are a professional Korean dermatologist and K-beauty skincare AI.
 
 You MUST return a full HTML report. Do NOT return plain text or skip any section.
 
@@ -88,20 +87,8 @@ Each category must include:
 Use semantic HTML and style with this wrapper:
 <div class="card" style="background:#fff;border-radius:12px;padding:16px;margin-bottom:24px;box-shadow:0 2px 5px rgba(0,0,0,0.06); color:#222;">
 
-
 🔹 At the very top of the report, insert a warm personalized greeting:
 “Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨”
-
-🔹 For each skin category:
-- Start with a friendly one-liner summary using emoji (e.g., “Sebum is feeling a bit wild today 🛢️”)
-- Then give:
-  <li><strong>Score:</strong> x/5</li>
-  <li><strong>Analysis:</strong> ...</li>
-  <li><strong>Recommended Product:</strong> Include real product brand examples (e.g., The Ordinary, La Roche-Posay, Cosrx)</li>
-
-🔹 Group the results:
-- Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
-- Highlight Top 3 lowest-scoring areas → “Needs Love 💔”
 
 Always return ALL of the following 9 categories in this exact order:
 
@@ -120,18 +107,9 @@ Always return ALL of the following 9 categories in this exact order:
 Each section must be wrapped in:
 <div class="card" style="..."> ... </div>
 
+At the end, include the Final Summary and Final Note also wrapped in .card
 
-📌 After generating the full HTML above, return a second JSON block for preview UI:
-
-Each preview item must include:
-You MUST return exactly 3 preview items only — one for each of the following categories: Sebum, Hydration, and Texture.
-- "category": name of the skin category
-- "status": a short summary of the current skin condition
-- "solution": recommended product strategy (summarized)
-- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
-- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
-- "reason": explain why the product is a good fit (mention ingredients and effect)
-
+Then, return a second JSON block using strict JSON syntax (double quotes only):
 [
   {
     "category": "Sebum",
@@ -140,74 +118,9 @@ You MUST return exactly 3 preview items only — one for each of the following c
     "emotionalHook": "...",
     "product": "...",
     "reason": "..."
-  },
-  ...
-]
+  }, ...
+]`;
 
-
-<div class="card" style="background:#fff;border-radius:12px;padding:16px;margin-bottom:24px;box-shadow:0 2px 5px rgba(0,0,0,0.06); color:#222;">
-  <h2>✨ Final Summary</h2>
-  <ul>
-    <li><strong>Total Score:</strong> .../45</li>
-    <li><strong>Skin Type Summary:</strong> ...</li>
-    <li><strong>Top 3 Concerns:</strong> ...</li>
-
-    <li><strong>AM Routine:</strong>
-      <div class="routine-box" style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;">
-        <ul>
-          <li><strong>Step 1 – Cleanser:</strong> ...</li>
-          <li><strong>Step 2 – Toner:</strong> ...</li>
-          <li><strong>Step 3 – Serum:</strong> ...</li>
-          <li><strong>Step 4 – Moisturizer:</strong> ...</li>
-          <li><strong>Step 5 – Sunscreen:</strong> ...</li>
-        </ul>
-        <p><strong>Lifestyle Tip:</strong> Try to drink a full glass of water within 10 minutes of waking up...</p>
-      </div>
-    </li>
-
-    <li><strong>PM Routine:</strong>
-      <div class="routine-box" style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;">
-        <ul>
-          <li><strong>Step 1 – Cleanser:</strong> ...</li>
-          <li><strong>Step 2 – Exfoliator:</strong> ...</li>
-          <li><strong>Step 3 – Serum:</strong> ...</li>
-          <li><strong>Step 4 – Moisturizer:</strong> ...</li>
-          <li><strong>Step 5 – Spot Treatment:</strong> ...</li>
-        </ul>
-        <p><strong>Lifestyle Tip:</strong> Try to finish your routine 30 minutes before sleep...</p>
-      </div>
-    </li>
-  </ul>
-</div>
-
-
-🔧 DESIGN INSTRUCTION:
-Return the entire HTML report using clean, white card components.
-Each skin category section (e.g., Sebum, Hydration) must be wrapped in this format:
-
-<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:24px;box-shadow:0 2px 5px rgba(0,0,0,0.06);">
-  <h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
-  <ul>
-    <li><strong>Score:</strong> 3/5</li>
-    <li><strong>Analysis:</strong> ...</li>
-    <li><strong>Recommended Product:</strong> ...</li>
-    <li><strong>Emotional Hook:</strong> ...</li>
-    <li><strong>Reason:</strong> ...</li>
-  </ul>
-</div>
-
-Repeat this format for all 9 categories.
-DO NOT include any markdown code blocks like \`\`\`json or \`\`\`html.
-
-🔚 At the very end of the report, add a warm and encouraging final message, wrapped in a styled box. It should thank the user, reflect on their unique skin journey, and express hope for improvement with GlowUp.AI's guidance.
-
-Use this format:
-
-<div style="background:#f9f9f9;border-left:4px solid #4caf50;padding:16px;margin-top:32px;border-radius:8px;">
-  <p><strong>💖 Final Note:</strong> Thank you for trusting GlowUp.AI with your skincare journey. Your skin is beautifully unique — and every step you take matters. With the right care, consistency, and support, your glow is unstoppable. Let’s keep going, together 🌱</p>
-</div>
-
-`;
 
 
 
