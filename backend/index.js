@@ -166,6 +166,32 @@ You MUST return exactly 3 preview items only — one for each of the following c
   <p><strong>Lifestyle Tip:</strong> Try to finish your routine 30 minutes before sleep to avoid pillow transfer, and keep your room humidified.</p>
 </li>
 
+🔧 DESIGN INSTRUCTION:
+Return the entire HTML report using clean, white card components.
+Each skin category section (e.g., Sebum, Hydration) must be wrapped in this format:
+
+<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:24px;box-shadow:0 2px 5px rgba(0,0,0,0.06);">
+  <h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
+  <ul>
+    <li><strong>Score:</strong> 3/5</li>
+    <li><strong>Analysis:</strong> ...</li>
+    <li><strong>Recommended Product:</strong> ...</li>
+    <li><strong>Emotional Hook:</strong> ...</li>
+    <li><strong>Reason:</strong> ...</li>
+  </ul>
+</div>
+
+Repeat this format for all 9 categories.
+DO NOT include any markdown code blocks like \`\`\`json or \`\`\`html.
+
+🔚 At the very end of the report, add a warm and encouraging final message, wrapped in a styled box. It should thank the user, reflect on their unique skin journey, and express hope for improvement with GlowUp.AI's guidance.
+
+Use this format:
+
+<div style="background:#f9f9f9;border-left:4px solid #4caf50;padding:16px;margin-top:32px;border-radius:8px;">
+  <p><strong>💖 Final Note:</strong> Thank you for trusting GlowUp.AI with your skincare journey. Your skin is beautifully unique — and every step you take matters. With the right care, consistency, and support, your glow is unstoppable. Let’s keep going, together 🌱</p>
+</div>
+
 `;
 
 
@@ -186,10 +212,12 @@ You MUST return exactly 3 preview items only — one for each of the following c
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
     const fullResult = rawResult
-      .replace(/^```html\n?/gm, '')
-      .replace(/```$/gm, '')
-      .trim();
-    
+    .replace(/```(?:html|json)?\n?/g, '')
+    .replace(/^```json\n?/gm, '')
+    .replace(/```/g, '') 
+    .replace(/```json[\s\S]*$/, '')  // ✅ 잘못 들어가는 마지막 JSON 제거 확실히 처리
+    .trim();
+
       // ⭐️ 추가: previewInsights 추출
 let previewInsights = [];
 const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
