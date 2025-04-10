@@ -163,8 +163,8 @@ export default function UploadPage() {
 
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '48px', fontWeight: '800', marginBottom: '12px' }}>GlowUp.AI</h1>
-        Let AI decode your skin — and unlock your glow. All for just $3.99.
-
+        Let AI decode your skin — and unlock your glow.
+        
         <h2 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>How to Use</h2>
         <p style={{ fontSize: '16px', lineHeight: '1.6' }}>
           1. Upload a selfie<br />

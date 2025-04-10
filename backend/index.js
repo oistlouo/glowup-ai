@@ -101,6 +101,11 @@ Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 - Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
 - Highlight Top 3 lowest-scoring areas → “Needs Love 💔”
 
+
+
+Each section must be wrapped in:
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 4px rgba(255,255,255,0.05)"> ... </div>
+
 Always return ALL of the following 9 categories in this exact order:
 
 <h1>🌿 Comprehensive Skin Report</h1>
@@ -139,32 +144,45 @@ You MUST return exactly 3 preview items only — one for each of the following c
 ]
 
 
-<h2>✨ Final Summary</h2>
-<ul>
-  <li><strong>Total Score:</strong> .../45</li>
-  <li><strong>Skin Type Summary:</strong> ...</li>
-  <li><strong>Top 3 Concerns:</strong> ...</li>
-  <li><strong>AM Routine:</strong>
-  <ul>
-    <li><strong>Step 1 – Cleanser:</strong> Use a low-pH hydrating gel cleanser to gently remove overnight oil without stripping moisture.</li>
-    <li><strong>Step 2 – Toner:</strong> Apply a balancing toner with witch hazel to prep your skin and control T-zone oil.</li>
-    <li><strong>Step 3 – Serum:</strong> Use Vitamin C (10–15%) serum to brighten and protect against UV damage.</li>
-    <li><strong>Step 4 – Moisturizer:</strong> Choose a lightweight gel-cream with hyaluronic acid for hydration lock.</li>
-    <li><strong>Step 5 – Sunscreen:</strong> Always finish with SPF 50+ PA+++ sunscreen before heading out.</li>
-  </ul>
-  <p><strong>Lifestyle Tip:</strong> Try to drink a full glass of water within 10 minutes of waking up, and avoid coffee before applying sunscreen.</p>
-</li>
+At the end, return:
 
-  <li><strong>PM Routine:</strong>
-  <ul>
-    <li><strong>Step 1 – Cleanser:</strong> Double cleanse: Start with a cleansing balm to remove sunscreen and makeup, then a mild foaming cleanser.</li>
-    <li><strong>Step 2 – Exfoliator (2–3x/week):</strong> Use a gentle BHA toner if your texture feels rough or congested.</li>
-    <li><strong>Step 3 – Serum:</strong> Apply a niacinamide or retinol-based serum depending on your sensitivity level.</li>
-    <li><strong>Step 4 – Moisturizer:</strong> Rich cream with ceramides to restore skin barrier overnight.</li>
-    <li><strong>Step 5 – Spot Treatment (if needed):</strong> Use salicylic acid gel on acne-prone areas.</li>
-  </ul>
-  <p><strong>Lifestyle Tip:</strong> Try to finish your routine 30 minutes before sleep to avoid pillow transfer, and keep your room humidified.</p>
-</li>
+<h2>✨ Final Summary</h2>
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+<p><strong>Total Score:</strong> 32/45</p>
+<p><strong>Skin Type Summary:</strong> Combination skin with mild sensitivity and early signs of aging.</p>
+<p><strong>Top 3 Concerns:</strong><br />
+1. Wrinkles – Use RoC Retinol Night Cream 2x/week + daily hydration<br />
+2. Pigmentation – Use Missha Essence daily AM/PM<br />
+3. Texture – Gently exfoliate with COSRX BHA 2~3x/week</p>
+</div>
+
+<h2>☀️ AM Routine</h2>
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+<ul>
+<li>Cleanser: Low pH Gel Cleanser</li>
+<li>Toner: Klairs Supple Preparation Toner</li>
+<li>Serum: Vitamin C Serum by Klairs</li>
+<li>Moisturizer: Neutrogena Hydro Boost Gel</li>
+<li>Sunscreen: Beauty of Joseon Rice SPF</li>
+</ul>
+</div>
+
+<h2>🌙 PM Routine</h2>
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+<ul>
+<li>Cleanser: Oil-based cleanser for makeup</li>
+<li>Exfoliator: COSRX BHA (2~3x/week)</li>
+<li>Serum: Retinol (every 2 days)</li>
+<li>Moisturizer: Avene Skin Recovery Cream</li>
+<li>Spot Treatment: Paula's Choice CLEAR</li>
+</ul>
+
+For both AM and PM routine sections, also include a personalized "Lifestyle Tip" based on the user's skin condition, concerns, or habits.
+
+Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
+<p><strong>Lifestyle Tip:</strong> ...</p> format.
+
+</div>
 
 `;
 
@@ -186,9 +204,11 @@ You MUST return exactly 3 preview items only — one for each of the following c
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
     const fullResult = rawResult
-      .replace(/^```html\n?/gm, '')
-      .replace(/```$/gm, '')
-      .trim();
+     .replace(/```(json|html)?[\s\S]*?```/g, '')
+     .replace(/^```html/, '')
+     .replace(/JSON Output:/g, '')
+     .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
+     .trim();
     
       // ⭐️ 추가: previewInsights 추출
 let previewInsights = [];
