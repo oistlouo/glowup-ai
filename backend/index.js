@@ -178,8 +178,9 @@ At the end, return:
 - Also mention what visible improvement can be expected and how long it usually takes if the suggested routine is followed (e.g., “In 2–3 weeks, you may notice smoother texture and less redness.”)
 
 <h2>☀️ AM Routine</h2> and <h2>🌙 PM Routine</h2>
-- Generate personalized 5-step AM/PM skincare routines based on the user’s skin issues
-- Include real product brand names per step (e.g., COSRX, La Roche-Posay, Klairs)
+- Generate personalized 5-step AM/PM skincare routines based ONLY on the 9 skin categories above.
+- You MUST select all routine products directly from the “Recommended Product” items already listed for the 9 skin concerns.
+- Do NOT introduce new products outside of those 9 categories.
 - Include 1 friendly and professional <p><strong>Lifestyle Tip:</strong> ...</p> under each routine
 - Make sure everything is wrapped inside a styled <div class="card" style="..."> element for each block
 
@@ -192,8 +193,13 @@ Every routine, summary, and tip must be fully customized per user.
 
 Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
 
-Every product must be intelligently selected from a wide range of global skincare brands (e.g., Korean, US, French, Japanese). Avoid repeating the same brand or product unless it is the absolute best fit for that issue.
+Every product must be selected from a wide variety of Korean, Japanese, US, and French skincare brands.  
+You MUST avoid repeating the same product or brand unless it is clearly the most effective for multiple categories.  
+Diversity in product selection is essential for realism and credibility.
 
+You MUST build the AM/PM skincare routines only using products already recommended in the 9 skin category sections.  
+Every product must be from a diverse global skincare brand pool.  
+Avoid duplication of the same product or brand unless strongly justified.
 
 
 Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
