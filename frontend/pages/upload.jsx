@@ -306,17 +306,19 @@ export default function UploadPage() {
 {isPaid && (
   <>
     <div
-      style={{
-        backgroundColor: '#f5f5f5',
-        padding: '20px',
-        borderRadius: '12px',
-        textAlign: 'center',
-        fontSize: '18px',
-        fontWeight: '600',
-        marginBottom: '20px',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
-      }}
-    >
+  className="result-card"
+  style={{
+    backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
+    color: isDarkMode ? '#fff' : '#222',
+    borderRadius: '12px',
+    padding: '20px',
+    textAlign: 'center',
+    fontSize: '18px',
+    fontWeight: '600',
+    marginBottom: '20px',
+    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+  }}
+>
       Hey {name || 'there'}, here’s what your skin is telling us today — and how we’ll glow it up ✨
     </div>
 

@@ -38,23 +38,6 @@ export default function UploadPage() {
     }
   };
 
-  const extractTop3Insights = (html) => {
-    const container = document.createElement('div');
-    container.innerHTML = html;
-    const items = Array.from(container.querySelectorAll('li'));
-    const insights = [];
-  
-    for (let li of items) {
-      const text = li.textContent.toLowerCase();
-      if (text.includes('sebum') || text.includes('hydration') || text.includes('texture')) {
-        insights.push(li.textContent);
-      }
-      if (insights.length >= 3) break;
-    }
-  
-    return insights;
-  };
-  
 
   const handleUpload = async () => {
     if (!image) return;
@@ -95,8 +78,6 @@ export default function UploadPage() {
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
 
-      const extractedInsights = extractTop3Insights(data.previewHtml);
-      setTop3Insights(extractedInsights);
       
       const amSteps = extractAmRoutine(data.previewHtml);
       setAmPreview(amSteps);
@@ -261,11 +242,14 @@ export default function UploadPage() {
 }}>
 
   <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>💡 Free Glow Check – Your Top 3 Skin Signals</h3>
-  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
-    {top3Insights.map((text, idx) => (
-      <li key={idx} style={{ marginBottom: '6px' }}>{text}</li>
-    ))}
-  </ul>
+  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>
+  💡 Free Glow Check – Your Top 3 Skin Signals
+</h3>
+
+<p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
+  Curious about the full analysis? Unlock all 9 insights for just $3.99.
+</p>
+
   <p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
     Curious about the full analysis? Unlock all 9 insights for just $3.99.
   </p>

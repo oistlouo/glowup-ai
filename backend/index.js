@@ -259,7 +259,7 @@ console.log('🧾 fullResult (500자 미리보기):', fullResult.slice(0, 500));
     const previewSplit = processedResult.split('<h2>🔹 4.');
     const summaryIndex = processedResult.indexOf('<h2>✨ Final Summary</h2>');
     const previewHtml = summaryIndex !== -1
-      ? processedResult.slice(0, summaryIndex + 8000) // 충분히 길게 포함
+      ? processedResult.slice(0, summaryIndex) // 충분히 길게 포함
       : previewSplit[0];
 
       console.log('🎯 Preview Insights:', previewInsights);
