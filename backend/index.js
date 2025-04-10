@@ -191,8 +191,10 @@ if (previewInsightsMatch) {
   try {
     // 🔧 따옴표 및 JSON 구조 보정
     const validJson = previewInsightsMatch[0]
-      .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":') // 키에 따옴표 추가
-      .replace(/'/g, '"'); // 홑따옴표 → 쌍따옴표
+  .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":')          // 키에 큰따옴표 추가
+  .replace(/:\s*'(.*?)'/g, ': "$1"')                  // 값이 '텍스트' → "텍스트"
+  .replace(/'/g, '"');                                // 그 외 모든 작은따옴표도 변환
+
 
     previewInsights = JSON.parse(validJson).map(item => ({
       category: item.category || '',
