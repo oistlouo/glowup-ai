@@ -137,7 +137,7 @@ export default function UploadPage() {
         @media (prefers-color-scheme: dark) {
           body {
             background-color: #121212;
-            color: #fff;
+            color: #fff !important;
           }
           input, h1, h2, p, label, div {
             color: #fff !important;
@@ -156,7 +156,7 @@ export default function UploadPage() {
             opacity: 1 !important;
           }
           .card, .result-card {
-            background-color: #1e1e1e !important;
+            background-color: #2a2a2a !important;
           }
         }
       `}</style>

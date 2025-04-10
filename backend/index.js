@@ -211,18 +211,23 @@ if (previewInsightsMatch) {
     );
 
     const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
-    for (const category of requiredCategories) {
-      if (!previewInsights.find(item => item.category === category)) {
-        previewInsights.push({
-          category,
-          status: 'No data',
-          solution: 'Analysis not available',
-          emotionalHook: '📷 Try uploading a clearer image!',
-          product: '-',
-          reason: 'Insufficient data to generate result.',
-        });
-      }
-    }
+const parsedCategoryNames = (validJson.match(/"category"\s*:\s*"([^"]+)"/g) || []).map(line =>
+  line.match(/"category"\s*:\s*"([^"]+)"/)[1]
+);
+
+for (const category of requiredCategories) {
+  if (!parsedCategoryNames.includes(category)) {
+    previewInsights.push({
+      category,
+      status: 'No data',
+      solution: 'Analysis not available',
+      emotionalHook: '📷 Try uploading a clearer image!',
+      product: '-',
+      reason: 'Insufficient data to generate result.',
+    });
+  }
+}
+
   } catch (err) {
     console.warn('⚠️ Failed to parse previewInsights:', err);
   }
