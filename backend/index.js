@@ -92,18 +92,10 @@ Each category must include:
 Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 🔹 At the very top of the report, insert a warm personalized greeting:
-<div className="card" style={{
-  background: '#1e1e1e',  // ✅ 진한 회색으로 변경
-  color: '#fff',
-  borderRadius: '12px',
-  padding: '24px',
-  marginBottom: '24px',
-  boxShadow: '0 2px 4px rgba(255,255,255,0.05)'
-}}>
-  <p style={{ fontSize: '18px', fontWeight: '500' }}>
-    Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨
-  </p>
+<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:24px; margin-bottom:24px; box-shadow:0 2px 4px rgba(255,255,255,0.05)">
+  <p style="font-size:18px; font-weight:500">Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨</p>
 </div>
+
 
 
 
@@ -197,6 +189,11 @@ For both AM and PM routine sections, also include a personalized "Lifestyle Tip"
 Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
 
 Every routine, summary, and tip must be fully customized per user.
+
+Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
+
+Every product must be intelligently selected from a wide range of global skincare brands (e.g., Korean, US, French, Japanese). Avoid repeating the same brand or product unless it is the absolute best fit for that issue.
+
 
 
 Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
