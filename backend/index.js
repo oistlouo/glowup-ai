@@ -235,10 +235,12 @@ for (const category of requiredCategories) {
 
 // 🧠 Step 3: 이제 HTML만 추출
 const fullResult = rawResult
-  .replace(/```(json|html)?[\s\S]*?```/g, '') // GPT가 감싸는 markdown 블록 제거
-  .replace(/JSON Output:/g, '')  
-  .replace(/\[\s*{[\s\S]*?}\s*\]/, '') // JSON 부분 한 번만 제거 (전체 삭제 아님)
+  .replace(/```(json|html)?[\s\S]*?```/g, '') // 마크다운 블록 제거
+  .replace(/JSON Output:/g, '')
+  // ↓ JSON만 제거하되, 정확한 위치 기준으로 제거 (마지막 JSON만 제거)
+  .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
   .trim();
+
 
 
 

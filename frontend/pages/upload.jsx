@@ -119,8 +119,13 @@ export default function UploadPage() {
 
       const data = await response.json();
       if (!data.previewHtml || !data.fullHtml) {
+        console.error('🔥 Server response missing fields:', {
+          previewHtml: !!data.previewHtml,
+          fullHtml: !!data.fullHtml,
+        });
         throw new Error('Incomplete result from server');
       }
+      
 
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);

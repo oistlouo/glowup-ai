@@ -79,8 +79,14 @@ export default function UploadPage() {
 
       const data = await response.json();
       if (!data.previewHtml || !data.fullHtml) {
-        throw new Error('Incomplete result from server');
+        console.error('❌ Missing HTML in response:', {
+          hasPreview: !!data.previewHtml,
+          hasFull: !!data.fullHtml
+        });
+        alert('Sorry, we couldn’t generate your report. Please try again with a clearer selfie.');
+        return;
       }
+      
 
       setPreviewInsights(data.previewInsights || []);
       console.log("🧪 previewInsights data:", data.previewInsights);
