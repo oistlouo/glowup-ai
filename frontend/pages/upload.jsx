@@ -158,7 +158,7 @@ export default function UploadPage() {
 
       <div style={{ textAlign: 'center' }}>
         <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? 'Analyzing...' : '✨ Start Analyze'}
+          {loading ? '🧬 Analyzing now — your results will shine in 5 minutes ✨' : '✨ Start Analyze'}
         </button>
       </div>
 

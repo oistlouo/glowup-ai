@@ -235,7 +235,7 @@ export default function UploadPage() {
       {(!isPaid && !previewHtml) && (
         <div style={{ textAlign: 'center' }}>
           <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
-            {loading ? 'Analyzing...' : '✨ Start Analyze'}
+            {loading ? 'ng...🧬 Analyzing now — your results will shine in 5 minutes ✨' : '✨ Start Analyze'}
           </button>
         </div>
       )}
