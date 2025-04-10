@@ -38,56 +38,6 @@ export default function UploadPage() {
     }
   }, []);
 
-  useEffect(() => {
-    const style = document.createElement('style');
-    style.innerHTML = `
-  .card, .result-card {
-    color: #222 !important;
-    background-color: #fff !important;
-    border: 1px solid #eee !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    border-radius: 12px !important;
-    padding: 20px !important;
-    margin-bottom: 24px !important;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #000 !important;
-    }
-
-    .card, .result-card {
-      background-color: #2a2a2a !important;
-      color: #fff !important;
-      border: 1px solid #444 !important;
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05) !important;
-    }
-
-    .routine-box {
-      background-color: #3a3a3a !important;
-      color: #fff !important;
-    }
-
-    input, label, h1, h2, h3, p {
-      color: #fff !important;
-    }
-
-    input {
-      background-color: #1e1e1e !important;
-      border: 1px solid #666 !important;
-    }
-
-    input::placeholder {
-      color: #aaa !important;
-    }
-  }
-`;
-
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
-
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -119,13 +69,8 @@ export default function UploadPage() {
 
       const data = await response.json();
       if (!data.previewHtml || !data.fullHtml) {
-        console.error('🔥 Server response missing fields:', {
-          previewHtml: !!data.previewHtml,
-          fullHtml: !!data.fullHtml,
-        });
         throw new Error('Incomplete result from server');
       }
-      
 
       setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
@@ -188,26 +133,6 @@ export default function UploadPage() {
         </label>
         <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </div>
-
-      {!isPaid && previewHtml && (
-  <div style={{ textAlign: 'center', marginTop: '12px' }}>
-    <button
-      onClick={() => setIsPaid(true)}
-      style={{
-        backgroundColor: '#e53935',
-        color: '#fff',
-        padding: '8px 16px',
-        borderRadius: '6px',
-        fontSize: '14px',
-        cursor: 'pointer',
-        border: 'none'
-      }}
-    >
-      🧪 Show Full Report (Dev Only)
-    </button>
-  </div>
-)}
-
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
@@ -306,19 +231,17 @@ export default function UploadPage() {
 {isPaid && (
   <>
     <div
-  className="result-card"
-  style={{
-    backgroundColor: isDarkMode ? '#2a2a2a' : '#fff',
-    color: isDarkMode ? '#fff' : '#222',
-    borderRadius: '12px',
-    padding: '20px',
-    textAlign: 'center',
-    fontSize: '18px',
-    fontWeight: '600',
-    marginBottom: '20px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
-  }}
->
+      style={{
+        backgroundColor: '#f5f5f5',
+        padding: '20px',
+        borderRadius: '12px',
+        textAlign: 'center',
+        fontSize: '18px',
+        fontWeight: '600',
+        marginBottom: '20px',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+      }}
+    >
       Hey {name || 'there'}, here’s what your skin is telling us today — and how we’ll glow it up ✨
     </div>
 

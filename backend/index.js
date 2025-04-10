@@ -37,13 +37,13 @@ const applyRoutineBox = (html) => {
     .replace(
       /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
       (_, content) => {
-        return `<li><strong>AM Routine:</strong><div style="background:#3a3a3a; border-radius:8px; padding:12px; margin-top:6px; color:#fff;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+        return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
       }
     )
     .replace(
       /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
       (_, content) => {
-        return `<li><strong>PM Routine:</strong><div style="background:#3a3a3a; border-radius:8px; padding:12px; margin-top:6px; color:#fff;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+        return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
       }
     );
 };
@@ -75,7 +75,8 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const imageUrl = uploaded.secure_url;
     console.log("✅ Uploaded Image URL:", imageUrl);
 
-    const prompt = `You are a professional Korean dermatologist and K-beauty skincare AI.
+    const prompt = `
+You are a professional Korean dermatologist and K-beauty skincare AI.
 
 You MUST return a full HTML report. Do NOT return plain text or skip any section.
 
@@ -84,11 +85,21 @@ Each category must include:
 - "product": specific product brand recommendation (e.g., "The Ordinary Niacinamide 10%")
 - "reason": why this product is a good fit, mentioning key ingredients and their effect
 
-Use semantic HTML and style with this wrapper:
-<div style="background:#f5f5f5; color:#222; padding:20px; border-radius:12px; text-align:center; font-size:18px; font-weight:600; margin-bottom:20px; box-shadow:0 2px 5px rgba(0,0,0,0.05)">
+Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 🔹 At the very top of the report, insert a warm personalized greeting:
 “Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨”
+
+🔹 For each skin category:
+- Start with a friendly one-liner summary using emoji (e.g., “Sebum is feeling a bit wild today 🛢️”)
+- Then give:
+  <li><strong>Score:</strong> x/5</li>
+  <li><strong>Analysis:</strong> ...</li>
+  <li><strong>Recommended Product:</strong> Include real product brand examples (e.g., The Ordinary, La Roche-Posay, Cosrx)</li>
+
+🔹 Group the results:
+- Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
+- Highlight Top 3 lowest-scoring areas → “Needs Love 💔”
 
 Always return ALL of the following 9 categories in this exact order:
 
@@ -104,53 +115,17 @@ Always return ALL of the following 9 categories in this exact order:
 <h2>🔹 8. Skin Tone</h2>
 <h2>🔹 9. Acne</h2>
 
-Each section must be wrapped in:
-<div class="card" style="..."> ... </div>
+📌 After generating the full HTML above, return a second JSON block for preview UI:
 
-<div class="card" style="...">
-  <h2>✨ Final Summary</h2>
-  <ul>
-    <li><strong>Total Score:</strong> 32/45</li>
-    <li><strong>Skin Type Summary:</strong> Combination skin with mild sensitivity and signs of early aging.</li>
-    <li><strong>Top 3 Concerns:</strong> 
-      <ul>
-        <li>1. Wrinkles – Use RoC Retinol Night Cream 2x/week + daily hydration</li>
-        <li>2. Pigmentation – Use Missha Essence daily AM/PM</li>
-        <li>3. Texture – Gently exfoliate with COSRX BHA 2~3x/week</li>
-      </ul>
-    </li>
-    <li><strong>AM Routine:</strong>
-      <div class="routine-box" style="background:#e3f2fd; ...">
-        <ul>
-          <li><strong>Cleanser:</strong> Low pH Gel Cleanser</li>
-          <li><strong>Toner:</strong> Klairs Supple Preparation Toner</li>
-          <li><strong>Serum:</strong> Vitamin C Serum by Klairs</li>
-          <li><strong>Moisturizer:</strong> Neutrogena Hydro Boost Gel</li>
-          <li><strong>Sunscreen:</strong> Beauty of Joseon Rice SPF</li>
-        </ul>
-        <p><strong>Lifestyle Tip:</strong> Wake up with a glass of water. Protect your skin from morning sun exposure.</p>
-      </div>
-    </li>
+Each preview item must include:
+You MUST return exactly 3 preview items only — one for each of the following categories: Sebum, Hydration, and Texture.
+- "category": name of the skin category
+- "status": a short summary of the current skin condition
+- "solution": recommended product strategy (summarized)
+- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": explain why the product is a good fit (mention ingredients and effect)
 
-    <li><strong>PM Routine:</strong>
-      <div class="routine-box" style="background:#fce4ec; ...">
-        <ul>
-          <li><strong>Cleanser:</strong> Oil-based cleanser for makeup</li>
-          <li><strong>Exfoliator:</strong> COSRX BHA (2~3x/week)</li>
-          <li><strong>Serum:</strong> Retinol (every 2 days)</li>
-          <li><strong>Moisturizer:</strong> Avene Skin Recovery Cream</li>
-          <li><strong>Spot Treatment:</strong> Paula's Choice CLEAR</li>
-        </ul>
-        <p><strong>Lifestyle Tip:</strong> Avoid screen light 30 mins before sleep. Let your skin recover overnight.</p>
-      </div>
-    </li>
-  </ul>
-</div>
-
-
-At the end, include the Final Summary and Final Note also wrapped in .card
-
-Then, return a second JSON block using strict JSON syntax (double quotes only):
 [
   {
     "category": "Sebum",
@@ -159,43 +134,69 @@ Then, return a second JSON block using strict JSON syntax (double quotes only):
     "emotionalHook": "...",
     "product": "...",
     "reason": "..."
-  }, ...
-]`;
+  },
+  ...
+]
+
+
+<h2>✨ Final Summary</h2>
+<ul>
+  <li><strong>Total Score:</strong> .../45</li>
+  <li><strong>Skin Type Summary:</strong> ...</li>
+  <li><strong>Top 3 Concerns:</strong> ...</li>
+  <li><strong>AM Routine:</strong>
+  <ul>
+    <li><strong>Step 1 – Cleanser:</strong> Use a low-pH hydrating gel cleanser to gently remove overnight oil without stripping moisture.</li>
+    <li><strong>Step 2 – Toner:</strong> Apply a balancing toner with witch hazel to prep your skin and control T-zone oil.</li>
+    <li><strong>Step 3 – Serum:</strong> Use Vitamin C (10–15%) serum to brighten and protect against UV damage.</li>
+    <li><strong>Step 4 – Moisturizer:</strong> Choose a lightweight gel-cream with hyaluronic acid for hydration lock.</li>
+    <li><strong>Step 5 – Sunscreen:</strong> Always finish with SPF 50+ PA+++ sunscreen before heading out.</li>
+  </ul>
+  <p><strong>Lifestyle Tip:</strong> Try to drink a full glass of water within 10 minutes of waking up, and avoid coffee before applying sunscreen.</p>
+</li>
+
+  <li><strong>PM Routine:</strong>
+  <ul>
+    <li><strong>Step 1 – Cleanser:</strong> Double cleanse: Start with a cleansing balm to remove sunscreen and makeup, then a mild foaming cleanser.</li>
+    <li><strong>Step 2 – Exfoliator (2–3x/week):</strong> Use a gentle BHA toner if your texture feels rough or congested.</li>
+    <li><strong>Step 3 – Serum:</strong> Apply a niacinamide or retinol-based serum depending on your sensitivity level.</li>
+    <li><strong>Step 4 – Moisturizer:</strong> Rich cream with ceramides to restore skin barrier overnight.</li>
+    <li><strong>Step 5 – Spot Treatment (if needed):</strong> Use salicylic acid gel on acne-prone areas.</li>
+  </ul>
+  <p><strong>Lifestyle Tip:</strong> Try to finish your routine 30 minutes before sleep to avoid pillow transfer, and keep your room humidified.</p>
+</li>
+
+`;
 
 
 
-
-const completion = await openai.chat.completions.create({
-  model: 'gpt-4-turbo',
-  messages: [
-    {
-      role: 'user',
-      content: [
-        { type: 'text', text: prompt },
-        { type: 'image_url', image_url: { url: imageUrl } },
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4-turbo',
+      messages: [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { type: 'image_url', image_url: { url: imageUrl } },
+          ],
+        },
       ],
-    },
-  ],
-  max_tokens: 4096, // ✅ 또는 6000~7000 정도까지도 가능
-  stream: false,
-});
+      stream: false,
+    });
 
-
-    // 🧠 Step 1: GPT 응답 텍스트
-const rawResult = completion.choices?.[0]?.message?.content || '';
-
-// 🧠 Step 2: JSON previewInsights 먼저 파싱
+    const rawResult = completion.choices?.[0]?.message?.content || '';
+    const fullResult = rawResult
+      .replace(/^```html\n?/gm, '')
+      .replace(/```$/gm, '')
+      .trim();
+    
+      // ⭐️ 추가: previewInsights 추출
 let previewInsights = [];
 const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
 if (previewInsightsMatch) {
   try {
-    // 🔧 따옴표 및 JSON 구조 보정
-    const validJson = previewInsightsMatch[0]
-  .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":')          // 키에 큰따옴표 추가
-  .replace(/:\s*'(.*?)'/g, ': "$1"')                  // 값이 '텍스트' → "텍스트"
-  .replace(/'/g, '"');                                // 그 외 모든 작은따옴표도 변환
-
-    previewInsights = JSON.parse(validJson).map(item => ({
+    previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
+      
       category: item.category || '',
       status: item.status || '',
       solution: item.solution || '',
@@ -209,13 +210,10 @@ if (previewInsightsMatch) {
       allowedCategories.includes(item.category)
     );
 
-    const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
-const parsedCategoryNames = (validJson.match(/"category"\s*:\s*"([^"]+)"/g) || []).map(line =>
-  line.match(/"category"\s*:\s*"([^"]+)"/)[1]
-);
-
+    // 🚨 previewInsights가 부족할 경우, 빈 항목으로 채우기
+const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
 for (const category of requiredCategories) {
-  if (!parsedCategoryNames.includes(category)) {
+  if (!previewInsights.find(item => item.category === category)) {
     previewInsights.push({
       category,
       status: 'No data',
@@ -227,30 +225,11 @@ for (const category of requiredCategories) {
   }
 }
 
-  } catch (err) {
-    console.warn('⚠️ Failed to parse previewInsights:', err);
+    
+  } catch (e) {
+    console.warn("⚠️ previewInsights 파싱 실패:", e);
   }
 }
-
-// 🧠 Step 3: 이제 HTML만 추출
-const fullResult = rawResult
-  .replace(/```(json|html)?[\s\S]*?```/g, '')         // 모든 마크다운 블록 제거
-  .replace(/JSON Output:/gi, '')                      // 'JSON Output:' 문자열 제거
-  .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')             // 마지막 JSON 배열 제거 (정확한 위치만)
-  .trim();
-
-
-
-// ✅ 여기에 로그 추가!
-console.log('🧾 fullResult (500자 미리보기):', fullResult.slice(0, 500));
-
-
-  if (!fullResult || fullResult.length < 500) {
-    console.warn('⚠️ GPT 응답이 비정상적으로 짧음. fullResult 길이:', fullResult.length);
-    return res.status(400).json({ error: 'Incomplete result from GPT (missing HTML)' });
-  }
-  
-
 
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
@@ -259,7 +238,7 @@ console.log('🧾 fullResult (500자 미리보기):', fullResult.slice(0, 500));
     const previewSplit = processedResult.split('<h2>🔹 4.');
     const summaryIndex = processedResult.indexOf('<h2>✨ Final Summary</h2>');
     const previewHtml = summaryIndex !== -1
-      ? processedResult.slice(0, summaryIndex) // 충분히 길게 포함
+      ? processedResult.slice(0, summaryIndex + 1000) // 충분히 길게 포함
       : previewSplit[0];
 
       console.log('🎯 Preview Insights:', previewInsights);

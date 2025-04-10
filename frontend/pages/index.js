@@ -38,6 +38,23 @@ export default function UploadPage() {
     }
   };
 
+  const extractTop3Insights = (html) => {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    const items = Array.from(container.querySelectorAll('li'));
+    const insights = [];
+  
+    for (let li of items) {
+      const text = li.textContent.toLowerCase();
+      if (text.includes('sebum') || text.includes('hydration') || text.includes('texture')) {
+        insights.push(li.textContent);
+      }
+      if (insights.length >= 3) break;
+    }
+  
+    return insights;
+  };
+  
 
   const handleUpload = async () => {
     if (!image) return;
@@ -62,14 +79,8 @@ export default function UploadPage() {
 
       const data = await response.json();
       if (!data.previewHtml || !data.fullHtml) {
-        console.error('❌ Missing HTML in response:', {
-          hasPreview: !!data.previewHtml,
-          hasFull: !!data.fullHtml
-        });
-        alert('Sorry, we couldn’t generate your report. Please try again with a clearer selfie.');
-        return;
+        throw new Error('Incomplete result from server');
       }
-      
 
       setPreviewInsights(data.previewInsights || []);
       console.log("🧪 previewInsights data:", data.previewInsights);
@@ -78,6 +89,8 @@ export default function UploadPage() {
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
 
+      const extractedInsights = extractTop3Insights(data.previewHtml);
+      setTop3Insights(extractedInsights);
       
       const amSteps = extractAmRoutine(data.previewHtml);
       setAmPreview(amSteps);
@@ -124,7 +137,7 @@ export default function UploadPage() {
         @media (prefers-color-scheme: dark) {
           body {
             background-color: #121212;
-            color: #fff !important;
+            color: #fff;
           }
           input, h1, h2, p, label, div {
             color: #fff !important;
@@ -143,7 +156,7 @@ export default function UploadPage() {
             opacity: 1 !important;
           }
           .card, .result-card {
-            background-color: #2a2a2a !important;
+            background-color: #1e1e1e !important;
           }
         }
       `}</style>
@@ -199,26 +212,6 @@ export default function UploadPage() {
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
-      {!isPaid && previewHtml && (
-  <div style={{ textAlign: 'center', marginTop: '12px' }}>
-    <button
-      onClick={() => setIsPaid(true)}
-      style={{
-        backgroundColor: '#e53935',
-        color: '#fff',
-        padding: '8px 16px',
-        borderRadius: '6px',
-        fontSize: '14px',
-        cursor: 'pointer',
-        border: 'none'
-      }}
-    >
-      🧪 Show Full Report (Dev Only)
-    </button>
-  </div>
-)}
-
-
       {(!isPaid && !previewHtml) && (
         <div style={{ textAlign: 'center' }}>
           <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
@@ -242,14 +235,11 @@ export default function UploadPage() {
 }}>
 
   <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>💡 Free Glow Check – Your Top 3 Skin Signals</h3>
-  <h3 style={{ textAlign: 'center', marginBottom: '12px' }}>
-  💡 Free Glow Check – Your Top 3 Skin Signals
-</h3>
-
-<p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
-  Curious about the full analysis? Unlock all 9 insights for just $3.99.
-</p>
-
+  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', fontSize: '15px' }}>
+    {top3Insights.map((text, idx) => (
+      <li key={idx} style={{ marginBottom: '6px' }}>{text}</li>
+    ))}
+  </ul>
   <p style={{ fontSize: '13px', color: '#888', marginTop: '8px' }}>
     Curious about the full analysis? Unlock all 9 insights for just $3.99.
   </p>
