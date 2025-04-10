@@ -203,6 +203,8 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
         },
       ],
       stream: false,
+      temperature: 0.7,
+      max_tokens: 4000, // 또는 4096까지 가능 (이 이상 넣으면 에러)
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
@@ -216,11 +218,19 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
     }
     
     const fullResult = rawResult
+
+
+    if (!rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') || !rawResult.includes('<h2>✨ Final Summary</h2>')) {
+      console.error('⚠️ GPT 응답이 불완전합니다.');
+      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
+    }
+    
      .replace(/```(json|html)?[\s\S]*?```/g, '')
      .replace(/^```html/, '')
      .replace(/JSON Output:/g, '')
      .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
      .trim();
+
     
       // ⭐️ 추가: previewInsights 추출
 let previewInsights = [];
@@ -265,6 +275,9 @@ for (const category of requiredCategories) {
 
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
+
+    console.log('🧾 Final GPT Result Start ===>\n', processedResult);
+
     
     // 개선: Final Summary 포함되게 일부 더 살림
     const previewSplit = processedResult.split('<h2>🔹 4.');
