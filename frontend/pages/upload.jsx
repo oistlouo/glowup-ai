@@ -69,7 +69,7 @@ export default function UploadPage() {
 
       const data = await response.json();
       if (!data.previewHtml || !data.fullHtml) {
-        throw new Error('Incomplete result from server');
+        throw new Error('Incomplete result from server – GPT output may have been cut off');
       }
 
       setPreviewHtml(data.previewHtml);

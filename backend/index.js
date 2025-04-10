@@ -78,7 +78,10 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const prompt = `
 You are a professional Korean dermatologist and K-beauty skincare AI.
 
-You MUST return a full HTML report. Do NOT return plain text or skip any section.
+⚠️ Very important: You MUST return a full HTML report + the JSON preview block in ONE reply. 
+Do NOT skip or cut off any section — especially the Final Summary and JSON at the end.
+The report MUST include all 9 skin categories, the Final Summary, and the full AM/PM routine.
+
 
 Each category must include:
 - "emotionalHook": a short emoji + fun summary (e.g., “T-zone’s going wild 🛢️”)
@@ -203,6 +206,15 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
+    if (
+      !rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') ||
+      !rawResult.includes('Final Summary') ||
+      !rawResult.includes('[')
+    ) {
+      console.error('⚠️ GPT 응답이 불완전합니다.');
+      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
+    }
+    
     const fullResult = rawResult
      .replace(/```(json|html)?[\s\S]*?```/g, '')
      .replace(/^```html/, '')
