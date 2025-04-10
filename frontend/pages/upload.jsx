@@ -136,6 +136,26 @@ export default function UploadPage() {
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
+      {!isPaid && previewHtml && (
+  <div style={{ textAlign: 'center', marginTop: '12px' }}>
+    <button
+      onClick={() => setIsPaid(true)}
+      style={{
+        backgroundColor: '#e53935',
+        color: '#fff',
+        padding: '8px 16px',
+        borderRadius: '6px',
+        fontSize: '14px',
+        cursor: 'pointer',
+        border: 'none'
+      }}
+    >
+      🧪 Show Full Report (Dev Only)
+    </button>
+  </div>
+)}
+
+
       <div style={{ textAlign: 'center' }}>
         <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
           {loading ? 'Analyzing...' : '✨ Start Analyze'}
