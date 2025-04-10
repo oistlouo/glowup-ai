@@ -151,7 +151,7 @@ You MUST return exactly 3 preview items only — one for each of the following c
 At the end, return:
 
 <h2>✨ Final Summary</h2>
-- Provide a total skin score out of 45
+- Provide a total skin score out of 100
 - Give a personalized skin type summary based on the analysis (e.g., “Combination skin with mild sensitivity and early aging signs.”)
 - List the Top 3 Concerns in priority order with short solution strategy per item
 - Then add an emotional motivational message like a dermatologist would give
