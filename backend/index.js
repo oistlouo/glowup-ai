@@ -85,7 +85,7 @@ Each category must include:
 - "reason": why this product is a good fit, mentioning key ingredients and their effect
 
 Use semantic HTML and style with this wrapper:
-<div class="card" style="background:#fff;border-radius:12px;padding:16px;margin-bottom:24px;box-shadow:0 2px 5px rgba(0,0,0,0.06); color:#222;">
+<div style="background:#f5f5f5; color:#222; padding:20px; border-radius:12px; text-align:center; font-size:18px; font-weight:600; margin-bottom:20px; box-shadow:0 2px 5px rgba(0,0,0,0.05)">
 
 🔹 At the very top of the report, insert a warm personalized greeting:
 “Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨”
@@ -106,6 +106,47 @@ Always return ALL of the following 9 categories in this exact order:
 
 Each section must be wrapped in:
 <div class="card" style="..."> ... </div>
+
+<div class="card" style="...">
+  <h2>✨ Final Summary</h2>
+  <ul>
+    <li><strong>Total Score:</strong> 32/45</li>
+    <li><strong>Skin Type Summary:</strong> Combination skin with mild sensitivity and signs of early aging.</li>
+    <li><strong>Top 3 Concerns:</strong> 
+      <ul>
+        <li>1. Wrinkles – Use RoC Retinol Night Cream 2x/week + daily hydration</li>
+        <li>2. Pigmentation – Use Missha Essence daily AM/PM</li>
+        <li>3. Texture – Gently exfoliate with COSRX BHA 2~3x/week</li>
+      </ul>
+    </li>
+    <li><strong>AM Routine:</strong>
+      <div class="routine-box" style="background:#e3f2fd; ...">
+        <ul>
+          <li><strong>Cleanser:</strong> Low pH Gel Cleanser</li>
+          <li><strong>Toner:</strong> Klairs Supple Preparation Toner</li>
+          <li><strong>Serum:</strong> Vitamin C Serum by Klairs</li>
+          <li><strong>Moisturizer:</strong> Neutrogena Hydro Boost Gel</li>
+          <li><strong>Sunscreen:</strong> Beauty of Joseon Rice SPF</li>
+        </ul>
+        <p><strong>Lifestyle Tip:</strong> Wake up with a glass of water. Protect your skin from morning sun exposure.</p>
+      </div>
+    </li>
+
+    <li><strong>PM Routine:</strong>
+      <div class="routine-box" style="background:#fce4ec; ...">
+        <ul>
+          <li><strong>Cleanser:</strong> Oil-based cleanser for makeup</li>
+          <li><strong>Exfoliator:</strong> COSRX BHA (2~3x/week)</li>
+          <li><strong>Serum:</strong> Retinol (every 2 days)</li>
+          <li><strong>Moisturizer:</strong> Avene Skin Recovery Cream</li>
+          <li><strong>Spot Treatment:</strong> Paula's Choice CLEAR</li>
+        </ul>
+        <p><strong>Lifestyle Tip:</strong> Avoid screen light 30 mins before sleep. Let your skin recover overnight.</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
 
 At the end, include the Final Summary and Final Note also wrapped in .card
 
@@ -188,6 +229,7 @@ if (previewInsightsMatch) {
 // 🧠 Step 3: 이제 HTML만 추출
 const fullResult = rawResult
   .replace(/```(json|html)?[\s\S]*?```/g, '') // GPT가 감싸는 markdown 블록 제거
+  .replace(/JSON Output:/g, '')  
   .replace(/\[\s*{[\s\S]*?}\s*\]/, '') // JSON 부분 한 번만 제거 (전체 삭제 아님)
   .trim();
 
