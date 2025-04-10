@@ -140,16 +140,60 @@ const completion = await openai.chat.completions.create({
 });
 
 
-    const rawResult = completion.choices?.[0]?.message?.content || '';
-    const fullResult = rawResult
-     .replace(/```(json|html)?[\s\S]*?```/g, '') // 코드 블럭 완전히 제거
-     .replace(/\[\s*{[\s\S]*?}\s*]/g, '') // JSON 배열 덩어리도 제거
-     .trim();
+    // 🧠 Step 1: GPT 응답 텍스트
+const rawResult = completion.choices?.[0]?.message?.content || '';
+
+// 🧠 Step 2: JSON previewInsights 먼저 파싱
+let previewInsights = [];
+const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
+if (previewInsightsMatch) {
+  try {
+    // 🔧 따옴표 및 JSON 구조 보정
+    const validJson = previewInsightsMatch[0]
+      .replace(/([{,]\s*)(\w+)\s*:/g, '$1"$2":') // 키에 따옴표 추가
+      .replace(/'/g, '"'); // 홑따옴표 → 쌍따옴표
+
+    previewInsights = JSON.parse(validJson).map(item => ({
+      category: item.category || '',
+      status: item.status || '',
+      solution: item.solution || '',
+      emotionalHook: item.emotionalHook || '',
+      product: item.product || '',
+      reason: item.reason || '',
+    }));
+
+    const allowedCategories = ['Sebum', 'Hydration', 'Texture'];
+    previewInsights = previewInsights.filter(item =>
+      allowedCategories.includes(item.category)
+    );
+
+    const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
+    for (const category of requiredCategories) {
+      if (!previewInsights.find(item => item.category === category)) {
+        previewInsights.push({
+          category,
+          status: 'No data',
+          solution: 'Analysis not available',
+          emotionalHook: '📷 Try uploading a clearer image!',
+          product: '-',
+          reason: 'Insufficient data to generate result.',
+        });
+      }
+    }
+  } catch (err) {
+    console.warn('⚠️ Failed to parse previewInsights:', err);
+  }
+}
+
+// 🧠 Step 3: 이제 HTML만 추출
+const fullResult = rawResult
+  .replace(/```(json|html)?[\s\S]*?```/g, '') // GPT가 감싸는 markdown 블록 제거
+  .replace(/\[\s*{[\s\S]*?}\s*\]/, '') // JSON 부분 한 번만 제거 (전체 삭제 아님)
+  .trim();
+
 
 
       // ⭐️ 추가: previewInsights 추출
-let previewInsights = [];
-const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
 if (previewInsightsMatch) {
   try {
     previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
