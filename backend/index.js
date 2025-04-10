@@ -234,12 +234,11 @@ for (const category of requiredCategories) {
 
 // 🧠 Step 3: 이제 HTML만 추출
 const fullResult = rawResult
-  .replace(/```(json|html)?[\s\S]*?```/g, '') // 마크다운 블록 제거
-  .replace(/^```html/, '')
-  .replace(/JSON Output:/g, '')
-  // ↓ JSON만 제거하되, 정확한 위치 기준으로 제거 (마지막 JSON만 제거)
-  .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
+  .replace(/```(json|html)?[\s\S]*?```/g, '')         // 모든 마크다운 블록 제거
+  .replace(/JSON Output:/gi, '')                      // 'JSON Output:' 문자열 제거
+  .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')             // 마지막 JSON 배열 제거 (정확한 위치만)
   .trim();
+
 
 
 // ✅ 여기에 로그 추가!
