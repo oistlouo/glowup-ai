@@ -158,7 +158,16 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+<div style={{ 
+  marginTop: '40px', 
+  backgroundColor: '#1e1e1e',  // ✅ 다크모드에 적합한 짙은 회색 배경
+  color: '#fff',               // ✅ 기본 글씨 색 보장
+  padding: '20px', 
+  borderRadius: '8px', 
+  boxShadow: '0 1px 3px rgba(255,255,255,0.1)' 
+}} 
+dangerouslySetInnerHTML={{ __html: resultText }} 
+/>
 
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>

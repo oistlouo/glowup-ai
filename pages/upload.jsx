@@ -158,7 +158,17 @@ export default function UploadPage() {
 
       {resultText && (
         <>
-          <div style={{ marginTop: '40px', backgroundColor: '#fff', padding: '20px', borderRadius: '8px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }} dangerouslySetInnerHTML={{ __html: resultText }} />
+<div
+  style={{
+    marginTop: '40px',
+    backgroundColor: '#1e1e1e', // 짙은 회색으로 변경
+    padding: '20px',
+    borderRadius: '8px',
+    color: '#fff', // 글씨색 흰색 고정
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+  }}
+  dangerouslySetInnerHTML={{ __html: resultText }}
+/>
 
           {concernsArray.length > 0 && (
             <div style={{ marginTop: '40px' }}>
