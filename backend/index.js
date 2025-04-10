@@ -218,19 +218,17 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
     }
     
     const fullResult = rawResult
-
+    .replace(/```(json|html)?[\s\S]*?```/g, '')
+    .replace(/^```html/, '')
+    .replace(/JSON Output:/g, '')
+    .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
+    .trim();
 
     if (!rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') || !rawResult.includes('<h2>✨ Final Summary</h2>')) {
       console.error('⚠️ GPT 응답이 불완전합니다.');
       throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
     }
     
-     .replace(/```(json|html)?[\s\S]*?```/g, '')
-     .replace(/^```html/, '')
-     .replace(/JSON Output:/g, '')
-     .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
-     .trim();
-
     
       // ⭐️ 추가: previewInsights 추출
 let previewInsights = [];
