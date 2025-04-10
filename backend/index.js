@@ -92,17 +92,38 @@ Each category must include:
 Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
 
 🔹 At the very top of the report, insert a warm personalized greeting:
-“Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨”
-- Wrap the entire category block in a dark-mode friendly card:
-  <div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+<div className="card" style={{
+  background: '#000',
+  color: '#fff',
+  borderRadius: '12px',
+  padding: '24px',
+  marginBottom: '24px',
+  boxShadow: '0 2px 4px rgba(255,255,255,0.05)'
+}}>
+  <p style={{ fontSize: '18px', fontWeight: '500' }}>
+    Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨
+  </p>
+</div>
 
 
-You MUST include the following 5 clearly labeled elements using semantic HTML (no bullet points):
-<p><strong>Score:</strong> x/5</p>
-<p><strong>Diagnosis:</strong> ...</p>
-<p><strong>Solution:</strong> ...</p>
-<p><strong>Recommended Product:</strong> ...</p>
-<p><strong>Why It Works:</strong> ...</p>
+You MUST include the following 6 clearly labeled elements using semantic HTML (no bullet points):
+
+
+<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+  <p><strong>Score:</strong> x/5</p>
+  <p><strong>Diagnosis:</strong> Describe what GPT sees in the skin photo</p>
+  <p><strong>Solution:</strong> What skincare action should be taken</p>
+  <p><strong>Recommended Product:</strong> Specific product name (e.g., COSRX BHA Blackhead Power Liquid)</p>
+  <p><strong>Why It Works:</strong> Real ingredient-based reasoning for that product</p>
+</div>
+
+- "category": name of the skin category
+- "status": a short summary of the current skin condition
+- "solution": recommended product strategy (summarized)
+- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": explain why the product is a good fit (mention ingredients and effect)
+
 
 Always wrap the entire category block in this format:
 <div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px"> ... </div>
@@ -171,6 +192,11 @@ At the end, return:
 
 
 For both AM and PM routine sections, also include a personalized "Lifestyle Tip" based on the user's skin condition, concerns, or habits.
+
+Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
+
+Every routine, summary, and tip must be fully customized per user.
+
 
 Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
 <p><strong>Lifestyle Tip:</strong> ...</p> format.
