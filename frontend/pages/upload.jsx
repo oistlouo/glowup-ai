@@ -38,6 +38,36 @@ export default function UploadPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .card, .result-card {
+        color: #222 !important;
+        background-color: #fff !important;
+        border: 1px solid #eee !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+        margin-bottom: 24px !important;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        .card, .result-card {
+          color: #fff !important;
+          background-color: #1e1e1e !important;
+          border: 1px solid #333 !important;
+          box-shadow: 0 4px 12px rgba(255, 255, 255, 0.05) !important;
+        }
+        .routine-box {
+          color: #000 !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
