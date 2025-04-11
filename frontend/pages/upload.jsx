@@ -221,9 +221,11 @@ export default function UploadPage() {
           {/* 💸 결제 유도 문구 + 버튼 */}
           <div style={{ textAlign: 'center', marginTop: '30px' }}>
             <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px', fontWeight: 'bold' }}>
-            🔍 Understand your skin better than ever before.<br />
-            🔓 Unlock 9 expert-level insights to reveal your personalized skincare routine.<br />
-            💎 Just $3.99 — Get your complete skin blueprint today.
+            Your Full Skin Report Awaits 👀  
+            Unlock 9 in-depth AI insights + your personal AM/PM routine.  
+            ✅ Dermatologist-grade breakdown  
+            ✅ Personalized product recommendations  
+            ✅ Visual pore + pigmentation analysis  
             </div>
             
             <div id="paypal-container-XW5X3YNYP26TN" />
