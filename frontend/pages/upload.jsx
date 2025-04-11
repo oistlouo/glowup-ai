@@ -136,24 +136,7 @@ export default function UploadPage() {
 
       {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
 
-      {!isPaid && previewHtml && (
-  <div style={{ textAlign: 'center', marginTop: '12px' }}>
-    <button
-      onClick={() => setIsPaid(true)}
-      style={{
-        backgroundColor: '#e53935',
-        color: '#fff',
-        padding: '8px 16px',
-        borderRadius: '6px',
-        fontSize: '14px',
-        cursor: 'pointer',
-        border: 'none'
-      }}
-    >
-      🧪 Show Full Report (Dev Only)
-    </button>
-  </div>
-)}
+
 
 
       <div style={{ textAlign: 'center' }}>
