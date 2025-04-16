@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 export default function UploadPage() {
   const [image, setImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [previewHtml, setPreviewHtml] = useState('');
   const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -12,9 +10,6 @@ export default function UploadPage() {
   const [age, setAge] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [amPreview, setAmPreview] = useState([]);
-  const [top3Insights, setTop3Insights] = useState([]);
-  const [previewInsights, setPreviewInsights] = useState([]);
 
   const extractAmRoutine = (html) => {
     const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
