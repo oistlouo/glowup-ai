@@ -90,7 +90,7 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    const isComplete = rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') || rawResult.includes('<h1>🌿 종합 피부 분석 리포트</h1>');
+    const isComplete = rawResult.includes('<h1') && rawResult.includes('<table') && rawResult.includes('피부') && rawResult.includes('루틴');
 
     if (!isComplete || !rawResult.includes('[')) {
       console.error('⚠️ GPT 응답이 불완전합니다.');
