@@ -49,6 +49,8 @@ export default function UploadPage() {
         throw new Error('서버 응답 오류');
       }
 
+
+
       const data = await response.json();
       let html = data.fullHtml || '';
 
@@ -130,19 +132,7 @@ export default function UploadPage() {
         </button>
       </div>
 
-      {fullHtml && (
-        <div
-          style={{
-            marginTop: '40px',
-            backgroundColor: isDarkMode ? '#000' : '#fff',
-            color: isDarkMode ? '#fff' : '#222',
-            padding: '20px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-          }}
-          dangerouslySetInnerHTML={{ __html: fullHtml }}
-        />
-      )}
+
     </div>
   );
 }

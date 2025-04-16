@@ -70,8 +70,12 @@ export default function UploadPage() {
       // In final summary, move 감성 메시지 to top and remove label
       html = html.replace(/<p><strong>감성 메시지:<\/strong>\s*(.*?)<\/p>/, '<p>$1</p>');
 
-      setFullHtml(html);
-      setImageUrl(data.imageUrl || '');
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('fullHtml', html);
+        sessionStorage.setItem('imageUrl', data.imageUrl || '');
+        window.location.href = '/result';
+      }
+      
     } catch (error) {
       console.error('분석 실패:', error);
       alert('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
