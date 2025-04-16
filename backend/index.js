@@ -78,18 +78,12 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    const isComplete = rawResult.includes('<h1') && rawResult.includes('총점') && rawResult.includes('피부');
+    const isComplete = rawResult.includes('<h1') && rawResult.includes('<div') && rawResult.length > 1000;
 
     if (!isComplete) {
-      console.error('⚠️ GPT 응답이 불완전합니다.');
-      console.log('📦 GPT 응답 원문:', rawResult);
-      return res.status(200).json({
-        fullHtml: `<div style="padding:20px;color:#c00;background:#fff0f0;border:1px solid #faa;border-radius:8px;"><h2>⚠️ 분석 실패</h2><p>AI가 이미지를 분석하는 중 문제가 발생했어요. 이미지 품질을 확인하고 다시 시도해주세요.</p></div>`,
-        imageUrl: null,
-        previewInsights: [],
-      });
+      console.warn('⚠️ GPT 응답이 부족하지만 그대로 전달합니다.');
     }
-
+    
     let cleanedHtml = rawResult
       .replace(/```(json|html)?[\s\S]*?```/g, '')
       .replace(/^```html/, '')
