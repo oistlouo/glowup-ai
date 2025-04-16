@@ -1,15 +1,15 @@
-export const dynamic = 'force-dynamic';
-
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 export default function UploadPage() {
-  const router = useRouter();
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewHtml, setPreviewHtml] = useState('');
+  const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(null);
   const [name, setName] = useState('');
-  const [age, setAge] = useState('');
+  const [birthdate, setBirthdate] = useState('');
+  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -22,24 +22,19 @@ export default function UploadPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB 제한
-        alert('⚠️ 파일 크기가 너무 큽니다. 5MB 이하의 이미지를 업로드해주세요.');
-        return;
-      }
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
-  
 
   const handleUpload = async () => {
     if (!image) return;
     setLoading(true);
+    setPreviewHtml('');
+    setFullHtml('');
 
     const formData = new FormData();
     formData.append('image', image);
-    formData.append('name', name);
-    formData.append('age', age);
 
     try {
       const response = await fetch('https://glowup-ai.onrender.com/analyze', {
@@ -49,120 +44,78 @@ export default function UploadPage() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('서버 오류:', errorText);
-        throw new Error('서버 응답 오류');
+        console.error('Server error details:', errorText);
+        throw new Error('Server responded with error');
       }
 
       const data = await response.json();
-      let html = data.fullHtml || '';
-
-      if (typeof window !== 'undefined') {
-        
-        sessionStorage.setItem('fullHtml', html);
-        sessionStorage.setItem('imageUrl', data.imageUrl || '');
-        setTimeout(() => {
-          router.push('/result');
-        }, 300);
+      if (!data.previewHtml || !data.fullHtml) {
+        throw new Error('Incomplete result from server – GPT output may have been cut off');
       }
+
+      setPreviewHtml(data.previewHtml);
+      setFullHtml(data.fullHtml);
+      setImageUrl(data.imageUrl);
+
     } catch (error) {
-      console.error('분석 실패:', error);
-      alert('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
+      console.error('Upload failed:', error);
+      alert('Upload failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+
+
+  const resultText = fullHtml;
+
+  const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
+  const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
+  const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
+  const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
+
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '720px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: '800' }}>GlowUp.AI 피부 분석기</h1>
+    <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
+      {/* 상단 입력 섹션은 이미 적용된 상태 */}
 
-      <p style={{ marginTop: '20px', fontSize: '14px', color: '#555', lineHeight: '1.6' }}>
-        📸 <strong>분석 정확도를 높이기 위해 다음을 지켜주세요:</strong><br />
-        - 이마부터 턱까지 얼굴 전체가 나오게 찍기<br />
-        - 밝은 자연광 혹은 조명 아래에서 촬영 (그림자 X)<br />
-        - 카메라를 정면으로 보고, 필터나 화장 없이 쌩얼로 촬영
-      </p>
-
-      <div style={{ marginTop: '24px' }}>
-        <label style={{ fontWeight: 'bold' }}>닉네임</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="예: 민수"
-          style={{ width: '100%', padding: '10px', marginTop: '8px', border: '1px solid #ccc', borderRadius: '6px' }}
-        />
-      </div>
-
-      <div style={{ marginTop: '20px' }}>
-        <label style={{ fontWeight: 'bold' }}>나이</label>
-        <input
-          type="number"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          placeholder="예: 25"
-          style={{ width: '100%', padding: '10px', marginTop: '8px', border: '1px solid #ccc', borderRadius: '6px' }}
-        />
-      </div>
-
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
-          📷 셀카 업로드
+          📷 Select Your Selfie
         </label>
         <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </div>
 
-      {previewUrl && (
-        <img src={previewUrl} alt="미리보기" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />
-      )}
+      {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
+
+
+
 
       <div style={{ textAlign: 'center' }}>
-        <button
-          onClick={handleUpload}
-          disabled={loading}
-          style={{
-            marginTop: '20px',
-            padding: '12px 28px',
-            fontSize: '16px',
-            backgroundColor: '#444',
-            color: '#fff',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {loading ? (
-            <span className="loading-text">
-              🧬 지금 분석 중입니다. 최대 5분 정도 소요돼요...
-            </span>
-          ) : (
-            '✨ 분석 시작'
-          )}
-
-          <style jsx>{`
-            .loading-text {
-              display: inline-block;
-              animation: pulse 1.4s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-              0% {
-                opacity: 1;
-                transform: translateY(0px);
-              }
-              50% {
-                opacity: 0.6;
-                transform: translateY(-2px);
-              }
-              100% {
-                opacity: 1;
-                transform: translateY(0px);
-              }
-            }
-          `}</style>
+        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
+          {loading ? '🧬 Analyzing now — your results will shine in 5 minutes ✨' : '✨ Start Analyze'}
         </button>
       </div>
+
+      {fullHtml && (
+  <div
+    style={{
+      marginTop: '40px',
+      backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+      color: isDarkMode ? '#ffffff' : '#222222',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+    }}
+    dangerouslySetInnerHTML={{ __html: fullHtml }}
+  />
+)}
+
+      <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
+        Need help? Contact us at <strong>admate@atladmate.com</strong><br />
+        <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
+      </p>
     </div>
   );
 }
+
+

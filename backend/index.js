@@ -8,12 +8,9 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-
-app.use(cors({
-  origin: ['https://glowup-ai.vercel.app'],
-}));
-
+app.use(cors());
 app.use(express.json());
+
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
@@ -25,41 +22,191 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// ⭐️ 별점 시각화 함수 추가
+const applyScoreStars = (html) => {
+  return html.replace(/<li><strong>Score:<\/strong> (\d)\/5<\/li>/g, (match, p1) => {
+    const score = parseInt(p1);
+    const stars = '⭐️'.repeat(score) + '☆'.repeat(5 - score);
+    return `<li><strong>Score:</strong> ${score}/5 &nbsp; ${stars}</li>`;
+  });
+};
+
+// ⭐️ AM/PM 루틴 박스 전체 <ul> 감싸도록 개선
+const applyRoutineBox = (html) => {
+  return html
+    .replace(
+      /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
+      (_, content) => {
+        return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+      }
+    )
+    .replace(
+      /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
+      (_, content) => {
+        return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
+      }
+    );
+};
+
 app.post('/analyze', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
     if (!file) return res.status(400).json({ error: 'No image uploaded.' });
 
-    const streamUpload = () => new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: 'image',
-          folder: 'glowup-ai',
-          use_filename: false,
-          unique_filename: true,
-          overwrite: false,
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(file.buffer);
-    });
+    const streamUpload = () =>
+      new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            resource_type: 'image',
+            folder: 'glowup-ai',
+            use_filename: false,
+            unique_filename: true,
+            overwrite: false,
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(file.buffer);
+      });
 
     const uploaded = await streamUpload();
     const imageUrl = uploaded.secure_url;
     console.log("✅ Uploaded Image URL:", imageUrl);
 
-    const promptPath = path.join(__dirname, 'templates', 'prompt_ko.txt');
-    if (!fs.existsSync(promptPath)) {
-      throw new Error(`프롬프트 파일이 존재하지 않음: ${promptPath}`);
-    }
+    const prompt = `
+You are a professional Korean dermatologist and K-beauty skincare AI.
 
-    const rawPrompt = fs.readFileSync(promptPath, 'utf8');
-    const name = req.body.name || '사용자';
-    const age = req.body.age || '??';
-    const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
+⚠️ Very important: You MUST return a full HTML report + the JSON preview block in ONE reply. 
+Do NOT skip or cut off any section — especially the Final Summary and JSON at the end.
+The report MUST include all 9 skin categories, the Final Summary, and the full AM/PM routine.
+
+Always be consistent in using exactly the same labels for each skin section (e.g., Score, Diagnosis, Solution, Recommended Product, Why It Works) using <strong> tags. This is essential for parsing and UI rendering.
+
+Each category must include:
+- "emotionalHook": a short emoji + fun summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product brand recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": Explain *why* this product is effective based on the user's specific skin issue. Include ingredients, mechanisms (e.g., exfoliates, hydrates, tightens pores), and what result it delivers (e.g., brighter skin, smoother texture).
+
+Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
+
+🔹 At the very top of the report, insert a warm personalized greeting:
+<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:24px; margin-bottom:24px; box-shadow:0 2px 4px rgba(255,255,255,0.05)">
+  <p style="font-size:18px; font-weight:500">Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨</p>
+</div>
+
+
+
+
+You MUST include the following 6 clearly labeled elements using semantic HTML (no bullet points):
+
+
+<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
+  <p><strong>Score:</strong> x/5</p>
+  <p><strong>Diagnosis:</strong> Describe what GPT sees in the skin photo</p>
+  <p><strong>Solution:</strong> What skincare action should be taken</p>
+  <p><strong>Recommended Product:</strong> Specific product name (e.g., COSRX BHA Blackhead Power Liquid)</p>
+  <p><strong>Why It Works:</strong> Real ingredient-based reasoning for that product</p>
+</div>
+
+- "category": name of the skin category
+- "status": a short summary of the current skin condition
+- "solution": recommended product strategy (summarized)
+- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": explain why the product is a good fit (mention ingredients and effect)
+
+
+Always wrap the entire category block in this format:
+<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px"> ... </div>
+
+🔹 Group the results:
+- Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
+- Highlight Top 3 lowest-scoring areas → “Needs Love 💔”
+
+
+
+Each section must be wrapped in:
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 4px rgba(255,255,255,0.05)"> ... </div>
+
+Always return ALL of the following 9 categories in this exact order:
+
+<h1>🌿 Comprehensive Skin Report</h1>
+
+<h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
+<h2>🔹 2. Hydration Level</h2>
+<h2>🔹 3. Texture</h2>
+<h2>🔹 4. Pigmentation</h2>
+<h2>🔹 5. Pore Visibility</h2>
+<h2>🔹 6. Sensitivity</h2>
+<h2>🔹 7. Wrinkles</h2>
+<h2>🔹 8. Skin Tone</h2>
+<h2>🔹 9. Acne</h2>
+
+📌 After generating the full HTML above, return a second JSON block for preview UI:
+
+- "category": name of the skin category
+- "status": a short summary of the current skin condition
+- "solution": recommended product strategy (summarized)
+- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
+- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
+- "reason": explain why the product is a good fit (mention ingredients and effect)
+
+[
+  {
+    "category": "Sebum",
+    "status": "...",
+    "solution": "...",
+    "emotionalHook": "...",
+    "product": "...",
+    "reason": "..."
+  },
+  ...
+]
+
+
+At the end, return:
+
+<h2>✨ Final Summary</h2>
+- Provide a total skin score out of 100
+- Give a personalized skin type summary based on the analysis (e.g., “Combination skin with mild sensitivity and early aging signs.”)
+- List the Top 3 Concerns in priority order with short solution strategy per item
+- Then add an emotional motivational message like a dermatologist would give
+- Also mention what visible improvement can be expected and how long it usually takes if the suggested routine is followed (e.g., “In 2–3 weeks, you may notice smoother texture and less redness.”)
+
+<h2>☀️ AM Routine</h2> and <h2>🌙 PM Routine</h2>
+- Generate personalized 5-step AM/PM skincare routines based ONLY on the 9 skin categories above.
+- You MUST select all routine products directly from the “Recommended Product” items already listed for the 9 skin concerns.
+- Do NOT introduce new products outside of those 9 categories.
+- Include 1 friendly and professional <p><strong>Lifestyle Tip:</strong> ...</p> under each routine
+- Make sure everything is wrapped inside a styled <div class="card" style="..."> element for each block
+
+
+For both AM and PM routine sections, also include a personalized "Lifestyle Tip" based on the user's skin condition, concerns, or habits.
+
+Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
+
+Every routine, summary, and tip must be fully customized per user.
+
+Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
+
+Every product must be selected from a wide variety of Korean, Japanese, US, and French skincare brands.  
+You MUST avoid repeating the same product or brand unless it is clearly the most effective for multiple categories.  
+Diversity in product selection is essential for realism and credibility.
+
+You MUST build the AM/PM skincare routines only using products already recommended in the 9 skin category sections.  
+Every product must be from a diverse global skincare brand pool.  
+Avoid duplication of the same product or brand unless strongly justified.
+
+
+Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
+<p><strong>Lifestyle Tip:</strong> ...</p> format.
+
+
+`;
+
+
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
@@ -74,22 +221,41 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       ],
       stream: false,
       temperature: 0.7,
-      max_tokens: 3600,
+      max_tokens: 4000, // 또는 4096까지 가능 (이 이상 넣으면 에러)
     });
 
-    let rawResult = completion.choices?.[0]?.message?.content || '';
+    const rawResult = completion.choices?.[0]?.message?.content || '';
+    {
+      console.error('⚠️ GPT 응답이 불완전합니다.');
+      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
+    }
+    
+    const fullResult = rawResult
+    .replace(/```(json|html)?[\s\S]*?```/g, '')
+    .replace(/^```html/, '')
+    .replace(/JSON Output:/g, '')
+    .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
+    .trim();
 
-    rawResult = rawResult
-      .replace(/```(json|html)?[\s\S]*?```/g, '')
-      .replace(/^```html/, '')
-      .replace(/JSON Output:/g, '')
-      .trim();
+    if (!rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') || !rawResult.includes('<h2>✨ Final Summary</h2>')) {
+      console.error('⚠️ GPT 응답이 불완전합니다.');
+      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
+    }
+    
+    
+
+    const withStars = applyScoreStars(fullResult);
+    const processedResult = applyRoutineBox(withStars);
+
+    console.log('🧾 Final GPT Result Start ===>\n', processedResult);
+
+    
 
     res.json({
-      fullHtml: rawResult,
+      fullHtml: processedResult,
       imageUrl,
-      previewInsights: [],
     });
+    
   } catch (err) {
     console.error('❌ Server error:', err);
     if (err.response) {
