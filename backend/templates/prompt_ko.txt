@@ -40,7 +40,6 @@
 ✅ 최종 요약
 <h2>✨ 전체 요약</h2>
 <ul>
-  <li><strong>총점:</strong> 00/100</li>
   <li><strong>피부 타입:</strong> 예: 지복합성 + 민감함</li>
   <li><strong>주요 고민 3가지:</strong> 예: 피지, 민감도, 여드름</li>
   <li><strong>추천 제품 TOP3:</strong> 예: 센텔라 앰플, 피지 컨트롤 세럼, 저자극 클렌저</li>
