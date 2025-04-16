@@ -1,7 +1,10 @@
 // ✅ GlowUp.AI — 무료 분석 구조, 결제 제거, 분석 즉시 결과 출력
+export const dynamic = 'force-dynamic';
+
 import React, { useEffect, useState } from 'react';
 
 export default function UploadPage() {
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [image, setImage] = useState(null);
   const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,22 +36,6 @@ export default function UploadPage() {
     }
   };
 
-  const extractTop3Insights = (html) => {
-    const container = document.createElement('div');
-    container.innerHTML = html;
-    const items = Array.from(container.querySelectorAll('li'));
-    const insights = [];
-
-    for (let li of items) {
-      const text = li.textContent.toLowerCase();
-      if (text.includes('sebum') || text.includes('hydration') || text.includes('texture')) {
-        insights.push(li.textContent);
-      }
-      if (insights.length >= 3) break;
-    }
-
-    return insights;
-  };
 
   const handleUpload = async () => {
     if (!image) return;
@@ -78,13 +65,8 @@ export default function UploadPage() {
         throw new Error('서버 응답 누락 — GPT 결과 부족');
       }
 
-      setPreviewInsights(data.previewInsights || []);
-      setPreviewHtml(data.previewHtml);
-      setFullHtml(data.fullHtml);
-      setImageUrl(data.imageUrl);
 
-      const extractedInsights = extractTop3Insights(data.previewHtml);
-      setTop3Insights(extractedInsights);
+      setFullHtml(data.fullHtml);
 
       const amSteps = extractAmRoutine(data.previewHtml);
       setAmPreview(amSteps);
