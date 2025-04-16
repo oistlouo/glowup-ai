@@ -1,3 +1,4 @@
+// upload.jsx
 import React, { useState, useEffect } from 'react';
 
 export default function UploadPage() {
@@ -6,18 +7,8 @@ export default function UploadPage() {
   const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
-  const [name, setName] = useState('');
-  const [birthdate, setBirthdate] = useState('');
-  const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
-  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const match = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(match);
-    }
-  }, []);
-
+  // 이미지 변경 핸들러
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -26,17 +17,18 @@ export default function UploadPage() {
     }
   };
 
+  // 업로드 및 백엔드 호출
   const handleUpload = async () => {
     if (!image) return;
     setLoading(true);
-    setPreviewHtml('');
     setFullHtml('');
 
     const formData = new FormData();
     formData.append('image', image);
 
     try {
-      const response = await fetch('https://glowup-ai.onrender.com/analyze', {
+      // 백엔드 URL을 환경변수로 설정
+      const response = await fetch(`${process.env.BACKEND_URL}/analyze`, {
         method: 'POST',
         body: formData,
       });
@@ -54,7 +46,6 @@ export default function UploadPage() {
 
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
-
     } catch (error) {
       console.error('Upload failed:', error);
       alert('Upload failed. Please try again.');
@@ -63,52 +54,19 @@ export default function UploadPage() {
     }
   };
 
-
-
-  const resultText = fullHtml;
-
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
-      {/* 상단 입력 섹션은 이미 적용된 상태 */}
+    <div>
+      <h1>Upload your selfie for analysis</h1>
+      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <button onClick={handleUpload} disabled={loading}>
+        {loading ? 'Analyzing...' : 'Start Analysis'}
+      </button>
 
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-        <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
-          📷 Select Your Selfie
-        </label>
-        <input id="file-upload" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
-      </div>
+      {/* 이미지 미리보기 */}
+      {previewUrl && <img src={previewUrl} alt="Preview" />}
 
-      {previewUrl && <img src={previewUrl} alt="Preview" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />}
-
-
-
-
-      <div style={{ textAlign: 'center' }}>
-        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? '🧬 분석중입니다 최대 5분안에 결과가 나와요✨' : '✨ 분석 시작하기'}
-        </button>
-      </div>
-
-      {fullHtml && (
-  <div
-    style={{
-      marginTop: '40px',
-      backgroundColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-      color: isDarkMode ? '#ffffff' : '#222222',
-      padding: '20px',
-      borderRadius: '12px',
-      boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
-    }}
-    dangerouslySetInnerHTML={{ __html: fullHtml }}
-  />
-)}
-
-      <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
-        Need help? Contact us at <strong>admate@atladmate.com</strong><br />
-        <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
-      </p>
+      {/* 분석 결과 */}
+      {fullHtml && <div dangerouslySetInnerHTML={{ __html: fullHtml }} />}
     </div>
   );
 }
-
-

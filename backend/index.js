@@ -3,12 +3,10 @@ const cors = require('cors');
 const multer = require('multer');
 const OpenAI = require('openai');
 const cloudinary = require('cloudinary').v2;
-const fs = require('fs');
-const path = require('path');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.use(express.json());
 
 const storage = multer.memoryStorage();
@@ -22,38 +20,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ⭐️ 별점 시각화 함수 추가
-const applyScoreStars = (html) => {
-  return html.replace(/<li><strong>Score:<\/strong> (\d)\/5<\/li>/g, (match, p1) => {
-    const score = parseInt(p1);
-    const stars = '⭐️'.repeat(score) + '☆'.repeat(5 - score);
-    return `<li><strong>Score:</strong> ${score}/5 &nbsp; ${stars}</li>`;
-  });
-};
-
-// ⭐️ AM/PM 루틴 박스 전체 <ul> 감싸도록 개선
-const applyRoutineBox = (html) => {
-  return html
-    .replace(
-      /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
-      (_, content) => {
-        return `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
-      }
-    )
-    .replace(
-      /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
-      (_, content) => {
-        return `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`;
-      }
-    );
-};
-
 app.post('/analyze', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
     if (!file) return res.status(400).json({ error: 'No image uploaded.' });
 
-    const streamUpload = () =>
+    const uploadStream = () =>
       new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
@@ -71,9 +43,8 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
         uploadStream.end(file.buffer);
       });
 
-    const uploaded = await streamUpload();
+    const uploaded = await uploadStream();
     const imageUrl = uploaded.secure_url;
-    console.log("✅ Uploaded Image URL:", imageUrl);
 
     const prompt = `
 당신은 한국의 피부과 전문의입니다. 사용자 얼굴 사진을 기반으로 아래 6가지 항목에 대해 전문적인 피부 진단 리포트를 HTML 형식으로 작성하세요. 말투는 신뢰감 있고 친절한 전문의 스타일이어야 합니다.
@@ -112,10 +83,6 @@ HTML 형식은 다음과 같습니다:
 - 항상 <strong>한글</strong>로 작성할 것  
 - 반드시 HTML 형식으로만 출력할 것 (코드블럭, JSON 응답 금지)  
 
-마지막에 반드시 "<h1>🩺 피부과 전문 진단 리포트</h1>"로 시작하고 "<h2>✨ 종합 요약</h2>"로 끝나야 합니다.
-응답이 누락되면 안 되며, 짧게 작성해도 되니 무조건 전체 출력이 끝나야 합니다.
-
-
 `;
 
     const completion = await openai.chat.completions.create({
@@ -135,36 +102,19 @@ HTML 형식은 다음과 같습니다:
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
+    if (!rawResult || rawResult.length < 100) {
+      console.warn('❗ GPT 응답이 너무 짧거나 비어 있습니다.');
+      return res.status(500).json({ error: 'GPT 응답이 누락되었거나 너무 짧습니다.' });
+    }
 
-// 경고만 출력하고 중단하지 않음
-if (!rawResult || rawResult.length < 100) {
-  console.warn('❗ GPT 응답이 너무 짧거나 비어 있습니다.');
-  return res.status(500).json({ error: 'GPT 응답이 누락되었거나 너무 짧습니다.' });
-}
-
-// 후처리는 최소한만 (불필요한 JSON 제거만)
-const fullResult = rawResult
-  .replace(/```(json|html)?[\s\S]*?```/g, '')
-  .trim();
-
-
-    const processedResult = fullResult;
-
-    console.log('🧾 Final GPT Result Start ===>\n', processedResult);
-
-    
+    const fullResult = rawResult.replace(/```(json|html)?[\s\S]*?```/g, '').trim();
 
     res.json({
-      fullHtml: processedResult,
+      fullHtml: fullResult,
       imageUrl,
     });
-    
   } catch (err) {
     console.error('❌ Server error:', err);
-    if (err.response) {
-      const text = await err.response.text?.();
-      console.error('🔍 OpenAI API Error Response:', text);
-    }
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
