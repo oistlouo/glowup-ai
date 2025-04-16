@@ -22,28 +22,28 @@ export default function UploadPage() {
     if (!image) return;
     setLoading(true);
     setFullHtml('');
-
+  
     const formData = new FormData();
     formData.append('image', image);
-
+  
     try {
       // 백엔드 URL을 환경변수로 설정
-      const response = await fetch(`${process.env.BACKEND_URL}/analyze`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/analyze`, {
         method: 'POST',
         body: formData,
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Server error details:', errorText);
         throw new Error('Server responded with error');
       }
-
+  
       const data = await response.json();
       if (!data.fullHtml) {
         throw new Error('Incomplete result from server – GPT output may have been cut off');
       }
-
+  
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
     } catch (error) {
@@ -53,6 +53,7 @@ export default function UploadPage() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div>
