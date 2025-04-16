@@ -1,4 +1,3 @@
-// ✅ GlowUp.AI — 무료 분석 구조, 결제 제거, 분석 즉시 결과 출력
 export const dynamic = 'force-dynamic';
 
 import React, { useEffect, useState } from 'react';
@@ -13,13 +12,6 @@ export default function UploadPage() {
   const [age, setAge] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const extractAmRoutine = (html) => {
-    const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
-    if (!match) return [];
-    const steps = match[1].match(/<li>(.*?)<\/li>/g) || [];
-    return steps.slice(0, 2).map(step => step.replace(/<[^>]+>/g, ''));
-  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -36,11 +28,9 @@ export default function UploadPage() {
     }
   };
 
-
   const handleUpload = async () => {
     if (!image) return;
     setLoading(true);
-    setPreviewHtml('');
     setFullHtml('');
 
     const formData = new FormData();
@@ -61,18 +51,11 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      if (!data.previewHtml || !data.fullHtml) {
-        throw new Error('서버 응답 누락 — GPT 결과 부족');
-      }
-
-
-      setFullHtml(data.fullHtml);
-
-      const amSteps = extractAmRoutine(data.previewHtml);
-      setAmPreview(amSteps);
+      setFullHtml(data.fullHtml || '');
+      setImageUrl(data.imageUrl || '');
     } catch (error) {
-      console.error('업로드 실패:', error);
-      alert('업로드에 실패했습니다. 다시 시도해주세요.');
+      console.error('분석 실패:', error);
+      alert('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setLoading(false);
     }
