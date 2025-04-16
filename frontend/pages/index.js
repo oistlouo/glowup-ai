@@ -1,6 +1,8 @@
 export const dynamic = 'force-dynamic';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
 
 export default function UploadPage() {
   const [image, setImage] = useState(null);
@@ -73,7 +75,9 @@ export default function UploadPage() {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('fullHtml', html);
         sessionStorage.setItem('imageUrl', data.imageUrl || '');
-        window.location.href = '/result';
+        setTimeout(() => {
+          window.location.assign('/result');
+        }, 300);
       }
       
     } catch (error) {
@@ -91,7 +95,7 @@ export default function UploadPage() {
       <p style={{ marginTop: '20px', fontSize: '14px', color: '#555', lineHeight: '1.6' }}>
         📸 <strong>분석 정확도를 높이기 위해 다음을 지켜주세요:</strong><br />
         - 이마부터 턱까지 얼굴 전체가 나오게 찍기<br />
-        - 밝은 자연광 아래에서 촬영 (그림자 X)<br />
+        - 밝은 자연광 혹은 조명 아래에서 촬영 (그림자 X)<br />
         - 카메라를 정면으로 보고, 필터나 화장 없이 쌩얼로 촬영
       </p>
 

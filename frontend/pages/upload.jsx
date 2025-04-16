@@ -66,7 +66,9 @@ export default function UploadPage() {
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('fullHtml', html);
         sessionStorage.setItem('imageUrl', data.imageUrl || '');
-        router.push('/result');
+        setTimeout(() => {
+          router.push('/result');
+        }, 300); // 0.3초 뒤에 이동
       }
     } catch (error) {
       console.error('분석 실패:', error);
