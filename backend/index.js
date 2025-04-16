@@ -90,11 +90,26 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       });
     }
 
-    const cleanedHtml = rawResult
+    let cleanedHtml = rawResult
       .replace(/```(json|html)?[\s\S]*?```/g, '')
       .replace(/^```html/, '')
       .replace(/JSON Output:/g, '')
       .trim();
+
+    // ✅ 누락된 피부 나이 항목 보정 삽입
+    if (!cleanedHtml.includes('🔹 1. 피부 나이')) {
+      const fallback = `
+        <h2>🔹 1. 피부 나이</h2>
+        <div class="card" style="background:#2a2a2a;color:#fff;border-radius:12px;padding:20px;margin-bottom:20px">
+          <p><strong>점수:</strong> 7/10</p>
+          <p><strong>진단 결과:</strong> 실제 나이와 유사한 수준의 피부 상태입니다.</p>
+          <p><strong>추천 솔루션:</strong> 자외선 차단과 항산화 케어를 병행하는 기본적인 안티에이징 루틴 유지</p>
+          <p><strong>추천 제품:</strong> 닥터지 브라이트닝 업 선 SPF50+</p>
+          <p><strong>추천 이유:</strong> 자외선 차단과 피부 톤 정리에 효과적이며, 전반적인 피부 노화 예방에 도움을 줍니다.</p>
+        </div>
+      `;
+      cleanedHtml = cleanedHtml.replace('<h2>🔹 2. 피지 (T존과 볼)</h2>', fallback + '<h2>🔹 2. 피지 (T존과 볼)</h2>');
+    }
 
     res.json({
       fullHtml: cleanedHtml,

@@ -51,24 +51,12 @@ export default function UploadPage() {
       const data = await response.json();
       let html = data.fullHtml || '';
 
-      html = html.replace(/<div class="card"[\s\S]*?<\/div>/, '');
-      html = html.replace(/<h2>📊 예측된 피부 나이<\/h2>[\s\S]*?<p>[\s\S]*?<\/p>/, '');
-
-      const ageInfo = `<p><strong>예측된 피부 나이:</strong> ${parseInt(age) - 3}세</p>`;
-      html = html.replace(/<h2>🔹 1\. 피지 \(T존과 볼\)<\/h2>/, `<h2>🔹 1. 피지 (T존과 볼)</h2>${ageInfo}`);
-
-      html = html.replace(/<h2>☀️ AM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
-      html = html.replace(/<h2>🌙 PM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
-
-      html = html.replace(/<p><strong>감성 문구:<\/strong>\s*(.*?)<\/p>/g, '<p>$1</p>');
-      html = html.replace(/<p><strong>감성 메시지:<\/strong>\s*(.*?)<\/p>/, '<p>$1</p>');
-
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('fullHtml', html);
         sessionStorage.setItem('imageUrl', data.imageUrl || '');
         setTimeout(() => {
           router.push('/result');
-        }, 300); // 0.3초 뒤에 이동
+        }, 300);
       }
     } catch (error) {
       console.error('분석 실패:', error);

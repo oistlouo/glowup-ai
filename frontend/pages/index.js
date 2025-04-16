@@ -3,13 +3,11 @@ export const dynamic = 'force-dynamic';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-
 export default function UploadPage() {
+  const router = useRouter();
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -32,7 +30,6 @@ export default function UploadPage() {
   const handleUpload = async () => {
     if (!image) return;
     setLoading(true);
-    setFullHtml('');
 
     const formData = new FormData();
     formData.append('image', image);
@@ -54,32 +51,13 @@ export default function UploadPage() {
       const data = await response.json();
       let html = data.fullHtml || '';
 
-      // Remove greeting and skin age prediction sections
-      html = html.replace(/<div class="card"[\s\S]*?<\/div>/, '');
-      html = html.replace(/<h2>📊 예측된 피부 나이<\/h2>[\s\S]*?<p>[\s\S]*?<\/p>/, '');
-
-      // Move skin age into first analysis block
-      const ageInfo = `<p><strong>예측된 피부 나이:</strong> ${parseInt(age) - 3}세</p>`; // 임의로 -3 설정
-      html = html.replace(/<h2>🔹 1\. 피지 \(T존과 볼\)<\/h2>/, `<h2>🔹 1. 피지 (T존과 볼)</h2>${ageInfo}`);
-
-      // Remove AM/PM routines
-      html = html.replace(/<h2>☀️ AM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
-      html = html.replace(/<h2>🌙 PM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
-
-      // Remove "감성 문구:" label and move content to top of each section
-      html = html.replace(/<p><strong>감성 문구:<\/strong>\s*(.*?)<\/p>/g, '<p>$1</p>');
-
-      // In final summary, move 감성 메시지 to top and remove label
-      html = html.replace(/<p><strong>감성 메시지:<\/strong>\s*(.*?)<\/p>/, '<p>$1</p>');
-
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('fullHtml', html);
         sessionStorage.setItem('imageUrl', data.imageUrl || '');
         setTimeout(() => {
-          window.location.assign('/result');
+          router.push('/result');
         }, 300);
       }
-      
     } catch (error) {
       console.error('분석 실패:', error);
       alert('분석 중 오류가 발생했습니다. 다시 시도해주세요.');
@@ -132,68 +110,53 @@ export default function UploadPage() {
         <img src={previewUrl} alt="미리보기" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />
       )}
 
-<div style={{ textAlign: 'center' }}>
-  <button
-    onClick={handleUpload}
-    disabled={loading}
-    style={{
-      marginTop: '20px',
-      padding: '12px 28px',
-      fontSize: '16px',
-      backgroundColor: '#444',
-      color: '#fff',
-      borderRadius: '6px',
-      cursor: 'pointer',
-      position: 'relative',
-      overflow: 'hidden',
-    }}
-  >
-    {loading ? (
-      <span className="loading-text">
-        🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...
-      </span>
-    ) : (
-      '✨ 분석 시작'
-    )}
-
-    <style jsx>{`
-      .loading-text {
-        display: inline-block;
-        animation: pulse 1.4s ease-in-out infinite;
-      }
-
-      @keyframes pulse {
-        0% {
-          opacity: 1;
-          transform: translateY(0px);
-        }
-        50% {
-          opacity: 0.6;
-          transform: translateY(-2px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0px);
-        }
-      }
-    `}</style>
-  </button>
-</div>
-
-
-      {fullHtml && (
-        <div
+      <div style={{ textAlign: 'center' }}>
+        <button
+          onClick={handleUpload}
+          disabled={loading}
           style={{
-            marginTop: '40px',
-            backgroundColor: isDarkMode ? '#000' : '#fff',
-            color: isDarkMode ? '#fff' : '#222',
-            padding: '20px',
-            borderRadius: '12px',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+            marginTop: '20px',
+            padding: '12px 28px',
+            fontSize: '16px',
+            backgroundColor: '#444',
+            color: '#fff',
+            borderRadius: '6px',
+            cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden',
           }}
-          dangerouslySetInnerHTML={{ __html: fullHtml }}
-        />
-      )}
+        >
+          {loading ? (
+            <span className="loading-text">
+              🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...
+            </span>
+          ) : (
+            '✨ 분석 시작'
+          )}
+
+          <style jsx>{`
+            .loading-text {
+              display: inline-block;
+              animation: pulse 1.4s ease-in-out infinite;
+            }
+
+            @keyframes pulse {
+              0% {
+                opacity: 1;
+                transform: translateY(0px);
+              }
+              50% {
+                opacity: 0.6;
+                transform: translateY(-2px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateY(0px);
+              }
+            }
+          `}</style>
+        </button>
+      </div>
     </div>
   );
 }
