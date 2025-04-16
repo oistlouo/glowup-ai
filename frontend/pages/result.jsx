@@ -33,13 +33,33 @@ export default function ResultPage() {
       }}
     >
       <h1 style={{ textAlign: 'center', fontSize: '28px', marginBottom: '20px' }}>피부 분석 결과</h1>
+
       <div
         dangerouslySetInnerHTML={{ __html: html }}
         style={{
           borderRadius: '12px',
           boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+          opacity: html ? 1 : 0,
+          transform: html ? 'translateY(0)' : 'translateY(20px)',
+          transition: 'all 0.4s ease-in-out',
         }}
       />
+
+      <button
+        onClick={() => router.push('/upload')}
+        style={{
+          display: 'block',
+          margin: '30px auto 0',
+          padding: '10px 20px',
+          backgroundColor: '#0066cc',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '8px',
+          cursor: 'pointer',
+        }}
+      >
+        🔁 다시 분석하기
+      </button>
     </div>
   );
 }

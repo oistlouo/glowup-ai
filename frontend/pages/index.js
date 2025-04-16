@@ -128,11 +128,54 @@ export default function UploadPage() {
         <img src={previewUrl} alt="미리보기" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />
       )}
 
-      <div style={{ textAlign: 'center' }}>
-        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? '🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...' : '✨ 분석 시작'}
-        </button>
-      </div>
+<div style={{ textAlign: 'center' }}>
+  <button
+    onClick={handleUpload}
+    disabled={loading}
+    style={{
+      marginTop: '20px',
+      padding: '12px 28px',
+      fontSize: '16px',
+      backgroundColor: '#444',
+      color: '#fff',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      position: 'relative',
+      overflow: 'hidden',
+    }}
+  >
+    {loading ? (
+      <span className="loading-text">
+        🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...
+      </span>
+    ) : (
+      '✨ 분석 시작'
+    )}
+
+    <style jsx>{`
+      .loading-text {
+        display: inline-block;
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+          transform: translateY(0px);
+        }
+        50% {
+          opacity: 0.6;
+          transform: translateY(-2px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0px);
+        }
+      }
+    `}</style>
+  </button>
+</div>
+
 
       {fullHtml && (
         <div
