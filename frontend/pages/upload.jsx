@@ -2,19 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 export default function UploadPage() {
   const [image, setImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [previewHtml, setPreviewHtml] = useState('');
-  const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
-  const [isPaid, setIsPaid] = useState(false);
   const [name, setName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [amPreview, setAmPreview] = useState([]);
   const [pmPreview, setPmPreview] = useState([]);
-  const [previewInsights, setPreviewInsights] = useState([]);
 
   const extractAmRoutine = (html) => {
     const match = html.match(/AM Routine.*?<ul>([\s\S]*?)<\/ul>/i);
@@ -91,31 +86,6 @@ export default function UploadPage() {
     }
   };
 
-  useEffect(() => {
-    if (!previewHtml || isPaid) return;
-
-    let alreadyRendered = false;
-
-    const script = document.createElement("script");
-    script.src = "https://www.paypal.com/sdk/js?client-id=BAAwOk4pNQMtsvhlLL_t1mVXYJ8IVvo7hi01PUDAy1bAkBXud17i_QzZVXdmjSrBZntcYrxV2icLmu2Ndo&components=hosted-buttons&disable-funding=venmo&currency=USD";
-    script.addEventListener("load", () => {
-      if (window.paypal && !alreadyRendered && document.getElementById("paypal-container-XW5X3YNYP26TN")) {
-        alreadyRendered = true;
-        window.paypal.HostedButtons({
-          hostedButtonId: "XW5X3YNYP26TN",
-          onApprove: () => {
-            setIsPaid(true);
-          },
-        }).render("#paypal-container-XW5X3YNYP26TN");
-      }
-    });
-
-    document.body.appendChild(script);
-    return () => {
-      script.remove();
-    };
-  }, [previewHtml, isPaid]);
-
   const resultText = isPaid ? fullHtml : previewHtml;
 
   const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
@@ -145,93 +115,6 @@ export default function UploadPage() {
         </button>
       </div>
 
-      {resultText && (
-        <>
-          {/* 🔓 Free Preview: 실제 분석 결과 3개 */}
-          <div style={{ marginTop: '40px' }}>
-          <h2 style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', marginBottom: '24px' }}>
-  ✨ Your Free Glow Breakdown – 3 Personalized Skin Insights
-</h2>
-
-<div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-{previewInsights.length === 0 && (
-  <p style={{ textAlign: 'center', color: '#888' }}>
-    No skin insights available. Please try again with a clearer photo.
-  </p>
-)}
-
-{previewInsights.length > 0 && previewInsights.map((item, idx) => (
-  <div
-    key={idx}
-    style={{
-      backgroundColor: isDarkMode ? '#1a1a1a' : '#ffffff',
-      color: isDarkMode ? '#f5f5f5' : '#222',
-      borderRadius: '12px',
-      padding: '20px',
-      boxShadow: isDarkMode
-        ? '0 2px 6px rgba(255, 255, 255, 0.05)'
-        : '0 2px 8px rgba(0,0,0,0.08)',
-      transition: 'all 0.3s ease',
-    }}
-  >
-    <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '12px' }}>
-      🔹 {item.category} <span style={{ fontWeight: '400' }}>– {item.emotionalHook}</span>
-    </h3>
-    <p style={{ marginBottom: '8px' }}>
-      <strong>Diagnosis:</strong> {item.status}
-    </p>
-    <p style={{ marginBottom: '8px' }}>
-      <strong>Solution:</strong> {item.solution}
-    </p>
-    <p style={{ marginBottom: '8px' }}>
-      <strong>Recommended Product:</strong> {item.product}
-    </p>
-    <p style={{ marginBottom: '0px' }}>
-      <strong>Why It Works:</strong> {item.reason}
-    </p>
-  </div>
-))}
-
-</div>
-
-          </div>
-
-          {/* 🔒 Locked Items */}
-          <div style={{ marginTop: '40px' }}>
-  <h3 style={{ textAlign: 'center', fontSize: '18px', fontWeight: 'bold', marginBottom: '12px' }}>
-    🔒 Locked Analysis Sections
-  </h3>
-  <ul style={{ listStyle: 'none', padding: 0, textAlign: 'center', color: '#888', fontSize: '15px', lineHeight: '1.6' }}>
-    <li>🔒 Pores - Analyze pore visibility, size & congestion level</li>
-    <li>🔒 Redness - Detect inflammation, sensitivity & irritation zones</li>
-    <li>🔒 Wrinkles - Detect fine lines & early aging signs</li>
-    <li>🔒 Pigmentation - Identify dark spots, freckles & sun damage</li>
-    <li>🔒 Skin Tone - AI color correction + hyperpigmentation mapping</li>
-    <li>🔒 Sensitivity - Assess reactivity to heat, touch, and skincare</li>
-    <li>🔒 Total Score - Overall skin health score (0–45)</li>
-    <li>🔒 Skin Type Summary - Identify your skin type & characteristics</li>
-    <li>🔒 Personalized AM/PM Routine - Product-specific, time-based regimen</li>
-  </ul>
-  <p style={{ fontSize: '13px', color: '#999', marginTop: '8px' }}>
-    → Unlock for a dermatologist-style full report
-  </p>
-</div>
-
-
-          {/* 💸 결제 유도 문구 + 버튼 */}
-          <div style={{ textAlign: 'center', marginTop: '30px' }}>
-            <div className="paypal-info" style={{ marginBottom: '8px', fontSize: '15px', fontWeight: 'bold' }}>
-            Your Full Skin Report Awaits 👀  
-            Unlock 9 in-depth AI insights + your personal AM/PM routine.  
-            ✅ Dermatologist-grade breakdown  
-            ✅ Personalized product recommendations  
-            ✅ Visual pore + pigmentation analysis  
-            </div>
-            
-            <div id="paypal-container-XW5X3YNYP26TN" />
-          </div>
-        </>
-      )}
 
 {isPaid && (
   <>
@@ -267,8 +150,7 @@ export default function UploadPage() {
 
 
       <p style={{ marginTop: '40px', fontSize: '13px', color: '#666', textAlign: 'center' }}>
-        Need help? Contact us at <strong>admate@atladmate.com</strong><br />
-        <strong>Refund Policy:</strong> All purchases are final and non-refundable due to the nature of digital AI analysis.
+        문의사항은 이메일로 <strong>admate@atladmate.com</strong><br />
       </p>
     </div>
   );
