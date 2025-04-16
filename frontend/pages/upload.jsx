@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 export default function UploadPage() {
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  const [previewHtml, setPreviewHtml] = useState('');
   const [fullHtml, setFullHtml] = useState('');
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -49,11 +48,10 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      if (!data.previewHtml || !data.fullHtml) {
+      if (!data.fullHtml) {
         throw new Error('Incomplete result from server – GPT output may have been cut off');
       }
 
-      setPreviewHtml(data.previewHtml);
       setFullHtml(data.fullHtml);
       setImageUrl(data.imageUrl);
 
@@ -68,11 +66,6 @@ export default function UploadPage() {
 
 
   const resultText = fullHtml;
-
-  const concernsMatch = resultText.match(/Top 3 Concerns:\s*<li><strong>(.*?)<\/strong><\/li>/);
-  const fallbackMatch = resultText.match(/Top 3 Concerns:\s*(.*?)<\/li>/);
-  const concernsRaw = concernsMatch ? concernsMatch[1] : fallbackMatch ? fallbackMatch[1] : '';
-  const concernsArray = concernsRaw ? concernsRaw.split(/<br\/?\s*>|,|\n/).map(c => c.trim()).filter(Boolean) : [];
 
   return (
     <div style={{ padding: '40px 20px', maxWidth: '760px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
@@ -92,7 +85,7 @@ export default function UploadPage() {
 
       <div style={{ textAlign: 'center' }}>
         <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? '🧬 Analyzing now — your results will shine in 5 minutes ✨' : '✨ Start Analyze'}
+          {loading ? '🧬 분석중입니다 최대 5분안에 결과가 나와요✨' : '✨ 분석 시작하기'}
         </button>
       </div>
 

@@ -48,7 +48,7 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      if (!data.previewHtml || !data.fullHtml) {
+      if (!data.fullHtml) {
         throw new Error('Incomplete result from server – GPT output may have been cut off');
       }
 
@@ -154,7 +154,7 @@ export default function UploadPage() {
 
       <div style={{ textAlign: 'center' }}>
   <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff' }}>
-    {loading ? '🧬 Analyzing now — your results will shine in 5 minutes ✨' : '✨ Start Analyze'}
+    {loading ? '🧬 분석중입니다 최대 5분안에 결과가 나와요✨' : '✨ 분석 시작하기'}
   </button>
 </div>
 

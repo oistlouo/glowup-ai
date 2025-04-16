@@ -76,137 +76,66 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     console.log("✅ Uploaded Image URL:", imageUrl);
 
     const prompt = `
-You are a professional Korean dermatologist and K-beauty skincare AI.
+당신은 한국의 피부과 전문의입니다. 지금부터 제공되는 얼굴 사진을 바탕으로, 전문적인 피부 진단 리포트를 HTML 형식으로 작성해야 합니다.
 
-⚠️ Very important: You MUST return a full HTML report + the JSON preview block in ONE reply. 
-Do NOT skip or cut off any section — especially the Final Summary and JSON at the end.
-The report MUST include all 9 skin categories, the Final Summary, and the full AM/PM routine.
+분석은 오직 아래의 6가지 항목으로만 제한합니다. 다른 항목은 절대 포함하지 마세요:
 
-Always be consistent in using exactly the same labels for each skin section (e.g., Score, Diagnosis, Solution, Recommended Product, Why It Works) using <strong> tags. This is essential for parsing and UI rendering.
+<h1>🩺 피부과 전문 진단 리포트</h1>
 
-Each category must include:
-- "emotionalHook": a short emoji + fun summary (e.g., “T-zone’s going wild 🛢️”)
-- "product": specific product brand recommendation (e.g., "The Ordinary Niacinamide 10%")
-- "reason": Explain *why* this product is effective based on the user's specific skin issue. Include ingredients, mechanisms (e.g., exfoliates, hydrates, tightens pores), and what result it delivers (e.g., brighter skin, smoother texture).
+<h2>1. 유수분 밸런스</h2>
+<h2>2. 색소 침착</h2>
+<h2>3. 주름</h2>
+<h2>4. 홍조와 혈관 상태</h2>
+<h2>5. 모공 & 피지 분비량</h2>
+<h2>6. 기미·간반 등 구별 어려운 증상</h2>
 
-Use valid semantic HTML only: <h2>, <ul>, <li>, <strong>, etc.
+각 항목에 대해 아래 4가지 요소를 포함하세요:
+- 진단 결과 (피부과 전문의처럼 구체적으로)
+- 개선 전략 (실제로 환자에게 조언하듯 신뢰감 있게)
+- 추천 제품 (브랜드 포함, 현실성 있는 제품)
+- 추천 이유 (주요 성분, 작용 원리, 기대 효과 등)
 
-🔹 At the very top of the report, insert a warm personalized greeting:
-<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:24px; margin-bottom:24px; box-shadow:0 2px 4px rgba(255,255,255,0.05)">
-  <p style="font-size:18px; font-weight:500">Hey [Name], here’s what your skin is telling us today — and how we’ll glow it up ✨</p>
-</div>
-
-
-
-
-You MUST include the following 6 clearly labeled elements using semantic HTML (no bullet points):
-
+각 항목은 다음과 같은 구조의 HTML 카드로 작성되어야 합니다:
 
 <div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px">
-  <p><strong>Score:</strong> x/5</p>
-  <p><strong>Diagnosis:</strong> Describe what GPT sees in the skin photo</p>
-  <p><strong>Solution:</strong> What skincare action should be taken</p>
-  <p><strong>Recommended Product:</strong> Specific product name (e.g., COSRX BHA Blackhead Power Liquid)</p>
-  <p><strong>Why It Works:</strong> Real ingredient-based reasoning for that product</p>
+  <p><strong>진단:</strong> ...</p>
+  <p><strong>개선 전략:</strong> ...</p>
+  <p><strong>추천 제품:</strong> [브랜드] 제품명</p>
+  <p><strong>추천 이유:</strong> ...</p>
 </div>
 
-- "category": name of the skin category
-- "status": a short summary of the current skin condition
-- "solution": recommended product strategy (summarized)
-- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
-- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
-- "reason": explain why the product is a good fit (mention ingredients and effect)
+모든 항목을 다 작성한 후, 종합 분석 요약을 반드시 포함하세요:
 
+<h2>✨ 종합 요약</h2>
 
-Always wrap the entire category block in this format:
-<div class="card" style="background:#1e1e1e; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px"> ... </div>
+- 피부 타입 한줄 요약 (예: 수분 부족형 지성 피부)
+- 주요 피부 고민 3가지 (항목명과 간단한 이유)
+- 추천 제품 3가지 (브랜드 포함, 각 제품 추천 이유도 포함)
+- 마지막 문단: 피부 개선 예측 및 조언 (예: "3~4주 후 피부결이 부드러워지고, 색소가 옅어지는 변화를 경험할 수 있습니다.")
 
-🔹 Group the results:
-- Highlight Top 3 best-scoring areas → “Your Glow Zones 💖”
-- Highlight Top 3 lowest-scoring areas → “Needs Love 💔”
+다음과 같은 형식으로 작성하세요:
 
+<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:24px; margin-top:30px; box-shadow:0 2px 4px rgba(255,255,255,0.05)">
+  <h2>✨ 종합 요약</h2>
+  <p><strong>피부 타입:</strong> ...</p>
+  <p><strong>주요 고민:</strong> 1) ... 2) ... 3) ...</p>
+  <p><strong>추천 제품:</strong></p>
+  <ul>
+    <li>[브랜드] 제품명 – 추천 이유</li>
+    <li>[브랜드] 제품명 – 추천 이유</li>
+    <li>[브랜드] 제품명 – 추천 이유</li>
+  </ul>
+  <p><strong>개선 예상:</strong> ...</p>
+</div>
 
-
-Each section must be wrapped in:
-<div class="card" style="background:#2a2a2a; color:#fff; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 2px 4px rgba(255,255,255,0.05)"> ... </div>
-
-Always return ALL of the following 9 categories in this exact order:
-
-<h1>🌿 Comprehensive Skin Report</h1>
-
-<h2>🔹 1. Sebum (T-zone vs cheeks)</h2>
-<h2>🔹 2. Hydration Level</h2>
-<h2>🔹 3. Texture</h2>
-<h2>🔹 4. Pigmentation</h2>
-<h2>🔹 5. Pore Visibility</h2>
-<h2>🔹 6. Sensitivity</h2>
-<h2>🔹 7. Wrinkles</h2>
-<h2>🔹 8. Skin Tone</h2>
-<h2>🔹 9. Acne</h2>
-
-📌 After generating the full HTML above, return a second JSON block for preview UI:
-
-- "category": name of the skin category
-- "status": a short summary of the current skin condition
-- "solution": recommended product strategy (summarized)
-- "emotionalHook": a fun emoji-based summary (e.g., “T-zone’s going wild 🛢️”)
-- "product": specific product recommendation (e.g., "The Ordinary Niacinamide 10%")
-- "reason": explain why the product is a good fit (mention ingredients and effect)
-
-[
-  {
-    "category": "Sebum",
-    "status": "...",
-    "solution": "...",
-    "emotionalHook": "...",
-    "product": "...",
-    "reason": "..."
-  },
-  ...
-]
-
-
-At the end, return:
-
-<h2>✨ Final Summary</h2>
-- Provide a total skin score out of 100
-- Give a personalized skin type summary based on the analysis (e.g., “Combination skin with mild sensitivity and early aging signs.”)
-- List the Top 3 Concerns in priority order with short solution strategy per item
-- Then add an emotional motivational message like a dermatologist would give
-- Also mention what visible improvement can be expected and how long it usually takes if the suggested routine is followed (e.g., “In 2–3 weeks, you may notice smoother texture and less redness.”)
-
-<h2>☀️ AM Routine</h2> and <h2>🌙 PM Routine</h2>
-- Generate personalized 5-step AM/PM skincare routines based ONLY on the 9 skin categories above.
-- You MUST select all routine products directly from the “Recommended Product” items already listed for the 9 skin concerns.
-- Do NOT introduce new products outside of those 9 categories.
-- Include 1 friendly and professional <p><strong>Lifestyle Tip:</strong> ...</p> under each routine
-- Make sure everything is wrapped inside a styled <div class="card" style="..."> element for each block
-
-
-For both AM and PM routine sections, also include a personalized "Lifestyle Tip" based on the user's skin condition, concerns, or habits.
-
-Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
-
-Every routine, summary, and tip must be fully customized per user.
-
-Do NOT use fixed examples. You MUST generate ALL product names, summaries, and tips based on the image and diagnosis.
-
-Every product must be selected from a wide variety of Korean, Japanese, US, and French skincare brands.  
-You MUST avoid repeating the same product or brand unless it is clearly the most effective for multiple categories.  
-Diversity in product selection is essential for realism and credibility.
-
-You MUST build the AM/PM skincare routines only using products already recommended in the 9 skin category sections.  
-Every product must be from a diverse global skincare brand pool.  
-Avoid duplication of the same product or brand unless strongly justified.
-
-
-Make the tip empathetic, short, and dermatologist-style practical — like advice you'd give to a client. Use:
-<p><strong>Lifestyle Tip:</strong> ...</p> format.
-
-
+⚠️ 중요 규칙:
+- 반드시 6개 항목으로만 분석할 것
+- 항상 <strong>한글</strong>로 작성할 것
+- 반드시 HTML로 응답할 것 (코드블럭, JSON 사용 금지)
+- 실제 존재하는 브랜드의 제품명을 사용할 것 (한국, 미국, 일본, 프랑스 등)
+- 제품 또는 브랜드 중복은 꼭 필요할 경우만 허용하며, 되도록 피할 것
+- 전문의의 말투처럼, 신뢰감 있고 정중하지만 친절한 어조로 작성할 것
 `;
-
-
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
@@ -225,10 +154,11 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    {
-      console.error('⚠️ GPT 응답이 불완전합니다.');
-      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
-    }
+if (!rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') || !rawResult.includes('<h2>✨ 종합 요약</h2>')) {
+  console.error('⚠️ GPT 응답이 불완전합니다.');
+  throw new Error('Incomplete result from GPT – HTML block is missing');
+}
+
     
     const fullResult = rawResult
     .replace(/```(json|html)?[\s\S]*?```/g, '')
@@ -244,8 +174,7 @@ Make the tip empathetic, short, and dermatologist-style practical — like advic
     
     
 
-    const withStars = applyScoreStars(fullResult);
-    const processedResult = applyRoutineBox(withStars);
+    const processedResult = fullResult;
 
     console.log('🧾 Final GPT Result Start ===>\n', processedResult);
 
