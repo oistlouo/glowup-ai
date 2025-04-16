@@ -64,7 +64,14 @@ export default function UploadPage() {
     <div style={{ padding: '40px 20px', maxWidth: '720px', margin: '0 auto', fontFamily: 'sans-serif', color: '#222' }}>
       <h1 style={{ textAlign: 'center', fontSize: '32px', fontWeight: '800' }}>GlowUp.AI 피부 분석기</h1>
 
-      <div style={{ marginBottom: '20px' }}>
+      <p style={{ marginTop: '20px', fontSize: '14px', color: '#555', lineHeight: '1.6' }}>
+        📸 <strong>분석 정확도를 높이기 위해 다음을 지켜주세요:</strong><br />
+        - 이마부터 턱까지 얼굴 전체가 나오게 찍기<br />
+        - 밝은 자연광 아래에서 촬영 (그림자 X)<br />
+        - 카메라를 정면으로 보고, 필터나 화장 없이 쌩얼로 촬영
+      </p>
+
+      <div style={{ marginTop: '24px' }}>
         <label style={{ fontWeight: 'bold' }}>닉네임</label>
         <input
           type="text"
@@ -75,7 +82,7 @@ export default function UploadPage() {
         />
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
+      <div style={{ marginTop: '20px' }}>
         <label style={{ fontWeight: 'bold' }}>나이</label>
         <input
           type="number"
@@ -86,7 +93,7 @@ export default function UploadPage() {
         />
       </div>
 
-      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <label htmlFor="file-upload" style={{ display: 'inline-block', padding: '12px 24px', backgroundColor: '#0066cc', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
           📷 셀카 업로드
         </label>
@@ -94,12 +101,12 @@ export default function UploadPage() {
       </div>
 
       {previewUrl && (
-        <img src={previewUrl} alt="미리보기" style={{ width: '100%', marginBottom: '20px', borderRadius: '8px' }} />
+        <img src={previewUrl} alt="미리보기" style={{ width: '100%', marginTop: '20px', borderRadius: '8px' }} />
       )}
 
       <div style={{ textAlign: 'center' }}>
-        <button onClick={handleUpload} disabled={loading} style={{ padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
-          {loading ? '🧬 분석 중...' : '✨ 분석 시작'}
+        <button onClick={handleUpload} disabled={loading} style={{ marginTop: '20px', padding: '12px 28px', fontSize: '16px', backgroundColor: '#444', color: '#fff', borderRadius: '6px', cursor: 'pointer' }}>
+          {loading ? '🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...' : '✨ 분석 시작'}
         </button>
       </div>
 

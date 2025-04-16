@@ -71,7 +71,14 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const imageUrl = uploaded.secure_url;
     console.log("✅ Uploaded Image URL:", imageUrl);
 
-    const prompt = fs.readFileSync(path.join(__dirname, 'templates', 'prompt_ko.txt'), 'utf8');
+    const promptPath = path.join(__dirname, 'templates', 'prompt_ko.txt');
+    if (!fs.existsSync(promptPath)) {
+      throw new Error(`프롬프트 파일이 존재하지 않음: ${promptPath}`);
+    }
+
+    const prompt = fs.readFileSync(promptPath, 'utf8')
+      .replace('[name]', req.body.name || '고객')
+      .replace('[age]', req.body.age || '20');
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
@@ -90,9 +97,9 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    const isComplete = rawResult.includes('<h1') && rawResult.includes('<table') && rawResult.includes('피부') && rawResult.includes('루틴');
+    const isComplete = rawResult.includes('<h1') && rawResult.includes('피부') && rawResult.includes('루틴');
 
-    if (!isComplete || !rawResult.includes('[')) {
+    if (!isComplete) {
       console.error('⚠️ GPT 응답이 불완전합니다.');
       console.log('📦 GPT 응답 원문:', rawResult);
       return res.status(200).json({
@@ -108,47 +115,13 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       .replace(/JSON Output:/g, '')
       .trim();
 
-    let previewInsights = [];
-    const previewInsightsMatch = rawResult.match(/\[\s*{[\s\S]*?}\s*\]/);
-    if (previewInsightsMatch) {
-      try {
-        previewInsights = JSON.parse(previewInsightsMatch[0]).map(item => ({
-          category: item.category || '',
-          status: item.status || '',
-          solution: item.solution || '',
-          emotionalHook: item.emotionalHook || '',
-          product: item.product || '',
-          reason: item.reason || '',
-        }));
-
-        const allowedCategories = ['Sebum', 'Hydration', 'Texture'];
-        previewInsights = previewInsights.filter(item => allowedCategories.includes(item.category));
-
-        const requiredCategories = ['Sebum', 'Hydration', 'Texture'];
-        for (const category of requiredCategories) {
-          if (!previewInsights.find(item => item.category === category)) {
-            previewInsights.push({
-              category,
-              status: 'No data',
-              solution: 'Analysis not available',
-              emotionalHook: '📷 Try uploading a clearer image!',
-              product: '-',
-              reason: 'Insufficient data to generate result.',
-            });
-          }
-        }
-      } catch (e) {
-        console.warn("⚠️ previewInsights 파싱 실패:", e);
-      }
-    }
-
     const withStars = applyScoreStars(fullResult);
     const processedResult = applyRoutineBox(withStars);
 
     res.json({
       fullHtml: processedResult,
       imageUrl,
-      previewInsights,
+      previewInsights: [],
     });
   } catch (err) {
     console.error('❌ Server error:', err);
