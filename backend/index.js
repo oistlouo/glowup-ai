@@ -78,8 +78,15 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    const isComplete = rawResult.includes('<h1') && rawResult.includes('<div') && rawResult.length > 1000;
-
+    const requiredKeywords = [
+      '<h1>🌿 종합 피부 분석 리포트</h1>',
+      '🔹 1. 피부 나이',
+      '🔹 2. 피지',
+      '총점:',
+      '추천 제품'
+    ];
+    const isComplete = requiredKeywords.every(keyword => rawResult.includes(keyword)) && rawResult.length > 1000;
+    
     if (!isComplete) {
       console.warn('⚠️ GPT 응답이 부족하지만 그대로 전달합니다.');
     }
