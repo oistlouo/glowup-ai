@@ -52,6 +52,13 @@ export default function UploadPage() {
       let html = data.fullHtml || '';
 
       if (typeof window !== 'undefined') {
+        // 총점 계산 및 HTML 업데이트
+const matches = html.match(/<strong>점수:<\/strong>\s*(\d+)\/10/g);
+const totalScore = matches
+  ? matches.map(m => parseInt(m.match(/\d+/)[0])).reduce((a, b) => a + b, 0)
+  : 0;
+html = html.replace(/<li><strong>총점:<\/strong>\s*\d+\/100<\/li>/, `<li><strong>총점:</strong> ${totalScore}/100</li>`);
+
         sessionStorage.setItem('fullHtml', html);
         sessionStorage.setItem('imageUrl', data.imageUrl || '');
         setTimeout(() => {

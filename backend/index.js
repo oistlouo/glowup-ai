@@ -80,7 +80,7 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
         ],
         stream: false,
         temperature: 0.7,
-        max_tokens: 4096,
+        max_tokens: 3600,
       });
 
       rawResult = completion.choices?.[0]?.message?.content || '';
