@@ -8,9 +8,14 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
+// backend index.js
+app.use(cors({
+  origin: ['https://glowup-ai.vercel.app'], // ✅ 이걸로 유지해야 맞아
+}));
+
+
+app.use(express.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
