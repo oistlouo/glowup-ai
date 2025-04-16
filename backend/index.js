@@ -127,25 +127,23 @@ HTML 형식은 다음과 같습니다:
       ],
       stream: false,
       temperature: 0.7,
-      max_tokens: 4000, // 또는 4096까지 가능 (이 이상 넣으면 에러)
+      max_tokens: 3000, // 또는 4096까지 가능 (이 이상 넣으면 에러)
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    if (
-      !rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') ||
-      !rawResult.includes('<h2>✨ 종합 요약</h2>')
-    ) {
-      console.warn('⚠️ GPT 응답이 예상보다 짧거나 누락된 섹션이 있을 수 있습니다.');
-}
-    
 
-    
-    const fullResult = rawResult
-    .replace(/```(json|html)?[\s\S]*?```/g, '')
-    .replace(/^```html/, '')
-    .replace(/JSON Output:/g, '')
-    .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
-    .trim();
+// 경고만 출력하고 중단하지 않음
+if (
+  !rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') ||
+  !rawResult.includes('<h2>✨ 종합 요약</h2>')
+) {
+  console.warn('⚠️ GPT 응답이 예상보다 짧거나 누락된 섹션이 있을 수 있습니다.');
+}
+
+// 후처리는 최소한만 (불필요한 JSON 제거만)
+const fullResult = rawResult
+  .replace(/```(json|html)?[\s\S]*?```/g, '')
+  .trim();
 
 
     const processedResult = fullResult;
