@@ -128,7 +128,7 @@ export default function UploadPage() {
         >
           {loading ? (
             <span className="loading-text">
-              🧬 지금 분석 중입니다. 최대 3분 정도 소요돼요...
+              🧬 지금 분석 중입니다. 최대 5분 정도 소요돼요...
             </span>
           ) : (
             '✨ 분석 시작'

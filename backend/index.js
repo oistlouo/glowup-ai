@@ -85,8 +85,10 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       '총점:',
       '추천 제품'
     ];
-    const isComplete = requiredKeywords.every(keyword => rawResult.includes(keyword)) && rawResult.length > 1000;
-    
+    const isComplete = rawResult.includes('<h1>🌿 종합 피부 분석 리포트</h1>') &&
+                   rawResult.includes('<h2>🔹 1. 피부 나이</h2>') &&
+                   rawResult.includes('<h2>🔹 10. 여드름</h2>');
+
     if (!isComplete) {
       console.warn('⚠️ GPT 응답이 부족하지만 그대로 전달합니다.');
     }
