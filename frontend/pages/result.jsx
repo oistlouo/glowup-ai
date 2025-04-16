@@ -10,16 +10,19 @@ export default function ResultPage() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const fullHtml = sessionStorage.getItem('fullHtml');
+  
       if (!fullHtml) {
-        router.push('/upload');
+        // 결과 없음 안내 메시지로 설정
+        setHtml('<p style="color: red; text-align: center; font-size: 18px;">❌ 분석 결과가 없습니다. 처음부터 다시 시도해주세요.</p>');
       } else {
         setHtml(fullHtml);
       }
-
+  
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setIsDarkMode(prefersDark);
     }
   }, []);
+  
 
   return (
     <div
