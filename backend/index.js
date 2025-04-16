@@ -154,10 +154,14 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-if (!rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') || !rawResult.includes('<h2>✨ 종합 요약</h2>')) {
-  console.error('⚠️ GPT 응답이 불완전합니다.');
-  throw new Error('Incomplete result from GPT – HTML block is missing');
-}
+    if (
+      !rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') ||
+      !rawResult.includes('<h2>✨ 종합 요약</h2>')
+    ) {
+      console.error('⚠️ GPT 응답이 불완전합니다.');
+      throw new Error('Incomplete result from GPT – HTML or Summary block is missing');
+    }
+    
 
     
     const fullResult = rawResult
@@ -167,12 +171,6 @@ if (!rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') || !r
     .replace(/\[\s*{[\s\S]*?}\s*\]\s*$/, '')
     .trim();
 
-    if (!rawResult.includes('<h1>🌿 Comprehensive Skin Report</h1>') || !rawResult.includes('<h2>✨ Final Summary</h2>')) {
-      console.error('⚠️ GPT 응답이 불완전합니다.');
-      throw new Error('Incomplete result from GPT – HTML or JSON block is missing');
-    }
-    
-    
 
     const processedResult = fullResult;
 
