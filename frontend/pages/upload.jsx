@@ -22,10 +22,15 @@ export default function UploadPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB 제한
+        alert('⚠️ 파일 크기가 너무 큽니다. 5MB 이하의 이미지를 업로드해주세요.');
+        return;
+      }
       setImage(file);
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
+  
 
   const handleUpload = async () => {
     if (!image) return;
