@@ -112,6 +112,10 @@ HTML 형식은 다음과 같습니다:
 - 항상 <strong>한글</strong>로 작성할 것  
 - 반드시 HTML 형식으로만 출력할 것 (코드블럭, JSON 응답 금지)  
 
+마지막에 반드시 "<h1>🩺 피부과 전문 진단 리포트</h1>"로 시작하고 "<h2>✨ 종합 요약</h2>"로 끝나야 합니다.
+응답이 누락되면 안 되며, 짧게 작성해도 되니 무조건 전체 출력이 끝나야 합니다.
+
+
 `;
 
     const completion = await openai.chat.completions.create({
@@ -133,11 +137,9 @@ HTML 형식은 다음과 같습니다:
     const rawResult = completion.choices?.[0]?.message?.content || '';
 
 // 경고만 출력하고 중단하지 않음
-if (
-  !rawResult.includes('<h1>🩺 피부과 전문 진단 리포트</h1>') ||
-  !rawResult.includes('<h2>✨ 종합 요약</h2>')
-) {
-  console.warn('⚠️ GPT 응답이 예상보다 짧거나 누락된 섹션이 있을 수 있습니다.');
+if (!rawResult || rawResult.length < 100) {
+  console.warn('❗ GPT 응답이 너무 짧거나 비어 있습니다.');
+  return res.status(500).json({ error: 'GPT 응답이 누락되었거나 너무 짧습니다.' });
 }
 
 // 후처리는 최소한만 (불필요한 JSON 제거만)
