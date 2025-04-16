@@ -76,9 +76,10 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       throw new Error(`프롬프트 파일이 존재하지 않음: ${promptPath}`);
     }
 
-    const prompt = fs.readFileSync(promptPath, 'utf8')
-      .replace('[name]', req.body.name || '고객')
-      .replace('[age]', req.body.age || '20');
+    let rawPrompt = fs.readFileSync(path.join(__dirname, 'templates', 'prompt_ko.txt'), 'utf8');
+const name = req.body.name || '사용자';
+const age = req.body.age || '??';
+const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
