@@ -61,61 +61,52 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
     const age = req.body.age || '??';
     const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
 
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo',
-      messages: [
-        {
-          role: 'user',
-          content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } },
-          ],
-        },
-      ],
-      stream: false,
-      temperature: 0.7,
-      max_tokens: 4096,
-    });
+    let attempts = 0;
+    let rawResult = '';
+    let isComplete = false;
 
-    const rawResult = completion.choices?.[0]?.message?.content || '';
-    const requiredKeywords = [
-      '<h1>🌿 종합 피부 분석 리포트</h1>',
-      '🔹 1. 피부 나이',
-      '🔹 2. 피지',
-      '총점:',
-      '추천 제품'
-    ];
-    const isComplete = rawResult.includes('<h1>🌿 종합 피부 분석 리포트</h1>') &&
-                   rawResult.includes('<h2>🔹 1. 피부 나이</h2>') &&
-                   rawResult.includes('<h2>🔹 10. 여드름</h2>');
+    while (attempts < 3 && !isComplete) {
+      attempts++;
+      const completion = await openai.chat.completions.create({
+        model: 'gpt-4-turbo',
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: prompt },
+              { type: 'image_url', image_url: { url: imageUrl } },
+            ],
+          },
+        ],
+        stream: false,
+        temperature: 0.7,
+        max_tokens: 4096,
+      });
+
+      rawResult = completion.choices?.[0]?.message?.content || '';
+
+      rawResult = rawResult
+        .replace(/```(json|html)?[\s\S]*?```/g, '')
+        .replace(/^```html/, '')
+        .replace(/JSON Output:/g, '')
+        .trim();
+
+      isComplete =
+        rawResult.includes('<h1>🌿 종합 피부 분석 리포트</h1>') &&
+        rawResult.includes('<h2>🔹 1. 피부 나이</h2>') &&
+        rawResult.includes('<h2>🔹 10. 여드름</h2>') &&
+        !rawResult.toLowerCase().includes('this html format') &&
+        !rawResult.toLowerCase().includes("i'm sorry") &&
+        !rawResult.toLowerCase().includes('no analysis');
+    }
 
     if (!isComplete) {
-      console.warn('⚠️ GPT 응답이 부족하지만 그대로 전달합니다.');
-    }
-    
-    let cleanedHtml = rawResult
-      .replace(/```(json|html)?[\s\S]*?```/g, '')
-      .replace(/^```html/, '')
-      .replace(/JSON Output:/g, '')
-      .trim();
-
-    // ✅ 누락된 피부 나이 항목 보정 삽입
-    if (!cleanedHtml.includes('🔹 1. 피부 나이')) {
-      const fallback = `
-        <h2>🔹 1. 피부 나이</h2>
-        <div class="card" style="background:#2a2a2a;color:#fff;border-radius:12px;padding:20px;margin-bottom:20px">
-          <p><strong>점수:</strong> 7/10</p>
-          <p><strong>진단 결과:</strong> 실제 나이와 유사한 수준의 피부 상태입니다.</p>
-          <p><strong>추천 솔루션:</strong> 자외선 차단과 항산화 케어를 병행하는 기본적인 안티에이징 루틴 유지</p>
-          <p><strong>추천 제품:</strong> 닥터지 브라이트닝 업 선 SPF50+</p>
-          <p><strong>추천 이유:</strong> 자외선 차단과 피부 톤 정리에 효과적이며, 전반적인 피부 노화 예방에 도움을 줍니다.</p>
-        </div>
-      `;
-      cleanedHtml = cleanedHtml.replace('<h2>🔹 2. 피지 (T존과 볼)</h2>', fallback + '<h2>🔹 2. 피지 (T존과 볼)</h2>');
+      console.error('❌ GPT 응답 실패: 3회 재시도 후에도 분석 리포트 생성 실패.');
+      return res.status(500).json({ error: 'AI 분석 실패: 분석 결과가 유효하지 않습니다.' });
     }
 
     res.json({
-      fullHtml: cleanedHtml,
+      fullHtml: rawResult,
       imageUrl,
       previewInsights: [],
     });
