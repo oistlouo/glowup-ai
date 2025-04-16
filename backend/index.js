@@ -25,26 +25,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const applyScoreStars = (html) => {
-  return html.replace(/<li><strong>Score:<\/strong> (\d)\/5<\/li>/g, (match, p1) => {
-    const score = parseInt(p1);
-    const stars = '⭐️'.repeat(score) + '☆'.repeat(5 - score);
-    return `<li><strong>Score:</strong> ${score}/5 &nbsp; ${stars}</li>`;
-  });
-};
-
-const applyRoutineBox = (html) => {
-  return html
-    .replace(
-      /<li>\s*<strong>AM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
-      (_, content) => `<li><strong>AM Routine:</strong><div style="background:#e3f2fd; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`
-    )
-    .replace(
-      /<li>\s*<strong>PM Routine:<\/strong>\s*<ul>([\s\S]*?)<\/ul>\s*<\/li>/,
-      (_, content) => `<li><strong>PM Routine:</strong><div style="background:#fce4ec; border-radius:8px; padding:12px; margin-top:6px; color:#000;" class="routine-box"><ul>${content.trim()}</ul></div></li>`
-    );
-};
-
 app.post('/analyze', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
@@ -76,10 +56,10 @@ app.post('/analyze', upload.single('image'), async (req, res) => {
       throw new Error(`프롬프트 파일이 존재하지 않음: ${promptPath}`);
     }
 
-    let rawPrompt = fs.readFileSync(path.join(__dirname, 'templates', 'prompt_ko.txt'), 'utf8');
-const name = req.body.name || '사용자';
-const age = req.body.age || '??';
-const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
+    const rawPrompt = fs.readFileSync(promptPath, 'utf8');
+    const name = req.body.name || '사용자';
+    const age = req.body.age || '??';
+    const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4-turbo',
@@ -98,7 +78,7 @@ const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
     });
 
     const rawResult = completion.choices?.[0]?.message?.content || '';
-    const isComplete = rawResult.includes('<h1') && rawResult.includes('피부') && rawResult.includes('루틴');
+    const isComplete = rawResult.includes('<h1') && rawResult.includes('총점') && rawResult.includes('피부');
 
     if (!isComplete) {
       console.error('⚠️ GPT 응답이 불완전합니다.');
@@ -110,17 +90,14 @@ const prompt = rawPrompt.replace(/\[name\]/g, name).replace(/\[age\]/g, age);
       });
     }
 
-    const fullResult = rawResult
+    const cleanedHtml = rawResult
       .replace(/```(json|html)?[\s\S]*?```/g, '')
       .replace(/^```html/, '')
       .replace(/JSON Output:/g, '')
       .trim();
 
-    const withStars = applyScoreStars(fullResult);
-    const processedResult = applyRoutineBox(withStars);
-
     res.json({
-      fullHtml: processedResult,
+      fullHtml: cleanedHtml,
       imageUrl,
       previewInsights: [],
     });

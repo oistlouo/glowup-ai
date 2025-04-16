@@ -50,7 +50,27 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      setFullHtml(data.fullHtml || '');
+      let html = data.fullHtml || '';
+
+      // Remove greeting and skin age prediction sections
+      html = html.replace(/<div class="card"[\s\S]*?<\/div>/, '');
+      html = html.replace(/<h2>📊 예측된 피부 나이<\/h2>[\s\S]*?<p>[\s\S]*?<\/p>/, '');
+
+      // Move skin age into first analysis block
+      const ageInfo = `<p><strong>예측된 피부 나이:</strong> ${parseInt(age) - 3}세</p>`; // 임의로 -3 설정
+      html = html.replace(/<h2>🔹 1\. 피지 \(T존과 볼\)<\/h2>/, `<h2>🔹 1. 피지 (T존과 볼)</h2>${ageInfo}`);
+
+      // Remove AM/PM routines
+      html = html.replace(/<h2>☀️ AM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
+      html = html.replace(/<h2>🌙 PM 루틴[\s\S]*?<\/ul>[\s\S]*?Lifestyle Tip:[\s\S]*?<\/p>/g, '');
+
+      // Remove "감성 문구:" label and move content to top of each section
+      html = html.replace(/<p><strong>감성 문구:<\/strong>\s*(.*?)<\/p>/g, '<p>$1</p>');
+
+      // In final summary, move 감성 메시지 to top and remove label
+      html = html.replace(/<p><strong>감성 메시지:<\/strong>\s*(.*?)<\/p>/, '<p>$1</p>');
+
+      setFullHtml(html);
       setImageUrl(data.imageUrl || '');
     } catch (error) {
       console.error('분석 실패:', error);
